@@ -1,0 +1,112 @@
+@use "./variables" as *;
+@use "./mixins" as mix;
+
+/*@media screen and (max-width: 1920px) {
+}
+@media screen and (max-width: 1680px) {
+}
+@media screen and (max-width: 1440px) {
+}
+@media screen and (max-width: 1366px) {
+}
+@media screen and (max-width: 1280px) {
+}*/
+
+@media screen and (max-width: 1024px) {
+  #root {
+    font-size: 0.8rem !important;
+
+    .contentWrapper {
+      @include mix.flex-box(column, center, flex-start);
+
+      .remarkCol {
+        width: initial !important;
+      }
+
+      .contentBlock {
+        width: 100%;
+      }
+    }
+  }
+}
+
+/*@media screen and (max-width: 992px) {
+
+}*/
+
+/*@media screen and (max-width: 800px) {
+
+}
+
+@media screen and (max-width: 782px) {
+
+}*/
+
+@media screen and (max-width: 768px) {
+  #root {
+    font-size: 0.75rem !important;
+
+    .totalWrapper {
+      @include mix.flex-box(column, flex-start, center);
+      align-items: flex-start !important;
+
+      .asideBar {
+        width: 100% !important;
+        height: fit-content !important;
+        min-height: unset !important;
+
+        @include mix.flex-box(row, center, flex-start);
+
+        .hero-name {
+          margin-bottom: 1em;
+        }
+
+        .image-section-container {
+          margin-left: 1.5em;
+          margin-right: 1.5em;
+
+          .imageContainer {
+            max-width: 16em;
+          }
+        }
+
+        .aside-item-wrapper {
+          padding: 0.5em 1.5em;
+        }
+      }
+
+      .contentBar {
+        width: 100%;
+        padding-left: unset !important;
+
+        .heading {
+          text-align: center;
+        }
+
+        .contentWrapper {
+          padding: 0 2em;
+        }
+      }
+    }
+  }
+
+}
+
+/*@media screen and (max-width: 600px) {
+}
+
+@media screen and (max-width: 568px) {
+}*/
+
+@media screen and (max-width: 425px) {
+  .contentWrapper {
+    padding: 0 1em !important;
+  }
+}
+
+/*
+@media screen and (max-width: 375px) {
+}
+
+@media screen and (max-width: 320px) {
+}*/

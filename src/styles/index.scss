@@ -1,0 +1,5 @@
+
+
+//@use "./reset.scss" as *;
+
+@use "./global_styles/root" as root;	//подключается один раз для всех компонентов

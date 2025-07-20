@@ -1,5 +1,50 @@
 
 
-//@use "./reset.scss" as *;
+@use "./global_styles/root" as root;
 
-@use "./global_styles/root" as root;	//подключается один раз для всех компонентов
+.total-wrapper {
+	position: relative;
+	//font-size: 1.125rem;  //18px
+	font-size: 1rem;
+
+	/*! It gives max-width, min-width, with margin: 0 auto... */
+	@extend %totalWrapper;
+	/*width: 100%;
+	max-width: root.$maxWidth; //1440px;
+	//min-width: root.$minWidth; //320px;
+	margin: 0 auto;*/
+
+	background-color: root.$white;
+	color: root.$grayDarkText;
+
+	border: 1px solid red;
+
+	/* mobile (portrait wide): (max-width: 640px) */
+	@include root.maxMobilePortraitWide {
+		font-size: 0.938rem;  //15px
+	}
+}
+
+.section {
+	//FOR GSAP:
+	//overflow: hidden; //for transformed, not absolute elements
+	font-size: 1em; //font-size inherits from total-wrapper
+	width: 100%;
+
+	@extend %sectionWrapper;  //margin-top, margin-bottom calculations to media width
+}
+
+.section__content-layer {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+
+	@extend %contentWrapper;  //padding calculations to media width
+
+	/* mobile (portrait wide): (max-width: 640px) */
+	@include root.maxMobilePortraitWide {
+		align-items: center;
+	}
+}
+

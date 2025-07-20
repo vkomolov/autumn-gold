@@ -1,31 +1,52 @@
-@use "mixins" as mix;
-@use "variables" as *;
+//@use "mixins" as mix;
+@use "./variables" as *;
+@use "./media" as media;
 
 ///////EXTENDS///////
 
-%button {
-  min-width: 50px;
-  border: none;
-  padding: 5px;
-  @include mix.box-shadow(2px, 3px);
-  transition: all .08s ease-in-out;
-  cursor: pointer;
+%totalWrapper {
+  width: 100%;
+  max-width: $maxWidth; //1440px;
+  //min-width: root.$minWidth; //320px;
+  margin: 0 auto;
+}
 
-  &:hover {
-    transform: scale(1.1);
-    @include mix.box-shadow(3px, 5px);
+//padding-top, padding-bottom of the total layer
+%sectionWrapper {
+  padding-top: 80px;
+  padding-bottom: 120px;
+
+  /* tablet (landscape) max-width: 1280px */
+  @include media.maxTabletLandscape {
+    padding-top: var(--range_80-64_max-1280px);
+    padding-bottom: var(--range_120-64_max-1280px);
   }
 
-  &:active {
-    transform: scale(1);
-    @include mix.box-shadow(2px, 3px);
+  /* mobile (portrait wide): (max-width: 640px) */
+  @include media.maxMobilePortraitWide {
+    padding-top: 64px;
+    padding-bottom: 64px;
   }
 }
 
-%heading-details {
-  color: $foxy;
-  margin-bottom: 0.5em;
+//padding-left, padding-right of the total layer
+%contentWrapper {
+  width: 100%;
+  max-width: $maxContentWidth;
+  min-width: $minWidth;
+  margin: 0 auto;
+  padding-right: 80px;
+  padding-left: 80px;
 
-  @include mix.init-font(1em, 700);
-  @include mix.text-shadow(0.08em, 0.1em);
+  /* tablet (landscape) max-width: 1280px */
+  @include media.maxTabletLandscape {
+    padding-right: var(--range_80-32_max-1280px);
+    padding-left: var(--range_80-32_max-1280px);
+  }
+
+  /* mobile (portrait wide): (max-width: 640px) */
+  @include media.maxMobilePortraitWide {
+    padding-right: var(--range_32-23_max-640px);
+    padding-left: var(--range_32-23_max-640px);
+  }
 }

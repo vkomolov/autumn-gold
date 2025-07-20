@@ -1,0 +1,7 @@
+@use "@/styles/global_styles/root" as root;
+
+.logoWrapper {
+	@include root.flex-box(column, center, center, wrap);
+	gap: 0.5em;
+}
+

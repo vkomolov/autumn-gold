@@ -1,112 +1,147 @@
-@use "./variables" as *;
-@use "./mixins" as mix;
 
-/*@media screen and (max-width: 1920px) {
-}
-@media screen and (max-width: 1680px) {
-}
-@media screen and (max-width: 1440px) {
-}
-@media screen and (max-width: 1366px) {
-}
-@media screen and (max-width: 1280px) {
-}*/
-
-@media screen and (max-width: 1024px) {
-  #root {
-    font-size: 0.8rem !important;
-
-    .contentWrapper {
-      @include mix.flex-box(column, center, flex-start);
-
-      .remarkCol {
-        width: initial !important;
-      }
-
-      .contentBlock {
-        width: 100%;
-      }
-    }
+/* retina display (2x) */
+@mixin mediaRetina2x() {
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    @content;
   }
 }
 
-/*@media screen and (max-width: 992px) {
-
-}*/
-
-/*@media screen and (max-width: 800px) {
-
-}
-
-@media screen and (max-width: 782px) {
-
-}*/
-
-@media screen and (max-width: 768px) {
-  #root {
-    font-size: 0.75rem !important;
-
-    .totalWrapper {
-      @include mix.flex-box(column, flex-start, center);
-      align-items: flex-start !important;
-
-      .asideBar {
-        width: 100% !important;
-        height: fit-content !important;
-        min-height: unset !important;
-
-        @include mix.flex-box(row, center, flex-start);
-
-        .hero-name {
-          margin-bottom: 1em;
-        }
-
-        .image-section-container {
-          margin-left: 1.5em;
-          margin-right: 1.5em;
-
-          .imageContainer {
-            max-width: 16em;
-          }
-        }
-
-        .aside-item-wrapper {
-          padding: 0.5em 1.5em;
-        }
-      }
-
-      .contentBar {
-        width: 100%;
-        padding-left: unset !important;
-
-        .heading {
-          text-align: center;
-        }
-
-        .contentWrapper {
-          padding: 0 2em;
-        }
-      }
-    }
-  }
-
-}
-
-/*@media screen and (max-width: 600px) {
-}
-
-@media screen and (max-width: 568px) {
-}*/
-
-@media screen and (max-width: 425px) {
-  .contentWrapper {
-    padding: 0 1em !important;
+/* large desktop: (min-width: 1921px) */
+@mixin minDesktopLarge() {
+  @media (min-width: 1921px) {
+    @content
   }
 }
 
-/*
-@media screen and (max-width: 375px) {
+/* desktop max-width: 1920px */
+@mixin maxDesktop() {
+  @media (max-width: 1920px) {
+    @content
+  }
 }
 
-@media screen and (max-width: 320px) {
-}*/
+/* desktop: (max-width: 1920px) and (min-width: 1441px) */
+@mixin rangeDesktop() {
+  @media (max-width: 1920px) and (min-width: 1441px) {
+    @content
+  }
+}
+
+/* laptop max-width: 1440px*/
+@mixin maxLaptop() {
+  @media (max-width: 1440px) {
+    @content
+  }
+}
+
+/* laptop:(max-width: 1440px) and (min-width: 1281px) */
+@mixin rangLaptop() {
+  @media (max-width: 1440px) and (min-width: 1281px) {
+    @content
+  }
+}
+
+/* tablet (landscape) max-width: 1280px */
+@mixin maxTabletLandscape() {
+  @media (max-width: 1280px) {
+    @content
+  }
+}
+
+/* tablet (landscape) min-width: 1281px */
+@mixin minTabletLandscape() {
+  @media (min-width: 1281px) {
+    @content
+  }
+}
+
+/* tablet (landscape): (max-width: 1280px) and (min-width: 1025px) */
+@mixin rangeTabletLandscape() {
+  @media (max-width: 1280px) and (min-width: 1025px) {
+    @content
+  }
+}
+
+/* tablet (portrait): (min-width: 1025px) */
+@mixin minTabletPortrait() {
+  @media (min-width: 1025px) {
+    @content
+  }
+}
+
+/* tablet (portrait): (max-width: 1024px) */
+@mixin maxTabletPortrait() {
+  @media (max-width: 1024px) {
+    @content
+  }
+}
+
+/* tablet (portrait): (max-width: 1024px) and (min-width: 769px) */
+@mixin rangeTabletPortrait() {
+  @media (max-width: 1024px) and (min-width: 769px) {
+    @content
+  }
+}
+
+/* mobile (landscape): (max-width: 768px)*/
+@mixin maxMobileLandscape() {
+  @media (max-width: 768px) {
+    @content
+  }
+}
+
+/* mobile (landscape): (max-width: 768px) and (min-width: 641px) */
+@mixin rangeMobileLandscape() {
+  @media (max-width: 768px) and (min-width: 641px) {
+    @content
+  }
+}
+
+/* mobile (portrait wide): (max-width: 640px) */
+@mixin maxMobilePortraitWide() {
+  @media (max-width: 640px) {
+    @content;
+  }
+}
+
+/* mobile (portrait wide): (max-width: 640px) and (min-width: 481px) */
+@mixin rangeMobilePortraitWide() {
+  @media (max-width: 640px) and (min-width: 481px) {
+    @content;
+  }
+}
+
+/* mobile (portrait narrow): (max-width: 480px)*/
+@mixin maxMobilePortraitNarrow() {
+  @media (max-width: 480px) {
+    @content
+  }
+}
+
+/* mobile (portrait narrow): (max-width: 480px) and (min-width: 376px) */
+@mixin rangeMobilePortraitNarrow() {
+  @media (max-width: 480px) and (min-width: 376px) {
+    @content
+  }
+}
+
+/* mobile (medium): (max-width: 375px) */
+@mixin maxMobileMedium() {
+  @media (max-width: 375px) {
+    @content
+  }
+}
+
+/* mobile (medium): (max-width: 375px) and (min-width: 320px) */
+@mixin rangeMobileMedium() {
+  @media (max-width: 375px) and (min-width: 320px) {
+    @content
+  }
+}
+
+/* mobile (small): (max-width: 320px) */
+@mixin maxMobileSmall() {
+  @media (max-width: 320px) {
+    @content
+  }
+}

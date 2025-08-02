@@ -1,0 +1,26 @@
+@use "@/styles/global_styles/root" as root;
+
+.contactsWrapper {
+	width: 100%;
+
+	@include root.flex-box(row, center, center, wrap);
+	gap: 1.5em 0.5em;
+}
+
+.addressWrapper {
+	flex-grow: 1;
+	border: 1px dotted green;
+
+	@include root.flex-box(row, flex-end, center, wrap);
+	gap: 0.625em 0.5em;
+}
+
+//is used for links, buttons etc...
+.customFoxy {
+	color: root.$foxyNormal !important;
+	font-weight: 700 !important;
+
+	&:hover {
+		color: root.$foxyActive !important;
+	}
+}

@@ -9,7 +9,7 @@ export default function NavLink({
 	                                exact = true,
 	                                replace = false,
 	                                className = "",
-	                                activeClassName,
+	                                activeClassName = "",
 	                                children,
 	                                ...rest
                                 }: INavLinkProps) {

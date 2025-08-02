@@ -3,12 +3,30 @@ $maxWidth: 1440px;
 $minWidth: 320px;
 $maxContentWidth: 1280px;
 
-///colors
-$white: rgb(255, 255, 255);
-$greenNormal: #116D37;
-$greenDarker: #065627;
-$grayDarkText: #655c52;
-$foxyNormal: #EB6F21;
-$foxyActive: #8a3700;
-/// SHADERS
-$rgba_opacity-0: rgba(65, 57, 48, 0);
+////////////  COLORS   ////////////
+$white: rgba(255, 255, 255, 1); //#ffffff
+$greenNormal: rgba(17, 109, 55, 1); //#116D37
+$greenDarker: rgba(3, 63, 28, 1); //#033f1c
+$greenDark: rgba(2, 39, 17, 1); //#022711
+$grayLightest: rgba(232, 230, 227, 1); //#e8e6e3
+$grayLighter: rgba(216, 212, 207, 1); //#d8d4cf
+$grayLight: rgba(179, 171, 162, 1); //#b3aba2
+$gray: rgba(132, 121, 108, 1); //#84796c
+$grayDarker: rgba(79, 72, 64, 1); //#4f4840
+$grayDarkest: rgba(53, 49, 44, 1); //#35312c
+$foxyLightest: rgba(255, 227, 204, 1); //#ffe3cc
+$foxyLighter: rgba(255, 207, 168, 1); //#ffcfa8
+$foxyLight: rgba(255, 168, 82, 1); //#ffa852
+$foxyNormal: rgba(255, 120, 31, 1); //#ff781f
+$foxyActive: rgba(235, 63, 0, 1); //#eb3f00
+$fallLightest: rgba(255, 242, 184, 1); //#fff2b8
+$fallLighter: rgba(255, 237, 158, 1); //#ffed9e
+$fallLight: rgba(255, 214, 117, 1); //#ffd675
+$fall: rgba(255, 155, 15, 1); //#ff9b0f
+
+////////////  GRADIENTS   ////////////
+$fallGradient: linear-gradient(170deg,rgba(248, 166, 23, 1) 50%, rgba(238, 120, 31, 1) 100%);
+
+/////////// PARTIAL OPACITIES ////////
+$whiteOpacity_50: rgba(255, 255, 255, .5);
+$grayDarkestOpacity_50: rgba(53, 49, 44, .5);

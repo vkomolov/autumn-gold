@@ -9,15 +9,12 @@
 
 	/*! It gives max-width, min-width, with margin: 0 auto... */
 	@extend %totalWrapper;
-	/*width: 100%;
-	max-width: root.$maxWidth; //1440px;
-	//min-width: root.$minWidth; //320px;
-	margin: 0 auto;*/
 
-	background-color: root.$white;
-	color: root.$grayDarkText;
+	background-color: root.$fallLighter;
+	//background-color: root.$white;
+	color: root.$grayDarker;
 
-	border: 1px solid red;
+	border: 1px dotted red;
 
 	/* mobile (portrait wide): (max-width: 640px) */
 	@include root.maxMobilePortraitWide {
@@ -26,12 +23,11 @@
 }
 
 .section {
-	//FOR GSAP:
-	//overflow: hidden; //for transformed, not absolute elements
+	//overflow: hidden; //! FOR GSAP: for transformed, not absolute elements
 	font-size: 1em; //font-size inherits from total-wrapper
 	width: 100%;
 
-	@extend %sectionWrapper;  //margin-top, margin-bottom calculations to media width
+	@extend %sectionWrapper;  // margin-top, margin-bottom calculations to media width
 }
 
 .section__content-layer {

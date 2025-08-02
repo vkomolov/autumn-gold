@@ -5,7 +5,7 @@ import {Noto_Serif} from "next/font/google";
 import Header from "@/components/Header";
 
 import "@/styles/reset.scss"; //resetting styles
-//import "@/styles/index.scss"; //for root classes
+import "@/styles/index.scss"; //for root classes
 
 
 const notoSerif = Noto_Serif({
@@ -34,8 +34,12 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 		<body className={`${notoSerif.variable}`}>
-		<Header/>
-		{children}
+
+		<div className="total-wrapper">
+			<Header/>
+			{children}
+		</div>
+
 		</body>
 		</html>
 	);

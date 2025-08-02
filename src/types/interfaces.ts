@@ -1,8 +1,11 @@
 
 import React from "react";
 import Link from "next/link";
-import NavLink from "@/components/NavLink";
 import {StaticImport} from "next/dist/shared/lib/get-img-props";
+import NavLink from "@/components/NavLink";
+
+
+/////////
 
 export interface INavLinkProps extends React.ComponentProps<typeof Link> {
 	href: string;
@@ -37,3 +40,40 @@ export interface INavImageProps extends Omit<React.ComponentProps<typeof NavLink
 	objectFit?: React.CSSProperties["objectFit"];
 	sizes?: string;
 }
+
+export interface IContactsDataHeader {
+	hrefMailTo: string,
+	hrefTelTo: string,
+	telLabel: string,
+	telAriaLabel: string
+	email: string,
+	addressItems: string[]
+}
+
+
+/*export interface INavMenuDBItem {
+	position: number;
+	item_id: string;
+	label: string;
+	href: string | null;
+	children: string[] | null;
+}*/
+
+export interface INavItem {
+	id: string;
+	type: "link" | "node";
+	label: string;
+	href: string | null;
+	children: INavItem[] | null;
+}
+
+/*export interface INavLinkItem {
+	id: string;
+	type: "link" | "nested"
+	label: string;
+	href: string | null;
+}
+
+export interface INavGroupItem extends Omit<INavLinkItem, "href"> {
+	nested: (INavLinkItem | INavGroupItem)[];
+}*/

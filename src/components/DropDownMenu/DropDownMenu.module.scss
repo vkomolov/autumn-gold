@@ -1,0 +1,33 @@
+@use "@/styles/global_styles/root" as root;
+
+.dropMenu {
+	position: absolute;
+	z-index: 100;
+
+	visibility: hidden;
+	top: 0;
+	left: 0;
+	width: max-content;
+	padding: 1.5em 0.2em 1em;
+	//border: 1px solid green;
+
+	opacity: 0;
+
+	//opacity: 0;
+	will-change: opacity, transform;
+	transform-origin: top left;
+	transform: scale(0.5);
+
+	@include root.flex-box(column, flex-start, flex-start, wrap);
+	@include root.transition(opacity, 0.2s);
+	@include root.transition(transform, 0.3s);
+
+	gap: 0.5em 1.5em;
+
+}
+
+.menuOpen {
+	visibility: visible;
+	opacity: 1;
+	transform: none;
+}

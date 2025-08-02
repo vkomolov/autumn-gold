@@ -1,28 +1,25 @@
 @use "@/styles/global_styles/root" as root;
 
-.headerLayer {
-	/*! It gives max-width, min-width, with margin: 0 auto... */
-	@extend %totalWrapper;
 
+
+.headerLayer {
 	background-color: root.$white;
 	//background: linear-gradient(90deg, root.$white 25%, root.$greenNormal 80%);
 }
 
 .header {
 	font-size: 1em; //parent font-size
-	font-weight: 600;
 	position: relative;
+	width: 100%;
 
-	//%contentWrapper is taken globally without root.*
 	@extend %contentWrapper;  //padding with account to the media width
 	@include root.flex-box(row, center, center, wrap);
 
-	gap: 2em 1em;
+	gap: 1em 1em;
 	padding-top: 0.625em;
 	padding-bottom: 0.625em;
 	color: root.$greenNormal;
-
-	border: 1px solid darkblue;
+	border: 1px dotted green;
 
 	/* tablet (portrait): (max-width: 1024px) */
 	@include root.maxTabletPortrait {
@@ -37,23 +34,15 @@
 
 }
 
-
-
 .headerInfo {
-	flex-grow: 1;	//it takes the rest from the LogoWrapper
-	border: 1px solid blue;
+	flex-grow: 1;	//it takes the rest from the LogoWrapper width
+	border: 1px dashed red;
 
 	@include root.flex-box(column, flex-start, center);
 	gap: 0.5em;
 }
 
-.addressWrapper {
-	flex-grow: 1;
-	border: 1px dotted green;
 
-	@include root.flex-box(row, flex-end, center, wrap);
-	gap: 0.625em 1em;
-}
 
 .addressText {
 	//padding: 0 0.625em;
@@ -61,22 +50,13 @@
 
 .addressTextBoarded {
 	padding: 0 0.625em;
-	border-left: 1px solid root.$grayDarkText;
-	border-right: 1px solid root.$grayDarkText;
+	border-left: 1px solid root.$gray;
+	border-right: 1px solid root.$gray;
 }
 
-.contactsWrapper {
-	width: 100%;
 
-	@include root.flex-box(row, center, center, wrap);
-	gap: 2em 1em;
-}
 
-.navWrapper {
-	width: 100%;
 
-	@include root.flex-box(row, flex-end, center, wrap);
-}
 
 ////////////
 
@@ -86,10 +66,4 @@
 	//color: red;
 }
 
-.customFoxy {
-	color: root.$foxyNormal !important;
 
-	&:hover {
-		color: root.$foxyActive !important;
-	}
-}

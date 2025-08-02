@@ -3,25 +3,19 @@
 .iconTextLink {
 	text-decoration: none;
 	color: root.$greenNormal;
-	transform-origin: 100% 50%;
-	transition: transform 0.15s ease-in-out, text-shadow 0.15s ease-in-out;
+	transform-origin: left top;
+	transition: transform 0.15s ease-in-out,
+	text-shadow 0.15s ease-in-out, color 0.15s ease;
 
 	@include root.flex-box(row, center, center, nowrap);
 	gap: 0.3em;
 
 	&:hover {
-		transform: translateX(-0.3em);
-		color: root.$greenDarker;
+		transform: translateX(-0.3em) scale(1.05);
+		color: root.$foxyNormal;
+		//font-weight: 600;
 
 		@include root.text-shadow(0, 0.5em, root.$white);
 	}
 }
-/*
 
-.customFoxy {
-	color: root.$foxyNormal;
-
-	&:hover {
-		color: root.$foxyActive;
-	}
-}*/

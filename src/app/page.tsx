@@ -1,11 +1,10 @@
-import "@/styles/index.scss"; //for root classes
+
+//import "@/styles/index.scss"; //is already imported at layout.tsx
 
 export default function Home() {
   return (
-    <div className="total-wrapper">
-      <section className="hero-layer">
-        <h2>Hello world</h2>
-      </section>
-    </div>
+    <section className="section hero-layer">
+      <h2>Hello world</h2>
+    </section>
   );
 }

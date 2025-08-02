@@ -1,0 +1,93 @@
+@use "@/styles/global_styles/root" as root;
+
+.navWrapper {
+	width: 100%;
+
+	> ul {
+		width: 100%;
+		@include root.flex-box(row, flex-end, flex-start, wrap);
+		gap: 0.5em;
+
+		li, a {
+			color: root.$greenNormal;
+		}
+
+		li {
+			//width will be taken from the content...
+			//border: 1px solid lightgray;
+			position: relative;
+			z-index: 10;
+
+			&::after {
+				display: block;
+				position: absolute;
+				content: "";
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 0;
+
+				background: root.$fall;
+				background: root.$fallGradient;
+				z-index: -1;
+
+				@include root.transition(height, 0.15s);
+			}
+
+			&:hover::after {
+				height: 100%;
+			}
+		}
+
+		> li {
+			&::after {
+				border-radius: 0.3em 0.3em 0 0;
+			}
+
+			> ul {
+				visibility: hidden;
+				position: absolute;
+				opacity: 0;
+				left: 0;
+				top: 0;
+				padding-top: 3em;
+				padding-bottom: .5em;
+				backdrop-filter: blur(.1em);
+				background-color: root.$whiteOpacity_50;
+				transform-origin: top left;
+				transform: scale(0);
+				z-index: -1;
+
+				transition: top 0.5s cubic-bezier(.5,1.66,.56,.88),
+				opacity 0.3s ease-out, transform 0.25s ease-out;
+
+
+				// стили для всех вложенных li
+				li:not(:first-child) {
+					border-top: 2px solid root.$grayLightest;
+				}
+			}
+
+			&:hover > ul {
+				transform: scaleY(1);
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+	}
+}
+
+.navLink {
+	text-decoration: none;
+	width: max-content;
+	padding: 0.5em 1em;
+	font-weight: 600;
+	cursor: pointer;
+	}
+
+.activeLink { //when usePathname() === href of the link
+	color: root.$greenDark;
+	background-color: root.$fallLighter;
+	cursor: default;
+	border-radius: 0.3em 0.3em 0 0;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import s from "./iconTextLink.module.scss";
-import clsx from "clsx";
+import cn from "@/lib/cn";
 import {IIconTextLinkProps} from "@/types";
 
 export default function IconTextLink({
@@ -11,9 +11,9 @@ export default function IconTextLink({
                                      }: IIconTextLinkProps) {
 	return (
 		<a
-			className={clsx(
+			className={cn(
 				s.iconTextLink,
-				className ?? ""
+				className
 			)}
 			href={href}
 			{...rest}

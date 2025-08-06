@@ -19,7 +19,6 @@
 	padding-top: 0.625em;
 	padding-bottom: 0.625em;
 	color: root.$greenNormal;
-	border: 1px dotted green;
 
 	/* tablet (portrait): (max-width: 1024px) */
 	@include root.maxTabletPortrait {
@@ -36,7 +35,6 @@
 
 .headerInfo {
 	flex-grow: 1;	//it takes the rest from the LogoWrapper width
-	border: 1px dashed red;
 
 	@include root.flex-box(column, flex-start, center);
 	gap: 0.5em;

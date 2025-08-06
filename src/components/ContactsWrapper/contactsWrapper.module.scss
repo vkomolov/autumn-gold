@@ -4,12 +4,11 @@
 	width: 100%;
 
 	@include root.flex-box(row, center, center, wrap);
-	gap: 1.5em 0.5em;
+	gap: 1.5em;
 }
 
 .addressWrapper {
-	flex-grow: 1;
-	border: 1px dotted green;
+	flex: 1 1 0;
 
 	@include root.flex-box(row, flex-end, center, wrap);
 	gap: 0.625em 0.5em;

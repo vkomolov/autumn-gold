@@ -1,8 +1,15 @@
-import { INavItem } from "@/types";
-import { nanoid } from "nanoid";
+import {INavItem} from "@/types";
+
+
+import {pagesData, navlinkList} from "@/lib/data/pagesData";
+import {getNavItems} from "@/utils";
 
 //TODO: To use database for storing link data...
 
+
+export const navLinksData: INavItem[] = getNavItems(pagesData, navlinkList);
+
+/*
 export const navLinksData: INavItem[] = [
 	{
 		id: nanoid(8),
@@ -84,4 +91,4 @@ export const navLinksData: INavItem[] = [
 		href: "/contact",
 		children: null,
 	},
-];
+];*/

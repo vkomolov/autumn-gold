@@ -50,30 +50,18 @@ export interface IContactsDataHeader {
 	addressItems: string[]
 }
 
-
-/*export interface INavMenuDBItem {
-	position: number;
-	item_id: string;
-	label: string;
-	href: string | null;
-	children: string[] | null;
-}*/
-
-export interface INavItem {
+export interface IPageData {
 	id: string;
-	type: "link" | "node";
 	label: string;
 	href: string | null;
+}
+
+export interface INavItem extends IPageData {
+	type: "link" | "node";
 	children: INavItem[] | null;
 }
 
-/*export interface INavLinkItem {
-	id: string;
-	type: "link" | "nested"
-	label: string;
-	href: string | null;
+export interface INormalizedPages {
+	pagesMap: Map<IPageData["id"], IPageData>;
+	idList: IPageData["id"][];
 }
-
-export interface INavGroupItem extends Omit<INavLinkItem, "href"> {
-	nested: (INavLinkItem | INavGroupItem)[];
-}*/

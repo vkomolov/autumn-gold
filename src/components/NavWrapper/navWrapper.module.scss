@@ -18,27 +18,31 @@
 			position: relative;
 			z-index: 10;
 
-			&::after {
-				display: block;
-				position: absolute;
-				content: "";
-				bottom: 0;
-				left: 0;
-				width: 100%;
-				height: 0;
+			//to exclude the active link (when url === usePath()...) from animation on hover
+			&:not(:has(> a.activeLink)) {
+				&::after {
+					display: block;
+					position: absolute;
+					content: "";
+					bottom: 0;
+					left: 0;
+					width: 100%;
+					height: 0;
 
-				background: root.$fall;
-				background: root.$fallGradient;
-				z-index: -1;
+					background: root.$fall;
+					background: root.$fallGradient;
+					z-index: -1;
 
-				@include root.transition(height, 0.15s);
-			}
+					@include root.transition(height, 0.15s);
+				}
 
-			&:hover::after {
-				height: 100%;
+				&:hover::after {
+					height: 100%;
+				}
 			}
 		}
 
+		//the top level li-items
 		> li {
 			&::after {
 				border-radius: 0.3em 0.3em 0 0;
@@ -86,8 +90,8 @@
 	}
 
 .activeLink { //when usePathname() === href of the link
-	color: root.$greenDark;
-	background-color: root.$fallLighter;
+	color: root.$greenDark !important;
+	//background-color: root.$fallLighter;
 	cursor: default;
 	border-radius: 0.3em 0.3em 0 0;
 }

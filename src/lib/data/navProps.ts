@@ -40,4 +40,4 @@ export const navImageAlccProps: INavImageProps = {
 	"aria-label": "go to ALCC",
 	target: "_blank",
 	rel: "nofollow noopener noreferrer"
-}
+} as const;

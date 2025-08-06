@@ -1,2 +1,3 @@
-export * from "@/utils/partial/dynamicUtils";
+export * from "@/utils/partial/jsxInUtils";
+export * from "@/utils/partial/regularUtils";
 

@@ -17,4 +17,4 @@ export const contactsDataHeader: IContactsDataHeader = {
 		"4310 Youngfield St.",
 		"Wheat Ridge, CO"
 	],
-}
+} as const;

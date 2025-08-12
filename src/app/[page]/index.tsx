@@ -1,8 +1,5 @@
 //import {Metadata} from "next";
 
-
-
-
 type TParams = {
 	params: Promise<{page: string}>
 }
@@ -10,9 +7,6 @@ type TParams = {
 //TODO: объединить получение данных
 /*export const generateMetadata = async ({params}: TParams): Promise<Metadata> => {
 	const { page } = await params;
-
-
-
 }*/
 
 export default async function Page({params}: TParams) {

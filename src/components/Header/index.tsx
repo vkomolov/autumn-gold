@@ -9,7 +9,7 @@ import {IContactsDataHeader} from "@/types"
 import ContactsWrapper from "@/components/ContactsWrapper";
 import NavWrapper from "@/components/NavWrapper";
 
-import s from "./header.module.scss";
+import s from "./header.module.scss"; // for className={s.someClass}
 
 /*const hrefMailTo = "mailto:agl@ag-landscape.com";
 const hrefTel = "tel:+13034679619";
@@ -38,7 +38,7 @@ export default function Header () {
 					{...{navImageProps}}
 					textLinkHref={hrefMailTo}
 				>
-					<MailIcon className={s.icon_14}/>
+					<MailIcon className="icon-sm"/>
 					{ email }
 				</LogoBlock>
 

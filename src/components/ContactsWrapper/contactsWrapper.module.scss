@@ -11,15 +11,39 @@
 	flex: 1 1 0;
 
 	@include root.flex-box(row, flex-end, center, wrap);
-	gap: 0.625em 0.5em;
+	gap: 0.4em 0.5em;
+
+	/*@ Tablet portrait mid-range: 860px to 768.02px */
+	@include root.rangeTabletPortraitMid {
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	/*@ mobile (landscape): (max-width: 768px)*/
+	@include root.maxMobileLandscape {
+		justify-content: center;
+		align-items: flex-start;
+	}
 }
 
-//is used for links, buttons etc...
-.customFoxy {
-	color: root.$foxyNormal !important;
-	font-weight: 700 !important;
+.addressSpanWrapper {
 
-	&:hover {
-		color: root.$foxyActive !important;
+	@include root.flex-box(row, center, center, wrap);
+	gap: 0.2em 0.5em;
+
+	/*@ Tablet portrait mid-range: 860px to 768.02px */
+	@include root.rangeTabletPortraitMid {
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+	}
+}
+
+.alccLogo {
+
+	/* mobile (landscape): (max-width: 768px)*/
+	@include root.maxMobileLandscape {
+		display: none;
 	}
 }

@@ -49,6 +49,9 @@ export default function LogoBlock({
 
 			<IconTextLink
 				href={textLinkHref}
+				aria-label="mail to us"
+				tabIndex={0}
+				className="iconTextLink"
 			>
 				{children}
 			</IconTextLink>

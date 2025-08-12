@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import s from "./iconTextLink.module.scss";
 import cn from "@/lib/cn";
 import {IIconTextLinkProps} from "@/types";
@@ -9,6 +10,23 @@ export default function IconTextLink({
 	                                     children,
 	                                     ...rest
                                      }: IIconTextLinkProps) {
+	const isInternalLink = href.startsWith("/") && !href.startsWith("//");
+
+	if (isInternalLink) {
+		return (
+			<Link
+				href={href}
+				className={cn(
+					s.iconTextLink,
+					className
+				)}
+				{...rest}
+			>
+				{children}
+			</Link>
+		);
+	}
+
 	return (
 		<a
 			className={cn(
@@ -18,7 +36,6 @@ export default function IconTextLink({
 			href={href}
 			{...rest}
 		>
-			{/*<MailIcon className={s.icon_14}/>*/}
 			{children}
 		</a>
 	);

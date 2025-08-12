@@ -16,25 +16,24 @@
 	@include root.flex-box(row, center, center, wrap);
 
 	gap: 1em 1em;
-	padding-top: 0.625em;
+	padding-top: 1.2em;
 	padding-bottom: 0.625em;
 	color: root.$greenNormal;
 
 	/* tablet (portrait): (max-width: 1024px) */
 	@include root.maxTabletPortrait {
-		font-size: 0.78em;
+		font-size: .9em;
 	}
 
-	/* mobile (portrait wide): (max-width: 640px) */
-	@include root.maxMobilePortraitWide {
+	/* mobile (landscape): (max-width: 768px)*/
+	@include root.maxMobileLandscape {
 		flex-direction: column;
-		font-size: 1em;
 	}
 
 }
 
 .headerInfo {
-	flex-grow: 1;	//it takes the rest from the LogoWrapper width
+	flex: 1 1 0;
 
 	@include root.flex-box(column, flex-start, center);
 	gap: 0.5em;
@@ -43,25 +42,21 @@
 
 
 .addressText {
-	//padding: 0 0.625em;
+	/* Tablet portrait mid-range: 860px to 769px */
+	@include root.rangeTabletPortraitMid {
+		font-size: 0.8em;
+	}
 }
 
 .addressTextBoarded {
 	padding: 0 0.625em;
 	border-left: 1px solid root.$gray;
 	border-right: 1px solid root.$gray;
+
+	/* Tablet portrait: (max-width: 860px)*/
+	@include root.maxTabletPortraitMid {
+		padding: 0;
+		border-left: none;
+		border-right: none;
+	}
 }
-
-
-
-
-
-////////////
-
-.icon_14 {
-	width: 14px;
-	height: 14px;
-	//color: red;
-}
-
-

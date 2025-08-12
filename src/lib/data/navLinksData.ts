@@ -9,6 +9,7 @@ import {getNavItems} from "@/utils";
 
 export const navLinksData: INavItem[] = getNavItems(pagesData, navlinkList);
 
+
 /*
 export const navLinksData: INavItem[] = [
 	{

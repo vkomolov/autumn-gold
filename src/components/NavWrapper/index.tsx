@@ -16,9 +16,11 @@ export default function NavWrapper({data}: {
 	return (
 		<nav
 			className={s.navWrapper}
-			aria-label="Navigation to services"
+			aria-label="Navigation to pages"
 		>
 			{getNavMenu(data, stylesData)}
 		</nav>
 	);
+
+
 }

@@ -6,10 +6,10 @@ import NavImage from "@/components/NavImage";
 import IconTextLink from "@/components/IconTextLink";
 
 import {navImageAlccProps} from "@/lib/data";
-
-import s from "@/components/ContactsWrapper/contactsWrapper.module.scss";
 import {getSpans} from "@/utils";
 import {IContactsDataHeader} from "@/types";
+
+import s from "./contactsWrapper.module.scss";
 
 type TContactsDataHeaderRest = Omit<IContactsDataHeader, 'hrefMailTo' | 'email'>;
 
@@ -32,20 +32,22 @@ export default function ContactsWrapper({data}: {
 					href={hrefTelTo}
 					aria-label={telAriaLabel}
 					tabIndex={0}
-					className={s.customFoxy}
+					className="iconTextLink"
 				>
-					<PhoneCall className={s.icon_14}/>
+					<PhoneCall className="icon-sm" />
 
 					{ telLabel }
 
 				</IconTextLink>
 
-				{
-					getSpans(addressItems)
-				}
+				<div className={s.addressSpanWrapper}>
+					{
+						getSpans(addressItems)
+					}
+				</div>
 
 			</div>
-			<NavImage {...navImageAlccProps} />
+			<NavImage {...navImageAlccProps} className={s.alccLogo} />
 
 		</div>
 	);

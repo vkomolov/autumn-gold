@@ -1,5 +1,4 @@
 
-
 @use "./global_styles/root" as root;
 
 .total-wrapper {
@@ -13,8 +12,6 @@
 	background-color: root.$fallLighter;
 	//background-color: root.$white;
 	color: root.$grayDarker;
-
-	border: 1px dotted red;
 
 	/* mobile (portrait wide): (max-width: 640px) */
 	@include root.maxMobilePortraitWide {
@@ -44,3 +41,25 @@
 	}
 }
 
+/* ICONS */
+.icon-sm {
+	width: 0.875em;
+	height: 0.875em;
+}
+
+.icon-md {
+	width: 1em;
+	height: 1em;
+}
+
+.iconTextLink {
+	color: root.$greenNormal;
+	transition: transform 0.15s ease-in-out,
+	color 0.15s ease, font-weight 0.15s ease;
+
+	&:hover {
+		transform: translateX(-0.3em);
+		color: root.$foxyNormal;
+		font-weight: 600;
+	}
+}

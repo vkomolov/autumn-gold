@@ -3,10 +3,15 @@
 .navWrapper {
 	width: 100%;
 
+	/* Tablet portrait: (max-width: 860px)*/
+	@include root.maxTabletPortraitMid {
+		font-size: 0.93em;
+	}
+
 	> ul {
 		width: 100%;
 		@include root.flex-box(row, flex-end, flex-start, wrap);
-		gap: 0.5em;
+		//gap: 0.5em;
 
 		li, a {
 			color: root.$greenNormal;

@@ -34,3 +34,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Architecture section:
+
+## 🖼️ Image Handling Strategy
+
+This project uses a hybrid image strategy that supports both optimized local images (via `StaticImageData`) and dynamic external sources (e.g., from a CMS or CDN).
+
+For a detailed explanation, see [docs/image-strategy.md](./docs/image-strategy.md).
+________________________________________

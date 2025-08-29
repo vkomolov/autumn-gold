@@ -5,10 +5,10 @@ import {promises as fs} from "fs";
 import path from "path";
 import fg from 'fast-glob';
 
-//Path to the directory with the images to be imported for StaticImageData
+//Path to the directory with the imagesStatic to be imported for StaticImageData
 //! read docs/image-strategy.md
 
-const IMAGES_DIR = path.resolve("./src/assets/images");
+const IMAGES_DIR = path.resolve("./src/assets/imagesStatic");
 
 //! Path to the output file
 const OUTPUT_FILE = path.resolve('./src/lib/generated/imageMap.ts');
@@ -23,7 +23,7 @@ const run = async () => {
 		/**
 		 *! fast-glob expects a POSIX-compatible path (with /), but path.resolve() on Windows generates a path with \,
 		 * for example:
-		 * D:\GIT\autumn-gold\src\assets\images/**
+		 * D:\GIT\autumn-gold\src\assets\imagesStatic/**
 		 * fast-glob does not recognize such a path as a valid pattern, and ends up returning an empty list.
 		 * Just replacing \ with / in pattern before passing it to fg():
 		 */
@@ -44,7 +44,7 @@ const run = async () => {
 		for (const [index, filePath] of files.entries()) {
 			/**
 			 *! It converts absolute file path to a relative POSIX-style path from 'src'
-			 * (e.g., 'src/assets/images/foo.webp' → 'assets/images/foo.webp')
+			 * (e.g., 'src/assets/imagesStatic/foo.webp' → 'assets/imagesStatic/foo.webp')
 			 *! Also it ensures compatibility on Windows by replacing backslashes with forward slashes
 			 */
 			const relativePath = path.relative('src', filePath).replace(/\\/g, '/');
@@ -61,7 +61,7 @@ const run = async () => {
 		/**
 		 *! ⚠️ AUTO-GENERATED FILE — DO NOT EDIT MANUALLY
 		 *! Run with: node scripts/processImages.mjs
-		 * it does line-by-line import of images,
+		 * it does line-by-line import of imagesStatic,
 		 * then it creates the Object imageMap inline width key: value pairs...
 		 */
 		const output = `

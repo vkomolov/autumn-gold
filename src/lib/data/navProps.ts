@@ -2,8 +2,8 @@ import {INavImageProps} from "@/types";
 
 //as Header is a server component, LogoImg will be imported on a server side. It will not enlarge the client bundle...
 //! import from "/public/..." is not allowed, as "/public" is used from the browser
-import LogoImg from "@/assets/images/logo/logo-autumn.webp";
-import LogoAlccImg from "@/assets/images/logo/alcc_tr.webp";
+import LogoImg from "@/assets/imagesStatic/logo/logo-autumn.webp";
+import LogoAlccImg from "@/assets/imagesStatic/logo/alcc_tr.webp";
 
 /**
  *@ Description

@@ -65,6 +65,8 @@ const run = async () => {
 		 * then it creates the Object imageMap inline width key: value pairs...
 		 */
 		const output = `
+// ⚠️ AUTO-GENERATED FILE — DO NOT EDIT MANUALLY
+// 'npm run generate:images'
 // imports
 ${imports.join('\n')}
 

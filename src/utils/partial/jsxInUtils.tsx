@@ -1,10 +1,18 @@
-import {INavItem, TNavItemStyles} from "@/types";
+import {
+	INavItem,
+	TNavItemStyles,
+	TImageSizes, TBreakPoints, TImageSizeValue,
+} from "@/types";
+
 import cn from "@/lib/cn";
-import {JSX} from "react";
+import React, {JSX} from "react";
 
 import NavLink from "@/components/NavLink";
 
 import s from "@/components/Header/header.module.scss";
+import {StaticImageData} from "next/image";
+
+/* END OF IMPORTS */
 
 export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.Element {
 	const {className, activeClassName} = stylesData;
@@ -88,4 +96,159 @@ export function getSpans(textItems: string[]) {
 			</span>
 		);
 	})
+}
+
+/**
+ * Calculates the aspect ratio (as a string) to be used in inline styles like `aspectRatio`.
+ *
+ * Supports two cases:
+ *
+ * 1. If `src` is a string (e.g. dynamic URL from CMS or API), both `width` and `height` must be provided manually.
+ * 2. If `src` is a StaticImageData object (e.g. from `import example from "../image.jpg"`),
+ *    the intrinsic dimensions from `src.width` and `src.height` are used.
+ *
+ * If height is missing in case 1 or the StaticImageData object is malformed,
+ * a warning is logged and the function returns `undefined`.
+ *
+ * @param width - The known or desired width of the image container.
+ * @param src - Either a dynamic string URL or StaticImageData object.
+ * @param height - (Optional) The known height of the image, required if `src` is a string.
+ *
+ * @returns The calculated aspect ratio as a string (e.g. "3.0000"), or `undefined` if it cannot be determined.
+ */
+export function getAspectRatio(
+	width: number,
+	src: string | StaticImageData,
+	height?: number,
+): string | undefined {
+	//! Case 1: When src is a string (dynamic URL), we need both width and height from props
+	if (typeof src === "string" ) {
+		if (!height) {
+			console.warn(
+				`[ImageWrapper] src="${src}": Cannot calculate aspect ratio — 
+				"height" is missing and "src" is not StaticImageData.`
+			)
+			return undefined;
+		}
+		return (width/height).toFixed(4);
+	}
+	//! Case 2: When src is StaticImageData (e.g. imported with `next/image`), use its built-in width/height
+	else {
+		if (src.width && src.height) {
+			return (src.width/src.height).toFixed(4);
+		}
+		// Fallback warning if StaticImageData lacks dimensions (very unlikely)
+		console.warn(`[ImageWrapper] Invalid StaticImageData: Missing "src.width" or "src.height". 
+		Cannot determine aspect ratio.`);
+		return undefined;
+	}
+}
+
+/**
+ * Creates a shallow copy of an object with specific keys removed.
+ *
+ * Useful when you want to preserve most of an object’s properties,
+ * but explicitly exclude a known set of keys — for example, to prevent
+ * overriding critical props or styles.
+ *
+ * This function is especially handy when working with `style` objects in React,
+ * where certain properties (like `position`, `width`, etc.) must be protected.
+ *
+ * @template T - The type of the source object.
+ * @template K - The keys to exclude from the result.
+ *
+ * @param obj - The original object to copy.
+ * @param keys - An array of keys to omit from the result.
+ *
+ * @returns A new object with the specified keys removed.
+ */
+export function omit<T extends object, K extends keyof T>(
+	obj: T,
+	keys: K[]
+): Omit<T, K> {
+	const clone = { ...obj };
+	for (const key of keys) {
+		delete clone[key];
+	}
+	return clone;
+}
+
+/**
+ * Generates a reliable inline `style` object for an image wrapper
+ * that works seamlessly with `<Image fill />` in Next.js.
+ *
+ * This function enforces layout-critical properties like `position`, `width`,
+ * and (optionally) `aspectRatio`, while allowing custom user-defined styles
+ * to be merged in — excluding any overrides for those critical properties.
+ *
+ * It's especially useful in components that dynamically build wrapper styles
+ * based on image dimensions or props.
+ *
+ * - `position: 'relative'` is always applied to ensure proper positioning for `Image fill`
+ * - `width` is required and defines the visual width of the container
+ * - `aspectRatio` is calculated if possible (based on `src`, `width`, and `height`)
+ * - Any custom styles (`propsStyle`) are merged, except for restricted layout keys
+ *
+ * @param style - Optional user-defined styles to apply to the wrapper.
+ * @param src - Either a string (dynamic image URL) or StaticImageData (with known dimensions).
+ * @param width - Required width of the wrapper container (used in aspect ratio calculation).
+ * @param height - Optional height of the wrapper (required if `src` is a string).
+ *
+ * @returns A `style` object safe to apply directly to a wrapper `<div>` around `<Image fill />`.
+ */
+export function getImageWrapperStyle(
+	src: string | StaticImageData,
+	width: number,
+	height?: number,
+	style?: React.CSSProperties | undefined,
+): React.CSSProperties {
+	// Calculate aspect ratio based on src and dimensions
+	const aspectRatio = getAspectRatio(width, src, height);
+
+	// Exclude layout-critical keys from user-defined style
+	const cleanedStyle = omit(
+		style ?? {},
+		['position', 'width', 'aspectRatio']
+	);
+
+	return {
+		// Required for <Image fill />
+		position: "relative",
+
+		// Fixed container width
+		width,
+
+		// If aspectRatio could be calculated, include it
+		// if no aspectRatio, the container will have only width and will not be visible in browser till CSS, if it is
+		...(aspectRatio ? { aspectRatio } : {}),
+
+		// apply any custom user-defined styles (safe to override non-layout properties)
+		...cleanedStyle,
+	}
+}
+
+function normalizeBreakPoint(breakPoint: TBreakPoints, value: TImageSizeValue): string {
+	const [prefix, bp] = breakPoint.split("_"); // e.g. ["max", "1920"]
+	return `(${prefix}-width: ${bp}px) ${value}`;
+}
+
+export function getImageSizes(breakPoints: TImageSizes): string | undefined {
+	/**
+	 *! Object.entries() always returns an array of [string, unknown] pairs.
+	 * Even if the keys are strongly typed, TypeScript forgets about it.
+	 *! Solution: to use Object.keys for strict typification...
+	 */
+/*	return breakPoints
+	? Object.entries(breakPoints).map(([key, value]) => {
+		return normalizeBreakPoint(key, value);
+		})
+			.join(", ")
+		: undefined;*/
+
+	return breakPoints
+		? (Object.keys(breakPoints) as TBreakPoints[]).map((key) => {
+			const value = breakPoints[key];
+			return normalizeBreakPoint(key, value);
+		}).join(', ')
+		: undefined;
 }

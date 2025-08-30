@@ -1,6 +1,5 @@
 import NavLink from "@/components/NavLink";
 import Image from "next/image";
-//import LogoImg from "/logo/logo-autumn.webp";
 import {INavImageProps} from "@/types";
 import React from "react";
 

@@ -1,16 +1,16 @@
-import {INavItem, INormalizedPages, IPageData, TLinkItem} from "@/types";
+import {INavItem, INormalizedPages, IPageHref, TLinkItem} from "@/types";
 
 export function getNavItems(
-	pagesData: IPageData[],
+	pagesHrefList: IPageHref[],
 	navlinkList: TLinkItem[]
 ): INavItem[] {
-	const { pagesMap } = getPagesDataNormailized(pagesData);
+	const { pagesHrefMap } = getPagesDataNormailized(pagesHrefList);
 
-	return getNavItemList(pagesMap, navlinkList);
+	return getNavItemList(pagesHrefMap, navlinkList);
 }
 
 
-function getNavItemList(pagesMap: Map<string, IPageData>, navlinkList: TLinkItem[]) {
+function getNavItemList(pagesMap: Map<string, IPageHref>, navlinkList: TLinkItem[]) {
 
 	const auxList = [];
 
@@ -34,11 +34,11 @@ function getNavItemList(pagesMap: Map<string, IPageData>, navlinkList: TLinkItem
 	return auxList;
 }
 
-function getPagesDataNormailized(pages: IPageData[]): INormalizedPages {
-	const pagesMap: INormalizedPages["pagesMap"] = new Map(pages.map(page => [page.id, page]));
-	const idList: INormalizedPages["idList"] = [...pagesMap.keys()];
+function getPagesDataNormailized(pages: IPageHref[]): INormalizedPages {
+	const pagesHrefMap: INormalizedPages["pagesHrefMap"] = new Map(pages.map(page => [page.id, page]));
+	const idList: INormalizedPages["idList"] = [...pagesHrefMap.keys()];
 	return {
-		pagesMap,
+		pagesHrefMap,
 		idList,
 	};
 }

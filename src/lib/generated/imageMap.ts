@@ -1,4 +1,6 @@
 
+// ⚠️ AUTO-GENERATED FILE — DO NOT EDIT MANUALLY
+// 'npm run generate:images'
 // imports
 import img0 from '@/assets/imagesStatic/hero/landscapes_hero.webp';
 import img1 from '@/assets/imagesStatic/logo/alcc_tr.webp';

@@ -50,18 +50,18 @@ export interface IContactsDataHeader {
 	addressItems: string[]
 }
 
-export interface IPageData {
+export interface IPageHref {
 	id: string;
 	label: string;
 	href: string | null;
 }
 
-export interface INavItem extends IPageData {
+export interface INavItem extends IPageHref {
 	type: "link" | "node";
 	children: INavItem[] | null;
 }
 
 export interface INormalizedPages {
-	pagesMap: Map<IPageData["id"], IPageData>;
-	idList: IPageData["id"][];
+	pagesHrefMap: Map<IPageHref["id"], IPageHref>;
+	idList: IPageHref["id"][];
 }

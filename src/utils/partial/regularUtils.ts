@@ -1,44 +1,32 @@
-import {INavItem, INormalizedPages, IPageHref, TLinkItem} from "@/types";
-
-export function getNavItems(
-	pagesHrefList: IPageHref[],
-	navlinkList: TLinkItem[]
-): INavItem[] {
-	const { pagesHrefMap } = getPagesDataNormailized(pagesHrefList);
-
-	return getNavItemList(pagesHrefMap, navlinkList);
-}
+import {INavItem, INormalizedPagesHref, IPageHref, TLinkItem} from "@/types";
 
 
-function getNavItemList(pagesMap: Map<string, IPageHref>, navlinkList: TLinkItem[]) {
 
-	const auxList = [];
-
-	for (const linkData of navlinkList) {
-		const itemData = pagesMap.get(linkData.id);
-		const children:TLinkItem[] | null = linkData.children?? null;
-
-		if (itemData) {
-			const navItem: INavItem = {
-				...itemData,
-				type: children ? "node" : "link",
-				children: children ? getNavItemList(pagesMap, children) : null,
-			}
-			auxList.push(navItem);
-		}
-		else {
-			console.warn(`getNavItemList: missing page data for id: "${linkData.id}"`);
-		}
+/**
+ * Creates a shallow copy of an object with specific keys removed.
+ *
+ * Useful when you want to preserve most of an object’s properties,
+ * but explicitly exclude a known set of keys — for example, to prevent
+ * overriding critical props or styles.
+ *
+ * This function is especially handy when working with `style` objects in React,
+ * where certain properties (like `position`, `width`, etc.) must be protected.
+ *
+ * @template T - The type of the source object.
+ * @template K - The keys to exclude from the result.
+ *
+ * @param obj - The original object to copy.
+ * @param keys - An array of keys to omit from the result.
+ *
+ * @returns A new object with the specified keys removed.
+ */
+export function omit<T extends object, K extends keyof T>(
+	obj: T,
+	keys: K[]
+): Omit<T, K> {
+	const clone = { ...obj };
+	for (const key of keys) {
+		delete clone[key];
 	}
-
-	return auxList;
-}
-
-function getPagesDataNormailized(pages: IPageHref[]): INormalizedPages {
-	const pagesHrefMap: INormalizedPages["pagesHrefMap"] = new Map(pages.map(page => [page.id, page]));
-	const idList: INormalizedPages["idList"] = [...pagesHrefMap.keys()];
-	return {
-		pagesHrefMap,
-		idList,
-	};
+	return clone;
 }

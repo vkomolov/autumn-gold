@@ -43,3 +43,10 @@ This project uses a hybrid image strategy that supports both optimized local ima
 
 For a detailed explanation, see [docs/image-strategy.md](./docs/image-strategy.md).
 ________________________________________
+
+## Imager Wrapper Component: ImageWrapper
+A small, battle-tested wrapper around Next.js `<Image>` 
+that guarantees safe layout (no CLS) and predictable responsive behavior
+
+For a detailed explanation, see [docs/imageWrapper.md](./docs/imageWrapper.md).
+----------------------------------------

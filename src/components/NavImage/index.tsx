@@ -34,7 +34,7 @@ export default function NavImage({
 	return (
 		<NavLink
 			href={href}
-			exact={exact} //
+			exact={exact}
 			replace={replace}
 			style={navLinkStyles}
 			className={className || ""}
@@ -43,12 +43,9 @@ export default function NavImage({
 			<Image
 				src={src}
 				priority={true} //! Next priority attribute
-				//alt="Autumn Gold Landscapes Services"
 				alt={alt || "image link"}
 				fetchPriority={"high"} //! HTML priority attribute
 				fill
-				//width={245}
-				//height={72}
 				style={{objectFit: objectFit || "cover"}}
 				sizes={sizes}
 			/>

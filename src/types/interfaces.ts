@@ -61,7 +61,7 @@ export interface INavItem extends IPageHref {
 	children: INavItem[] | null;
 }
 
-export interface INormalizedPages {
+export interface INormalizedPagesHref {
 	pagesHrefMap: Map<IPageHref["id"], IPageHref>;
 	idList: IPageHref["id"][];
 }

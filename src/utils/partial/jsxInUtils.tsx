@@ -1,7 +1,7 @@
 import {
 	INavItem,
 	TNavItemStyles,
-	TImageSizes, TBreakPoints, TImageSizeValue,
+	TImageSizes, TBreakPoints, TImageSizeValue, IPageHref, TLinkItem, INormalizedPagesHref,
 } from "@/types";
 
 import cn from "@/lib/cn";
@@ -11,6 +11,7 @@ import NavLink from "@/components/NavLink";
 
 import s from "@/components/Header/header.module.scss";
 import {StaticImageData} from "next/image";
+import {omit} from "@/utils";
 
 /* END OF IMPORTS */
 
@@ -98,6 +99,48 @@ export function getSpans(textItems: string[]) {
 	})
 }
 
+export function getNavItems(
+	pagesHrefList: IPageHref[],
+	navlinkList: TLinkItem[]
+): INavItem[] {
+	const { pagesHrefMap } = getPagesHrefNormalized(pagesHrefList);
+
+	return getNavItemList(pagesHrefMap, navlinkList);
+}
+
+function getNavItemList(pagesMap: Map<string, IPageHref>, navlinkList: TLinkItem[]) {
+
+	const auxList = [];
+
+	for (const linkData of navlinkList) {
+		const itemData = pagesMap.get(linkData.id);
+		const children:TLinkItem[] | null = linkData.children?? null;
+
+		if (itemData) {
+			const navItem: INavItem = {
+				...itemData,
+				type: children ? "node" : "link",
+				children: children ? getNavItemList(pagesMap, children) : null,
+			}
+			auxList.push(navItem);
+		}
+		else {
+			console.warn(`getNavItemList: missing page data for id: "${linkData.id}"`);
+		}
+	}
+
+	return auxList;
+}
+
+function getPagesHrefNormalized(pages: IPageHref[]): INormalizedPagesHref {
+	const pagesHrefMap: INormalizedPagesHref["pagesHrefMap"] = new Map(pages.map(page => [page.id, page]));
+	const idList: INormalizedPagesHref["idList"] = [...pagesHrefMap.keys()];
+	return {
+		pagesHrefMap,
+		idList,
+	};
+}
+
 /**
  * Calculates the aspect ratio (as a string) to be used in inline styles like `aspectRatio`.
  *
@@ -145,35 +188,6 @@ export function getAspectRatio(
 }
 
 /**
- * Creates a shallow copy of an object with specific keys removed.
- *
- * Useful when you want to preserve most of an object’s properties,
- * but explicitly exclude a known set of keys — for example, to prevent
- * overriding critical props or styles.
- *
- * This function is especially handy when working with `style` objects in React,
- * where certain properties (like `position`, `width`, etc.) must be protected.
- *
- * @template T - The type of the source object.
- * @template K - The keys to exclude from the result.
- *
- * @param obj - The original object to copy.
- * @param keys - An array of keys to omit from the result.
- *
- * @returns A new object with the specified keys removed.
- */
-export function omit<T extends object, K extends keyof T>(
-	obj: T,
-	keys: K[]
-): Omit<T, K> {
-	const clone = { ...obj };
-	for (const key of keys) {
-		delete clone[key];
-	}
-	return clone;
-}
-
-/**
  * Generates a reliable inline `style` object for an image wrapper
  * that works seamlessly with `<Image fill />` in Next.js.
  *
@@ -208,7 +222,7 @@ export function getImageWrapperStyle(
 	// Exclude layout-critical keys from user-defined style
 	const cleanedStyle = omit(
 		style ?? {},
-		['position', 'width', 'aspectRatio']
+		["position", "width", "aspectRatio"]
 	);
 
 	return {

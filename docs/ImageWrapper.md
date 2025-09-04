@@ -124,18 +124,28 @@ objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 breakPoints?: TImageSizes;
 
 /** Valid breakpoint keys **/
-type TBreakPoints =
+export type TBreakPoints =
 	| "min_1921"
 	| "max_1920"
+	| "min_1441"
 	| "max_1440"
+	| "min_1281"
 	| "max_1280"
+	| "min_1025"
 	| "max_1024"
+	| "min_861"
 	| "max_860"
+	| "min_769"
 	| "max_768"
+	| "min_641"
 	| "max_640"
+	| "min_577"
 	| "max_576"
+	| "min_481"
 	| "max_480"
+	| "min_376"
 	| "max_375"
+	| "min_321"
 	| "max_320";
 
 // Sizes can be numeric (default: px), or string with unit
@@ -152,17 +162,15 @@ type TImageSizes = Record<TBreakPoints, TImageSizeValue>;
 
 Safe attributes you can pass in wrapperProps:
 
-``className, id, role, tabIndex``
+- ``className, id, role, tabIndex etc...``
 
-ARIA: any aria-*
+- ARIA: any aria-*
 
-Data attributes: any data-*
+- Data attributes: any data-*
 
-Event handlers: onClick, onMouseEnter, onMouseLeave, onKeyDown, etc.
+- Event handlers: onClick, onMouseEnter, onMouseLeave, onKeyDown, etc.
 
-#### Do not pass raw style; 
-
-#### use propStyle instead so critical layout keys remain protected.
+#### Do not pass raw "style": use propStyle instead so critical layout keys remain protected.
 
 In imageProps (forwarded to `<Image>` after cleaning):
 
@@ -176,7 +184,7 @@ unoptimized, onLoadingComplete
 className, id, role, any aria-*, any data-*
 ```
 
-Stripped automatically from imageProps: 
+#### Stripped automatically from imageProps: 
 ```fill, sizes, style (managed internally).```
 
 ### BASIC USAGE with <div> as wrapper:
@@ -186,26 +194,26 @@ import ImageWrapper from '@/components/ImageWrapper';
 export function Hero() {
 return (
 <ImageWrapper
-wrapper="div"
-wrapperProps={{
-className: 'relative block',
-propStyle: { borderRadius: 12 }, // merged safely; critical keys are protected
-'aria-label': 'Decorative hero image'
+  wrapper="div"
+  wrapperProps={{
+    className: 'relative block',
+    propStyle: { borderRadius: 12 }, // merged safely; critical keys are protected
+    'aria-label': 'Decorative hero image'
 }}
-imageProps={{
-src: 'generated-landscapes_hero.webp', // resolves from imageMap
-alt: 'Mountains at sunrise',
-width: '100%',
-// height: 420, // as src is StaticImageData, no need for height (aspectRatio will be calculated)
-objectFit: 'cover',
-breakPoints: {
-	"min_1921": "740px",
-	"max_1024": "32em",
-	"max_640": "100%"
+  imageProps={{
+    src: 'generated-landscapes_hero.webp', // resolves from imageMap
+    alt: 'Mountains at sunrise',
+    width: '100%',
+    // height: 420, // as src is StaticImageData, no need for height (aspectRatio will be calculated)
+    objectFit: 'cover',
+  breakPoints: {
+	  "min_1921": "740px",
+	  "max_1024": "32em",
+	  "max_640": "100%"
 },
 // plus any other safe props
-priority: true,
-fetchPriority: 'high',
+  priority: true,
+  fetchPriority: 'high',
 }}
 />
 );

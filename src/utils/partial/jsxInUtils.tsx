@@ -252,16 +252,14 @@ export function getImageSizes(breakPoints: TImageSizes): string | undefined {
 	 * Even if the keys are strongly typed, TypeScript forgets about it.
 	 *! Solution: to use Object.keys for strict typification...
 	 */
-/*	return breakPoints
-	? Object.entries(breakPoints).map(([key, value]) => {
-		return normalizeBreakPoint(key, value);
-		})
-			.join(", ")
-		: undefined;*/
 
 	return breakPoints
 		? (Object.keys(breakPoints) as TBreakPoints[]).map((key) => {
 			const value = breakPoints[key];
+			if (!value) {
+				console.warn(`[getImageSizes] no breakPoints value at media: ${key}... sizes is "undefined"...`);
+				return undefined;
+			}
 			return normalizeBreakPoint(key, value);
 		}).join(', ')
 		: undefined;

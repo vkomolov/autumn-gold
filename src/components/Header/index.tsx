@@ -1,15 +1,16 @@
 
-import { Mail as MailIcon } from 'lucide-react';
-
-import LogoBlock from "@/components/LogoBlock";
-
-import {contactsDataHeader, navImageProps, navLinksData } from "@/lib/data";
+import {contactsDataHeader, navLinksData } from "@/lib/data";
 import {IContactsDataHeader} from "@/types"
 
 import ContactsWrapper from "@/components/ContactsWrapper";
 import NavWrapper from "@/components/NavWrapper";
+import LogoBlock from "@/components/LogoBlock";
+import { Mail as MailIcon } from 'lucide-react';
+import {logoBlockImageData} from "@/lib/data";
 
 import s from "./header.module.scss"; // for className={s.someClass}
+
+/* END OF IMPORTS */
 
 /*const hrefMailTo = "mailto:agl@ag-landscape.com";
 const hrefTel = "tel:+13034679619";
@@ -29,13 +30,15 @@ export default function Header () {
 		...rest
 
 	} = contactsDataHeader as IContactsDataHeader;
+	const {wrapperProps, imageProps} = logoBlockImageData;
 
 	return (
 		<div className={s.headerLayer}>
 			<header className={s.header} role="banner">
 
 				<LogoBlock
-					{...{navImageProps}}
+					wrapperProps={wrapperProps}
+					imageProps={imageProps}
 					textLinkHref={hrefMailTo}
 				>
 					<MailIcon className="icon-sm"/>

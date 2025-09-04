@@ -1,4 +1,4 @@
-import {IPageHref} from "@/types/interfaces";
+import {INavLinkProps, IPageHref} from "@/types/interfaces";
 import React, {CSSProperties, JSX, ReactElement} from "react";
 import {imageMap} from "@/lib/generated/imageMap";
 
@@ -57,19 +57,12 @@ export type TBreakPoints =
 	| "min_321"
 	| "max_320";
 
-// Sizes can be numeric (default: px), or string with unit
+// Sizes can be numeric or string with units ${'px' | 'vw' | '%'}`
 //! no "em", as "em" asks for loading CSS, which is later, then inline styles...
 export type TImageSizeValue = number | `${number}${'px' | 'vw' | '%'}`;
 
 // Mapping breakpoints → sizes
-export type TImageSizes = Record<TBreakPoints, TImageSizeValue>;
-
-const sample = {
-	"min_1441": "25vw",
-	"max_1440": "33.3vw",
-	"max_1024": "50vw",
-	"max_480": "100vw",
-}
+export type TImageSizes = Partial<Record<TBreakPoints, TImageSizeValue>>;
 
 // Final shape of image data (used in CMS, UI configs, etc.)
 export type TImageProps = {
@@ -82,7 +75,8 @@ export type TImageProps = {
 	// Optional height — required if src is a string (not StaticImageData)
 	height?: number;
 
-	objectFit?: React.CSSProperties['objectFit'];
+	//objectFit?: React.CSSProperties['objectFit'];
+	objectFit?: string; //objectFit is taken from imageProps.objectFit which is string
 
 	// Responsive sizes
 	breakPoints?: TImageSizes;
@@ -91,17 +85,32 @@ export type TImageProps = {
 	[key: string]: unknown;
 };
 
-export type TImageWrapper =
+export type TImageWrapper<P> =
 	| keyof JSX.IntrinsicElements //"div", "a", "section", etc...
-	| React.ComponentType<unknown>
+	| React.ComponentType<P>
 
-export type TWrapperProps = {
-	propStyle?: CSSProperties;  //adding optional inline style
-	[key: string]: unknown; //The remaining properties can be also optional.
-}
+export type TWrapperProps<P = Record<string, unknown>> = P & {
+	propStyle?: CSSProperties;
+};
 
-export type TImageWrapperProps = {
-	wrapper: TImageWrapper;
-	wrapperProps?: TWrapperProps;
+export type TImageWrapperProps<P = Record<string, unknown>> = {
+	wrapper: TImageWrapper<P>;
 	imageProps: TImageProps;
+	wrapperProps?: TWrapperProps<P>;
 }
+
+export type TLogoBlockProps = {
+	imageProps: TImageProps;
+	wrapperProps: TWrapperProps<INavLinkProps>; //href is required...
+	textLinkHref: string;
+	children: React.ReactNode;
+}
+
+export type TImageData = {
+	wrapperProps: Record<string, unknown>,
+	imageProps: TImageProps,
+}
+
+export type TLogoBlockImageData = Omit<TImageData, "wrapperProps"> & {
+	wrapperProps: TWrapperProps<INavLinkProps>
+};

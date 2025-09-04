@@ -3,8 +3,15 @@ import Image from "next/image";
 import {INavImageProps} from "@/types";
 import React from "react";
 
+export default function NavImage({}) {
 
-export default function NavImage({
+	return (<div></div>
+
+	);
+}
+
+
+export function NavImageOld({
 	href,
 	src,
 	alt,

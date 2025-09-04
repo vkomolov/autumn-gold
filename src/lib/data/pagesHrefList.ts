@@ -59,6 +59,10 @@ export const pagesHrefList: IPageHref[] = [
 	}
 ];
 
+export const pagesHrefMapByLabel = new Map<string, string | null>(pagesHrefList.map(
+	({label, href}) => [label.toLowerCase(), href]
+));
+
 
 export const navlinkList: TLinkItem[] = [
 	{

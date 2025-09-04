@@ -27,7 +27,7 @@ export default function ContactsWrapper({data}: {
 	return (
 		<div className={s.contactsWrapper}>
 
-			<div className={s.addressWrapper}>
+{/*			<div className={s.addressWrapper}>
 				<IconTextLink
 					href={hrefTelTo}
 					aria-label={telAriaLabel}
@@ -47,7 +47,7 @@ export default function ContactsWrapper({data}: {
 				</div>
 
 			</div>
-			<NavImage {...navImageAlccProps} className={s.alccLogo} />
+			<NavImage {...navImageAlccProps} className={s.alccLogo} />*/}
 
 		</div>
 	);

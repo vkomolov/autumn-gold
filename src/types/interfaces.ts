@@ -13,7 +13,7 @@ export interface INavLinkProps extends React.ComponentProps<typeof Link> {
 	className?: string;
 	replace?: boolean;
 	activeClassName?: string; //is used when "active"
-	children: React.ReactNode;
+	//children: React.ReactNode;
 }
 
 export interface IIconTextLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {

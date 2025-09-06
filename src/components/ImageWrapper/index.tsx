@@ -61,7 +61,7 @@ export default function ImageWrapper<
 	} = imageProps;
 
 	const {
-		propStyle,
+		style,
 		...restWrapperProps
 	} = wrapperProps ?? ({} as TWrapperProps<P>);
 
@@ -85,7 +85,7 @@ export default function ImageWrapper<
 	 * - Includes relative positioning, width, aspect-ratio.
 	 * - Preserves safe inline styles passed via propStyle (except restricted keys).
 	 */
-	const wrapperStyle = getImageWrapperStyle(resolvedSrc, width, height, propStyle);
+	const wrapperStyle = getImageWrapperStyle(resolvedSrc, width, height, style);
 
 	// Generate responsive sizes attribute if breakPoints are defined.
 	//! sizes and imageProps.width are recommended to be in consistent units (px ↔ px, vw ↔ vw)
@@ -113,7 +113,7 @@ export default function ImageWrapper<
 	return (
 		<Wrapper
 			style={wrapperStyle}
-			{...(restWrapperPropsCleaned as unknown as P)}
+			{...(restWrapperPropsCleaned as P & { children?: React.ReactNode })}
 		>
 			<Image
 				fill

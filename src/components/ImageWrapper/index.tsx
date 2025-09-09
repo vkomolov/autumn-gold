@@ -6,45 +6,9 @@ import {imageMap} from "@/lib/generated/imageMap";
 
 /* END OF IMPORTS */
 
-/* --------------------------------------------------------------------------
- * ImageWrapper Component
- *
- * A wrapper around Next.js <Image> that provides:
- * - Automatic resolution of image sources (local StaticImageData or remote URL).
- * - Safe inline styles for the wrapper (aspectRatio, relative positioning, width).
- * - Responsive image sizes based on custom breakpoints.
- * - Separation of concerns between wrapperProps and imageProps.
- *
- * Restrictions:
- * - Wrapper styles are filtered to prevent overriding critical layout styles.
- * - Image props are sanitized (["fill", "sizes", "style"] are internally managed).
- *
- * For a detailed explanation, see documentation:
- * [docs/imageWrapper.md](./docs/imageWrapper.md)
- * -------------------------------------------------------------------------- */
 
-/**
- * ImageWrapper
- *
- * @param wrapper - React element type for wrapping the image (e.g., "div", Link, or custom component).
- * @param wrapperProps - Additional props for the wrapper. Accepts:
- *   - `propStyle`: inline styles (except restricted keys).
- *   - any `aria-*` attributes or classNames.
- *   - Critical wrapper styles (position, width, aspectRatio) are injected automatically.
- * @param imageProps - Props for Next.js <Image>. Accepts:
- *   - `src`: either StaticImageData (imported image from imageMap) or string (public/CDN/CMS URL).
- *   - `alt`: required for accessibility.
- *   - `width` / `height`: numeric values (used when src is a string).
- *   ! sizes and imageProps.width must be in consistent units (px ↔ px, vw ↔ vw)
- *   - `objectFit`: CSS object-fit behavior. It is sent in imageProps.objectFit...
- *   - `breakPoints`: mapping of viewport breakpoints → sizes (for responsive behavior).
- *   - Other safe attributes are passed to <Image>.
- *
- * @returns A wrapped <Image> element with safe styles and responsive support.
- */
 export default function ImageWrapper<
-	P extends { style?: React.CSSProperties; children?: React.ReactNode } = Record<string, unknown
-	>
+	P extends { style?: React.CSSProperties; children?: React.ReactNode } = object
 >({
 	wrapper: Wrapper,
 	wrapperProps,
@@ -101,19 +65,19 @@ export default function ImageWrapper<
 	 */
 	const restImagePropsCleaned = omit(
 		restImageProps,
-		["fill", "sizes", "style", "className"] //className is omitted to exclude critical css styles
+		["fill", "sizes", "style", "className"] as (keyof typeof restImageProps)[] //className is omitted to exclude critical css styles
 	);
 
 	// Remove restricted props from wrapper to enforce style control.
 	const restWrapperPropsCleaned = omit(
-		restWrapperProps as Record<string, unknown>,
-		["style"]
+		restWrapperProps,
+		["style"] as (keyof typeof restWrapperProps)[]
 	);
 
 	return (
 		<Wrapper
 			style={wrapperStyle}
-			{...(restWrapperPropsCleaned as P & { children?: React.ReactNode })}
+			{...(restWrapperPropsCleaned as P)}
 		>
 			<Image
 				fill

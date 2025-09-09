@@ -50,3 +50,10 @@ that guarantees safe layout (no CLS) and predictable responsive behavior
 
 For a detailed explanation, see [docs/imageWrapper.md](./docs/imageWrapper.md).
 ----------------------------------------
+
+## все ссылки с октрытием нового окна через target="_blank", должны иметь аттрибут rel="noopener"
+
+Даже если ссылка не имеет target="_blank", ссылка должна содержать аттрибут rel="noopener", предотвращающая 
+доступ к window.opener из нового окна (для избежания возможного шифинга и других атак)
+
+----------------------------------------

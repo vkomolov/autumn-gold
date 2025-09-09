@@ -89,36 +89,10 @@ export type TImageWrapper<P = object> =
 	| keyof JSX.IntrinsicElements //"div", "a", "section", etc...
 	| React.ComponentType<P & { children?: React.ReactNode }>;
 
-
-/*export type TImageWrapper<P> =
-	| keyof JSX.IntrinsicElements //"div", "a", "section", etc...
-	| React.ComponentType<P>*/
-
-export type TWrapperProps<P> = Omit<P, "style"> & { style?: React.CSSProperties };
-
-/*export type TWrapperProps<P = Record<string, unknown>> = P & {
-	propStyle?: CSSProperties;
-};*/
-
-/*export type TImageWrapperProps<W extends TImageWrapper<unknown>> = {
-	wrapper: TImageWrapper<W>;
-	imageProps: TImageProps;
-	wrapperProps?: W extends React.ComponentType<infer P>
-		? TWrapperProps<P>
-		: W extends keyof JSX.IntrinsicElements
-			? React.HTMLAttributes<W>
-			: never;
-}*/
-
-/*export type TImageWrapperProps<P = object> = {
-	wrapper: React.ComponentType<P & { children?: React.ReactNode }>;
-	wrapperProps?: TWrapperProps<P>;
-	imageProps: TImageProps;
-} | {
-	wrapper: keyof JSX.IntrinsicElements;
-	wrapperProps?: React.HTMLAttributes<keyof JSX.IntrinsicElements>;
-	imageProps: TImageProps;
-}*/
+export type TWrapperProps<P> = Omit<P, "style"> & {
+	style?: React.CSSProperties;
+	[key: `data-${string}`]: string | undefined;
+};
 
 export type TImageWrapperProps<P = object> = {
 	wrapper: TImageWrapper<P>;
@@ -126,34 +100,12 @@ export type TImageWrapperProps<P = object> = {
 	wrapperProps?: TWrapperProps<P>;
 }
 
+export type TNavImageWrapperProps = {
+	wrapperProps: TWrapperProps<INavLinkProps> //href is required...
+	imageProps: TImageProps,
+};
 
-
-/*export type TImageWrapperProps<P = Record<string, unknown>> = {
-	wrapper: TImageWrapper<P>;
-	imageProps: TImageProps;
-	wrapperProps?: TWrapperProps<P> & { children?: React.ReactNode };
-}*/
-
-
-/*export type TImageWrapperProps<P = Record<string, unknown>> = {
-	wrapper: TImageWrapper<P>;
-	imageProps: TImageProps;
-	wrapperProps?: TWrapperProps<P>;
-}*/
-
-
-export type TLogoBlockProps = {
-	imageProps: TImageProps;
-	wrapperProps: TWrapperProps<INavLinkProps>; //href is required...
+export type TLogoBlockProps = TNavImageWrapperProps & {
 	textLinkHref: string;
 	children: React.ReactNode;
 }
-
-export type TImageData = {
-	wrapperProps: Record<string, unknown>,
-	imageProps: TImageProps,
-}
-
-export type TLogoBlockImageData = Omit<TImageData, "wrapperProps"> & {
-	wrapperProps: TWrapperProps<INavLinkProps>
-};

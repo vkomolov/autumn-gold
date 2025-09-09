@@ -1,15 +1,20 @@
 
+import React from "react";
 
-import {PhoneCall} from "lucide-react";
-
-import NavImage from "@/components/NavImage";
 import IconTextLink from "@/components/IconTextLink";
+import ImageWrapper from "@/components/ImageWrapper";
+import NavLink from "@/components/NavLink";
 
-import {navImageAlccProps} from "@/lib/data";
+import {alccImageData} from "@/lib/data";
 import {getSpans} from "@/utils";
-import {IContactsDataHeader} from "@/types";
+import {IContactsDataHeader, INavLinkProps} from "@/types";
 
 import s from "./contactsWrapper.module.scss";
+
+
+
+
+/* END OF IMPORTS */
 
 type TContactsDataHeaderRest = Omit<IContactsDataHeader, 'hrefMailTo' | 'email'>;
 
@@ -23,18 +28,24 @@ export default function ContactsWrapper({data}: {
 		addressItems,
 	} = data;
 
+	const {
+		wrapperProps,
+		imageProps
+	} = alccImageData;
+
 
 	return (
 		<div className={s.contactsWrapper}>
 
-{/*			<div className={s.addressWrapper}>
+			<div className={s.addressWrapper}>
 				<IconTextLink
 					href={hrefTelTo}
 					aria-label={telAriaLabel}
 					tabIndex={0}
 					className="iconTextLink"
 				>
-					<PhoneCall className="icon-sm" />
+					{/*<PhoneCall className="icon-sm" />*/}
+
 
 					{ telLabel }
 
@@ -47,7 +58,12 @@ export default function ContactsWrapper({data}: {
 				</div>
 
 			</div>
-			<NavImage {...navImageAlccProps} className={s.alccLogo} />*/}
+			{/*<NavImage {...navImageAlccProps} className={s.alccLogo} />*/}
+			<ImageWrapper<INavLinkProps>
+				wrapper={ NavLink }
+				wrapperProps={ wrapperProps }
+				imageProps={ imageProps }
+			/>
 
 		</div>
 	);

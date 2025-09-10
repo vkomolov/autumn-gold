@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "node:check": "node scripts/nodeCheck.mjs",
     "generate:images": "node scripts/processImages.mjs",
-    "dev": "npm run generate:images && next dev --turbopack",
-    "build": "npm run generate:images && next build",
+    "dev": "npm run node:check && generate:images && next dev --turbopack",
+    "build": "npm run node:check && generate:images && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -21,6 +22,7 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "sass": "^1.92.1",

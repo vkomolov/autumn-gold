@@ -57,3 +57,25 @@ For a detailed explanation, see [docs/imageWrapper.md](./docs/imageWrapper.md).
 доступ к window.opener из нового окна (для избежания возможного шифинга и других атак)
 
 ----------------------------------------
+
+## ✅ Node.js version control with .nvmrc
+This project uses a .nvmrc file to enforce a required Node.js version.
+The version is checked before running dev/build scripts using a script powered by semver.
+How to use:
+Make sure the current Node version corresponds to the version of Node.js, 
+written in .nvmrc
+
+.nvmrc examples:
+# Exact version
+18.17.0
+
+# Latest minor and patch for major version
+^18.17.0
+
+# Any version greater than or equal to 20
+>=20
+
+# Latest version of Node 24
+^24.0.0
+Scripts like npm run dev, build, and start will automatically check that your Node.js version matches what's required in .nvmrc. If not, they will exit with an error.
+

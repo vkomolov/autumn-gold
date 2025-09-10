@@ -1,49 +1,47 @@
 @use "@/styles/global_styles/root" as root;
 
 .contactsWrapper {
-	width: 100%;
+  width: 100%;
 
-	@include root.flex-box(row, center, center, wrap);
-	gap: 1.5em;
+  @include root.flex-box(row, center, center, wrap);
+  gap: 1.5em;
 }
 
 .addressWrapper {
-	flex: 1 1 0;
+  flex: 1 1 0;
 
-	@include root.flex-box(row, flex-end, center, wrap);
-	gap: 0.4em 0.5em;
+  @include root.flex-box(row, flex-end, center, wrap);
+  gap: 0.4em 0.5em;
 
-	/*@ Tablet portrait mid-range: 860px to 768.02px */
-	@include root.rangeTabletPortraitMid {
-		flex-direction: column;
-		justify-content: flex-start;
-		align-items: center;
-	}
+  /*@ Tablet portrait mid-range: 860px to 768.02px */
+  @include root.rangeTabletPortraitMid {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
-	/*@ mobile (landscape): (max-width: 768px)*/
-	@include root.maxMobileLandscape {
-		justify-content: center;
-		align-items: flex-start;
-	}
+  /*@ mobile (landscape): (max-width: 768px)*/
+  @include root.maxMobileLandscape {
+    justify-content: center;
+    align-items: flex-start;
+  }
 }
 
 .addressSpanWrapper {
+  @include root.flex-box(row, center, center, wrap);
+  gap: 0.2em 0.5em;
 
-	@include root.flex-box(row, center, center, wrap);
-	gap: 0.2em 0.5em;
-
-	/*@ Tablet portrait mid-range: 860px to 768.02px */
-	@include root.rangeTabletPortraitMid {
-		flex-direction: column;
-		justify-content: flex-start;
-		align-items: center;
-	}
+  /*@ Tablet portrait mid-range: 860px to 768.02px */
+  @include root.rangeTabletPortraitMid {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
 }
 
 .alccLogo {
-
-	/* mobile (landscape): (max-width: 768px)*/
-	@include root.maxMobileLandscape {
-		display: none;
-	}
+  /* mobile (landscape): (max-width: 768px)*/
+  @include root.maxMobileLandscape {
+    display: none;
+  }
 }

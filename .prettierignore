@@ -1,0 +1,7 @@
+.next
+out
+node_modules
+*.lock
+*.log
+.next-env.d.ts
+scripts

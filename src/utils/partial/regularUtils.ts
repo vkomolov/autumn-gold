@@ -1,5 +1,3 @@
-
-
 /**
  * Creates a shallow copy of an object with specific keys removed.
  *
@@ -18,23 +16,25 @@
  *
  * @returns A new object with the specified keys removed.
  */
-export function omit<T extends object, K extends keyof T>(
-	obj: T,
-	keys: K[]
-): Omit<T, K> {
-	const clone = { ...obj };
-	for (const key of keys) {
-		delete clone[key];
-	}
-	return clone;
+export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
+  const clone = { ...obj };
+  for (const key of keys) {
+    delete clone[key];
+  }
+  return clone;
 }
 
 //is used for getting href with label from the pagesHrefMapByLabel at @lib/data/pagesHrefList.ts
-export function getHrefbyLabelFromPagesHrefMap (map: Map<string, string | null>, label: string): string {
-	const labelLowered = label.toLowerCase();
-	const res = map.get(labelLowered);
-	if (!res) {
-		console.warn(`[getHrefbyLabelFromPagesHrefMap]: no href found with label "${label}"... switched to "/"...`);
-	}
-	return res || "/";
+export function getHrefbyLabelFromPagesHrefMap(
+  map: Map<string, string | null>,
+  label: string,
+): string {
+  const labelLowered = label.toLowerCase();
+  const res = map.get(labelLowered);
+  if (!res) {
+    console.warn(
+      `[getHrefbyLabelFromPagesHrefMap]: no href found with label "${label}"... switched to "/"...`,
+    );
+  }
+  return res || "/";
 }

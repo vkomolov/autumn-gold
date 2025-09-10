@@ -42,40 +42,46 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 This project uses a hybrid image strategy that supports both optimized local images (via `StaticImageData`) and dynamic external sources (e.g., from a CMS or CDN).
 
 For a detailed explanation, see [docs/image-strategy.md](./docs/image-strategy.md).
-________________________________________
+
+---
 
 ## Imager Wrapper Component: ImageWrapper
-A small, battle-tested wrapper around Next.js `<Image>` 
+
+A small, battle-tested wrapper around Next.js `<Image>`
 that guarantees safe layout (no CLS) and predictable responsive behavior
 
-For a detailed explanation, see [docs/imageWrapper.md](./docs/imageWrapper.md).
-----------------------------------------
+## For a detailed explanation, see [docs/imageWrapper.md](./docs/imageWrapper.md).
 
-## все ссылки с октрытием нового окна через target="_blank", должны иметь аттрибут rel="noopener"
+## все ссылки с октрытием нового окна через target="\_blank", должны иметь аттрибут rel="noopener"
 
-Даже если ссылка не имеет target="_blank", ссылка должна содержать аттрибут rel="noopener", предотвращающая 
+Даже если ссылка не имеет target="\_blank", ссылка должна содержать аттрибут rel="noopener", предотвращающая
 доступ к window.opener из нового окна (для избежания возможного шифинга и других атак)
 
-----------------------------------------
+---
 
 ## ✅ Node.js version control with .nvmrc
+
 This project uses a .nvmrc file to enforce a required Node.js version.
 The version is checked before running dev/build scripts using a script powered by semver.
 How to use:
-Make sure the current Node version corresponds to the version of Node.js, 
+Make sure the current Node version corresponds to the version of Node.js,
 written in .nvmrc
 
 .nvmrc examples:
+
 # Exact version
+
 18.17.0
 
 # Latest minor and patch for major version
+
 ^18.17.0
 
 # Any version greater than or equal to 20
->=20
+
+> =20
 
 # Latest version of Node 24
+
 ^24.0.0
 Scripts like npm run dev, build, and start will automatically check that your Node.js version matches what's required in .nvmrc. If not, they will exit with an error.
-

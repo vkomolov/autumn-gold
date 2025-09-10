@@ -1,12 +1,11 @@
-
-import {contactsDataHeader, navLinksData } from "@/lib/data";
-import {IContactsDataHeader} from "@/types"
+import { contactsDataHeader, navLinksData } from "@/lib/data";
+import { IContactsDataHeader } from "@/types";
 
 import ContactsWrapper from "@/components/ContactsWrapper";
 import NavWrapper from "@/components/NavWrapper";
 import LogoBlock from "@/components/LogoBlock";
-import { Mail as MailIcon } from 'lucide-react';
-import {logoBlockImageData} from "@/lib/data";
+import { FaEnvelope } from "react-icons/fa6";
+import { logoBlockImageData } from "@/lib/data";
 
 import s from "./header.module.scss"; // for className={s.someClass}
 
@@ -22,37 +21,27 @@ const addressItems: string[] = [
 	"Wheat Ridge, CO"
 ];*/
 
+export default function Header() {
+  const { hrefMailTo, email, ...rest } = contactsDataHeader as IContactsDataHeader;
+  const { wrapperProps, imageProps } = logoBlockImageData;
 
-export default function Header () {
-	const {
-		hrefMailTo,
-		email,
-		...rest
+  return (
+    <div className={s.headerLayer}>
+      <header className={s.header} role="banner">
+        <LogoBlock
+          wrapperProps={wrapperProps}
+          imageProps={imageProps}
+          textLinkHref={hrefMailTo}
+        >
+          <FaEnvelope size={14} className="icon-sm" />
+          {email}
+        </LogoBlock>
 
-	} = contactsDataHeader as IContactsDataHeader;
-	const {wrapperProps, imageProps} = logoBlockImageData;
-
-	return (
-		<div className={s.headerLayer}>
-			<header className={s.header} role="banner">
-
-				<LogoBlock
-					wrapperProps={wrapperProps}
-					imageProps={imageProps}
-					textLinkHref={hrefMailTo}
-				>
-					<MailIcon className="icon-sm"/>
-					{ email }
-				</LogoBlock>
-
-				<div className={s.headerInfo}>
-
-					<ContactsWrapper data={rest} />
-					<NavWrapper data={navLinksData} />
-
-				</div>
-
-			</header>
-		</div>
-	);
+        <div className={s.headerInfo}>
+          <ContactsWrapper data={rest} />
+          <NavWrapper data={navLinksData} />
+        </div>
+      </header>
+    </div>
+  );
 }

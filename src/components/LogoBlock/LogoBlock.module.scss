@@ -1,7 +1,13 @@
 @use "@/styles/global_styles/root" as root;
 
 .logoWrapper {
-	@include root.flex-box(column, center, center, wrap);
-	gap: 0.5em;
+  @include root.flex-box(column, center, center, wrap);
+  gap: 0.5em;
 }
 
+.logoBlock {
+  /* tablet (portrait): (max-width: 1024px) */
+  @include root.maxTabletPortrait {
+    width: 200px !important;
+  }
+}

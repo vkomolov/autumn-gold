@@ -1,10 +1,9 @@
 @use "@/styles/global_styles/root" as root;
 
 .iconTextLink {
-	text-decoration: none;
-	transform-origin: left center;
+  text-decoration: none;
+  transform-origin: left center;
 
-	@include root.flex-box(row, center, center, nowrap);
-	gap: 0.3em;
+  @include root.flex-box(row, center, center, nowrap);
+  gap: 0.3em;
 }
-

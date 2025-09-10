@@ -1,28 +1,28 @@
-import {INavLinkProps, IPageHref} from "@/types/interfaces";
-import React, {JSX, ReactElement} from "react";
-import {imageMap} from "@/lib/generated/imageMap";
+import { INavLinkProps, IPageHref } from "@/types/interfaces";
+import React, { JSX, ReactElement } from "react";
+import { imageMap } from "@/lib/generated/imageMap";
 
 /* END OF IMPORTS */
 
 export type TNavItemStyles = {
-	className?: string; //basic className of NavLink
-	activeClassName?: string; //active className of NavLink (when NavLink href === usePathname()
+  className?: string; //basic className of NavLink
+  activeClassName?: string; //active className of NavLink (when NavLink href === usePathname()
 };
 
 export type TLinkItem = {
-	id: IPageHref["id"];
-	children: TLinkItem[] | null;
-}
+  id: IPageHref["id"];
+  children: TLinkItem[] | null;
+};
 
 // acceptable types of children
 export type TMenuRef =
-	| ReactElement<JSX.IntrinsicElements["ul"], "ul">
-	| ReactElement<JSX.IntrinsicElements["div"], "div">;
+  | ReactElement<JSX.IntrinsicElements["ul"], "ul">
+  | ReactElement<JSX.IntrinsicElements["div"], "div">;
 
 export type TRef<T extends HTMLElement> = {
-	ref: React.Ref<T>;
-	className?: string;
-	style?: React.CSSProperties;
+  ref: React.Ref<T>;
+  className?: string;
+  style?: React.CSSProperties;
 };
 
 // Keys from imageMap (auto-generated from /imagesStatic and located at @lib/genereated/imageMap.ts)
@@ -34,78 +34,78 @@ export type TImageSource = string | TLocalImageKeys;
 // Valid breakpoint keys
 //TODO: `${string}${'px' | 'vw' | '%'}`
 export type TBreakPoints =
-	| "min_1921"
-	| "max_1920"
-	| "min_1441"
-	| "max_1440"
-	| "min_1281"
-	| "max_1280"
-	| "min_1025"
-	| "max_1024"
-	| "min_861"
-	| "max_860"
-	| "min_769"
-	| "max_768"
-	| "min_641"
-	| "max_640"
-	| "min_577"
-	| "max_576"
-	| "min_481"
-	| "max_480"
-	| "min_376"
-	| "max_375"
-	| "min_321"
-	| "max_320";
+  | "min_1921"
+  | "max_1920"
+  | "min_1441"
+  | "max_1440"
+  | "min_1281"
+  | "max_1280"
+  | "min_1025"
+  | "max_1024"
+  | "min_861"
+  | "max_860"
+  | "min_769"
+  | "max_768"
+  | "min_641"
+  | "max_640"
+  | "min_577"
+  | "max_576"
+  | "min_481"
+  | "max_480"
+  | "min_376"
+  | "max_375"
+  | "min_321"
+  | "max_320";
 
 // Sizes can be numeric or string with units ${'px' | 'vw' | '%'}`
 //! no "em", as "em" asks for loading CSS, which is later, then inline styles...
-export type TImageSizeValue = number | `${number}${'px' | 'vw' | '%'}`;
+export type TImageSizeValue = number | `${number}${"px" | "vw" | "%"}`;
 
 // Mapping breakpoints → sizes
 export type TImageSizes = Partial<Record<TBreakPoints, TImageSizeValue>>;
 
 // Final shape of image data (used in CMS, UI configs, etc.)
 export type TImageProps = {
-	src: TImageSource;
-	alt: string;
+  src: TImageSource;
+  alt: string;
 
-	// Required width for container, aspect ratio will be calculated
-	width: number;
+  // Required width for container, aspect ratio will be calculated
+  width: number;
 
-	// Optional height — required if src is a string (not StaticImageData)
-	height?: number;
+  // Optional height — required if src is a string (not StaticImageData)
+  height?: number;
 
-	//objectFit?: React.CSSProperties['objectFit'];
-	objectFit?: string; //objectFit is taken from imageProps.objectFit which is string
+  //objectFit?: React.CSSProperties['objectFit'];
+  objectFit?: string; //objectFit is taken from imageProps.objectFit which is string
 
-	// Responsive sizes
-	breakPoints?: TImageSizes;
+  // Responsive sizes
+  breakPoints?: TImageSizes;
 
-	// Allow passing any other native <img> or <Image> props if needed
-	[key: string]: unknown;
+  // Allow passing any other native <img> or <Image> props if needed
+  [key: string]: unknown;
 };
 
 export type TImageWrapper<P = object> =
-	| keyof JSX.IntrinsicElements //"div", "a", "section", etc...
-	| React.ComponentType<P & { children?: React.ReactNode }>;
+  | keyof JSX.IntrinsicElements //"div", "a", "section", etc...
+  | React.ComponentType<P & { children?: React.ReactNode }>;
 
 export type TWrapperProps<P> = Omit<P, "style"> & {
-	style?: React.CSSProperties;
-	[key: `data-${string}`]: string | undefined;
+  style?: React.CSSProperties;
+  [key: `data-${string}`]: string | undefined;
 };
 
 export type TImageWrapperProps<P = object> = {
-	wrapper: TImageWrapper<P>;
-	imageProps: TImageProps;
-	wrapperProps?: TWrapperProps<P>;
-}
+  wrapper: TImageWrapper<P>;
+  imageProps: TImageProps;
+  wrapperProps?: TWrapperProps<P>;
+};
 
 export type TNavImageWrapperProps = {
-	wrapperProps: TWrapperProps<INavLinkProps> //href is required...
-	imageProps: TImageProps,
+  wrapperProps: TWrapperProps<INavLinkProps>; //href is required...
+  imageProps: TImageProps;
 };
 
 export type TLogoBlockProps = TNavImageWrapperProps & {
-	textLinkHref: string;
-	children: React.ReactNode;
-}
+  textLinkHref: string;
+  children: React.ReactNode;
+};

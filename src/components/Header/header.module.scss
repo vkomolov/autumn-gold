@@ -1,62 +1,57 @@
 @use "@/styles/global_styles/root" as root;
 
-
-
 .headerLayer {
-	background-color: root.$white;
-	//background: linear-gradient(90deg, root.$white 25%, root.$greenNormal 80%);
+  background-color: root.$white;
+  //background: linear-gradient(90deg, root.$white 25%, root.$greenNormal 80%);
 }
 
 .header {
-	font-size: 1em; //parent font-size
-	position: relative;
-	width: 100%;
+  font-size: 1em; //parent font-size
+  position: relative;
+  width: 100%;
 
-	@extend %contentWrapper;  //padding with account to the media width
-	@include root.flex-box(row, center, center, wrap);
+  @extend %contentWrapper; //padding with account to the media width
+  @include root.flex-box(row, center, center, wrap);
 
-	gap: 1em 1em;
-	padding-top: 1.2em;
-	padding-bottom: 0.625em;
-	color: root.$greenNormal;
+  gap: 1em 1em;
+  padding-top: 1.2em;
+  padding-bottom: 0.625em;
+  color: root.$greenNormal;
 
-	/* tablet (portrait): (max-width: 1024px) */
-	@include root.maxTabletPortrait {
-		font-size: .9em;
-	}
+  /* tablet (portrait): (max-width: 1024px) */
+  @include root.maxTabletPortrait {
+    font-size: 0.9em;
+  }
 
-	/* mobile (landscape): (max-width: 768px)*/
-	@include root.maxMobileLandscape {
-		flex-direction: column;
-	}
-
+  /* mobile (landscape): (max-width: 768px)*/
+  @include root.maxMobileLandscape {
+    flex-direction: column;
+  }
 }
 
 .headerInfo {
-	flex: 1 1 0;
+  flex: 1 1 0;
 
-	@include root.flex-box(column, flex-start, center);
-	gap: 0.5em;
+  @include root.flex-box(column, flex-start, center);
+  gap: 0.5em;
 }
 
-
-
 .addressText {
-	/* Tablet portrait mid-range: 860px to 769px */
-	@include root.rangeTabletPortraitMid {
-		font-size: 0.8em;
-	}
+  /* Tablet portrait mid-range: 860px to 769px */
+  @include root.rangeTabletPortraitMid {
+    font-size: 0.8em;
+  }
 }
 
 .addressTextBoarded {
-	padding: 0 0.625em;
-	border-left: 1px solid root.$gray;
-	border-right: 1px solid root.$gray;
+  padding: 0 0.625em;
+  border-left: 1px solid root.$gray;
+  border-right: 1px solid root.$gray;
 
-	/* Tablet portrait: (max-width: 860px)*/
-	@include root.maxTabletPortraitMid {
-		padding: 0;
-		border-left: none;
-		border-right: none;
-	}
+  /* Tablet portrait: (max-width: 860px)*/
+  @include root.maxTabletPortraitMid {
+    padding: 0;
+    border-left: none;
+    border-right: none;
+  }
 }

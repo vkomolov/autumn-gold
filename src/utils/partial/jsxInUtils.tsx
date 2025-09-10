@@ -1,144 +1,139 @@
 import {
-	INavItem,
-	TNavItemStyles,
-	TImageSizes, TBreakPoints, TImageSizeValue, IPageHref, TLinkItem, INormalizedPagesHref,
+  INavItem,
+  TNavItemStyles,
+  TImageSizes,
+  TBreakPoints,
+  TImageSizeValue,
+  IPageHref,
+  TLinkItem,
+  INormalizedPagesHref,
 } from "@/types";
 
 import cn from "@/lib/cn";
-import React, {JSX} from "react";
+import React, { JSX } from "react";
 
 import NavLink from "@/components/NavLink";
 
 import s from "@/components/Header/header.module.scss";
-import {StaticImageData} from "next/image";
-import {omit} from "@/utils";
+import { StaticImageData } from "next/image";
+import { omit } from "@/utils";
 
 /* END OF IMPORTS */
 
 export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.Element {
-	const {className, activeClassName} = stylesData;
+  const { className, activeClassName } = stylesData;
 
-	const navItems: JSX.Element[] = [];
+  const navItems: JSX.Element[] = [];
 
-	for (const item of data) {
-		const {id, label, type, href, children} = item;
+  for (const item of data) {
+    const { id, label, type, href, children } = item;
 
-		if (type === "link" && href) {
-			navItems.push(
-				<li
-					key={id}
-				>
-					<NavLink
-						href={href}
-						className={className}
-						activeClassName={activeClassName}
-						aria-label={`to ${label}`}
-						tabIndex={0}
-					>
-						{label}
-					</NavLink>
-				</li>
-			);
-			continue;
-		}
+    if (type === "link" && href) {
+      navItems.push(
+        <li key={id}>
+          <NavLink
+            href={href}
+            className={className}
+            activeClassName={activeClassName}
+            aria-label={`to ${label}`}
+            tabIndex={0}
+          >
+            {label}
+          </NavLink>
+        </li>,
+      );
+      continue;
+    }
 
-		if (type === "node" && children) {
-			navItems.push(
-				<li
-					key={id}
-					className={className} //<li> with the type "node" will take the styles of NavLink component
-					style={{
-						position: "relative", //getNavMenu writes position: "relative"
-						cursor: "default"
-					}}
-				>
-					{label}
+    if (type === "node" && children) {
+      navItems.push(
+        <li
+          key={id}
+          className={className} //<li> with the type "node" will take the styles of NavLink component
+          style={{
+            position: "relative", //getNavMenu writes position: "relative"
+            cursor: "default",
+          }}
+        >
+          {label}
 
-					{/*! <DropDownMenu style={} className={} ...other props of HTMLDivElement, HTMLUListElement >  */}
+          {/*! <DropDownMenu style={} className={} ...other props of HTMLDivElement, HTMLUListElement >  */}
 
-					{getNavMenu(children, stylesData)}
+          {getNavMenu(children, stylesData)}
 
-					{/*					<DropDownMenu >
+          {/*					<DropDownMenu >
 						{getNavMenu(children, stylesData)}
 					</DropDownMenu>*/}
+        </li>,
+      );
+    } else {
+      // Optional for dev
+      console.warn(`${id} with ${label} is omitted with not proper data...`);
+    }
+  }
 
-				</li>
-			);
-		} else {
-			// Optional for dev
-			console.warn(`${id} with ${label} is omitted with not proper data...`);
-		}
-	}
-
-	return (
-		<ul>
-			{navItems}
-		</ul>
-	);
+  return <ul>{navItems}</ul>;
 }
 
 export function getSpans(textItems: string[]) {
-	const lastIndex = textItems.length - 1;
+  const lastIndex = textItems.length - 1;
 
-	return textItems.map((textItem, index) => {
-		if (index === lastIndex) { //if the last item in the list...
+  return textItems.map((textItem, index) => {
+    if (index === lastIndex) {
+      //if the last item in the list...
+    }
 
-		}
-
-		return (
-			<span
-				key={`span-${index}`}
-				className={cn(
-					s.addressText,
-					index === lastIndex && s.addressTextBoarded
-				)}
-			>
-				{textItem}
-			</span>
-		);
-	})
+    return (
+      <span
+        key={`span-${index}`}
+        className={cn(s.addressText, index === lastIndex && s.addressTextBoarded)}
+      >
+        {textItem}
+      </span>
+    );
+  });
 }
 
 export function getNavItems(
-	pagesHrefList: IPageHref[],
-	navlinkList: TLinkItem[]
+  pagesHrefList: IPageHref[],
+  navlinkList: TLinkItem[],
 ): INavItem[] {
-	const { pagesHrefMap } = getPagesHrefNormalized(pagesHrefList);
+  const { pagesHrefMap } = getPagesHrefNormalized(pagesHrefList);
 
-	return getNavItemList(pagesHrefMap, navlinkList);
+  return getNavItemList(pagesHrefMap, navlinkList);
 }
 
 function getNavItemList(pagesMap: Map<string, IPageHref>, navlinkList: TLinkItem[]) {
+  const auxList = [];
 
-	const auxList = [];
+  for (const linkData of navlinkList) {
+    const itemData = pagesMap.get(linkData.id);
+    const children: TLinkItem[] | null = linkData.children ?? null;
 
-	for (const linkData of navlinkList) {
-		const itemData = pagesMap.get(linkData.id);
-		const children:TLinkItem[] | null = linkData.children?? null;
+    if (itemData) {
+      const navItem: INavItem = {
+        ...itemData,
+        type: children ? "node" : "link",
+        children: children ? getNavItemList(pagesMap, children) : null,
+      };
+      auxList.push(navItem);
+    } else {
+      console.warn(`getNavItemList: missing page data for id: "${linkData.id}"`);
+    }
+  }
 
-		if (itemData) {
-			const navItem: INavItem = {
-				...itemData,
-				type: children ? "node" : "link",
-				children: children ? getNavItemList(pagesMap, children) : null,
-			}
-			auxList.push(navItem);
-		}
-		else {
-			console.warn(`getNavItemList: missing page data for id: "${linkData.id}"`);
-		}
-	}
-
-	return auxList;
+  return auxList;
 }
 
 function getPagesHrefNormalized(pages: IPageHref[]): INormalizedPagesHref {
-	const pagesHrefMap: INormalizedPagesHref["pagesHrefMap"] = new Map(pages.map(page => [page.id, page]));
-	const idList: INormalizedPagesHref["idList"] = [...pagesHrefMap.keys()];
-	return {
-		pagesHrefMap,
-		idList,
-	};
+  const pagesHrefMap: INormalizedPagesHref["pagesHrefMap"] = new Map(
+    pages.map(page => [page.id, page]),
+  );
+  const idList: INormalizedPagesHref["idList"] = [...pagesHrefMap.keys()];
+  return {
+    pagesHrefMap,
+    idList,
+  };
 }
 
 /**
@@ -160,31 +155,31 @@ function getPagesHrefNormalized(pages: IPageHref[]): INormalizedPagesHref {
  * @returns The calculated aspect ratio as a string (e.g. "3.0000"), or `undefined` if it cannot be determined.
  */
 export function getAspectRatio(
-	width: number,
-	src: string | StaticImageData,
-	height?: number,
+  width: number,
+  src: string | StaticImageData,
+  height?: number,
 ): string | undefined {
-	//! Case 1: When src is a string (dynamic URL), we need both width and height from props
-	if (typeof src === "string" ) {
-		if (!height) {
-			console.warn(
-				`[ImageWrapper] src="${src}": Cannot calculate aspect ratio — 
-				"height" is missing and "src" is not StaticImageData.`
-			)
-			return undefined;
-		}
-		return (width/height).toFixed(4);
-	}
-	//! Case 2: When src is StaticImageData (e.g. imported with `next/image`), use its built-in width/height
-	else {
-		if (src.width && src.height) {
-			return (src.width/src.height).toFixed(4);
-		}
-		// Fallback warning if StaticImageData lacks dimensions (very unlikely)
-		console.warn(`[ImageWrapper] Invalid StaticImageData: Missing "src.width" or "src.height". 
+  //! Case 1: When src is a string (dynamic URL), we need both width and height from props
+  if (typeof src === "string") {
+    if (!height) {
+      console.warn(
+        `[ImageWrapper] src="${src}": Cannot calculate aspect ratio — 
+				"height" is missing and "src" is not StaticImageData.`,
+      );
+      return undefined;
+    }
+    return (width / height).toFixed(4);
+  }
+  //! Case 2: When src is StaticImageData (e.g. imported with `next/image`), use its built-in width/height
+  else {
+    if (src.width && src.height) {
+      return (src.width / src.height).toFixed(4);
+    }
+    // Fallback warning if StaticImageData lacks dimensions (very unlikely)
+    console.warn(`[ImageWrapper] Invalid StaticImageData: Missing "src.width" or "src.height". 
 		Cannot determine aspect ratio.`);
-		return undefined;
-	}
+    return undefined;
+  }
 }
 
 /**
@@ -211,56 +206,57 @@ export function getAspectRatio(
  * @returns A `style` object safe to apply directly to a wrapper `<div>` around `<Image fill />`.
  */
 export function getImageWrapperStyle(
-	src: string | StaticImageData,
-	width: number,
-	height?: number,
-	style?: React.CSSProperties | undefined,
+  src: string | StaticImageData,
+  width: number,
+  height?: number,
+  style?: React.CSSProperties | undefined,
 ): React.CSSProperties {
-	// Calculate aspect ratio based on src and dimensions
-	const aspectRatio = getAspectRatio(width, src, height);
+  // Calculate aspect ratio based on src and dimensions
+  const aspectRatio = getAspectRatio(width, src, height);
 
-	// Exclude layout-critical keys from user-defined style
-	const cleanedStyle = omit(
-		style ?? {},
-		["position", "width", "aspectRatio"]
-	);
+  // Exclude layout-critical keys from user-defined style
+  const cleanedStyle = omit(style ?? {}, ["position", "width", "aspectRatio"]);
 
-	return {
-		// Required for <Image fill />
-		position: "relative",
+  return {
+    // Required for <Image fill />
+    position: "relative",
 
-		// Fixed container width
-		width,
+    // Fixed container width
+    width,
 
-		// If aspectRatio could be calculated, include it
-		// if no aspectRatio, the container will have only width and will not be visible in browser till CSS, if it is
-		...(aspectRatio ? { aspectRatio } : {}),
+    // If aspectRatio could be calculated, include it
+    // if no aspectRatio, the container will have only width and will not be visible in browser till CSS, if it is
+    ...(aspectRatio ? { aspectRatio } : {}),
 
-		// apply any custom user-defined styles (safe to override non-layout properties)
-		...cleanedStyle,
-	}
+    // apply any custom user-defined styles (safe to override non-layout properties)
+    ...cleanedStyle,
+  };
 }
 
 function normalizeBreakPoint(breakPoint: TBreakPoints, value: TImageSizeValue): string {
-	const [prefix, bp] = breakPoint.split("_"); // e.g. ["max", "1920"]
-	return `(${prefix}-width: ${bp}px) ${value}`;
+  const [prefix, bp] = breakPoint.split("_"); // e.g. ["max", "1920"]
+  return `(${prefix}-width: ${bp}px) ${value}`;
 }
 
 export function getImageSizes(breakPoints: TImageSizes): string | undefined {
-	/**
-	 *! Object.entries() always returns an array of [string, unknown] pairs.
-	 * Even if the keys are strongly typed, TypeScript forgets about it.
-	 *! Solution: to use Object.keys for strict typification...
-	 */
+  /**
+   *! Object.entries() always returns an array of [string, unknown] pairs.
+   * Even if the keys are strongly typed, TypeScript forgets about it.
+   *! Solution: to use Object.keys for strict typification...
+   */
 
-	return breakPoints
-		? (Object.keys(breakPoints) as TBreakPoints[]).map((key) => {
-			const value = breakPoints[key];
-			if (!value) {
-				console.warn(`[getImageSizes] no breakPoints value at media: ${key}... sizes is "undefined"...`);
-				return undefined;
-			}
-			return normalizeBreakPoint(key, value);
-		}).join(', ')
-		: undefined;
+  return breakPoints
+    ? (Object.keys(breakPoints) as TBreakPoints[])
+        .map(key => {
+          const value = breakPoints[key];
+          if (!value) {
+            console.warn(
+              `[getImageSizes] no breakPoints value at media: ${key}... sizes is "undefined"...`,
+            );
+            return undefined;
+          }
+          return normalizeBreakPoint(key, value);
+        })
+        .join(", ")
+    : undefined;
 }

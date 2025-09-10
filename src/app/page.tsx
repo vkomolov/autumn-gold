@@ -1,4 +1,3 @@
-
 //import "@/styles/index.scss"; //is already imported at layout.tsx
 
 export default function Home() {

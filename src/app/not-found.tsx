@@ -1,18 +1,16 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function NotFound() {
-	const router = useRouter();
+  const router = useRouter();
 
-	useEffect(() => {
+  useEffect(() => {
+    setTimeout(() => {
+      router.replace("/"); // заменяет текущий url без добавления в history
+    }, 1000);
+  }, [router]);
 
-		setTimeout(() => {
-			router.replace('/'); // заменяет текущий url без добавления в history
-		}, 1000);
-
-	}, [router]);
-
-	return <p>Перенаправление...</p>;
+  return <p>Перенаправление...</p>;
 }

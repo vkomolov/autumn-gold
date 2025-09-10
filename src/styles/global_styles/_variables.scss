@@ -25,8 +25,12 @@ $fallLight: rgba(255, 214, 117, 1); //#ffd675
 $fall: rgba(255, 155, 15, 1); //#ff9b0f
 
 ////////////  GRADIENTS   ////////////
-$fallGradient: linear-gradient(170deg,rgba(248, 166, 23, 1) 50%, rgba(238, 120, 31, 1) 100%);
+$fallGradient: linear-gradient(
+  170deg,
+  rgba(248, 166, 23, 1) 50%,
+  rgba(238, 120, 31, 1) 100%
+);
 
 /////////// PARTIAL OPACITIES ////////
-$whiteOpacity_50: rgba(255, 255, 255, .5);
-$grayDarkestOpacity_50: rgba(53, 49, 44, .5);
+$whiteOpacity_50: rgba(255, 255, 255, 0.5);
+$grayDarkestOpacity_50: rgba(53, 49, 44, 0.5);

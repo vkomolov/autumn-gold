@@ -1,5 +1,4 @@
-import {IContactsDataHeader} from "@/types";
-
+import { IContactsDataHeader } from "@/types";
 
 /**
  * @description
@@ -8,13 +7,10 @@ import {IContactsDataHeader} from "@/types";
  * telAriaLabel -
  */
 export const contactsDataHeader: IContactsDataHeader = {
-	hrefMailTo: "mailto:agl@ag-landscape.com",
-	hrefTelTo: "tel:+13034679619",
-	telLabel: "303-467-9619",
-	telAriaLabel: "make a call to the master",
-	email: "agl@ag-landscape.com",
-	addressItems: [
-		"4310 Youngfield St.",
-		"Wheat Ridge, CO"
-	],
+  hrefMailTo: "mailto:agl@ag-landscape.com",
+  hrefTelTo: "tel:+13034679619",
+  telLabel: "303-467-9619",
+  telAriaLabel: "make a call to the master",
+  email: "agl@ag-landscape.com",
+  addressItems: ["4310 Youngfield St.", "Wheat Ridge, CO"],
 } as const;

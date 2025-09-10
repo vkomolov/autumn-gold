@@ -4,19 +4,23 @@
   "private": true,
   "scripts": {
     "node:check": "node scripts/nodeCheck.mjs",
-    "generate:images": "node scripts/processImages.mjs",
-    "dev": "npm run node:check && generate:images && next dev --turbopack",
-    "build": "npm run node:check && generate:images && next build",
-    "start": "next start",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "tidy": "npm-run-all -s node:check format lint",
+    "generate:images": "node scripts/processImages.mjs",
+    "dev": "npm-run-all -s tidy generate:images && next dev --turbopack",
+    "build": "npm-run-all -s tidy generate:images && next build",
+    "start": "next start"
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "nanoid": "^5.1.5",
     "next": "15.5.2",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -29,7 +33,11 @@
     "@typescript-eslint/parser": "^8.43.0",
     "cross-env": "^10.0.0",
     "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.4.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.6.2",
     "sass": "^1.92.1",
     "semver": "^7.7.2",
     "typescript": "^5",

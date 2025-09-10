@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "es2022"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "noUncheckedIndexedAccess": true, //catches the error “Cannot read property of undefined” already at the compilation stage
+    "noImplicitOverride": true, // protection against accidental method overriding in classes.
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -18,9 +20,11 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".", // officially required when using paths, otherwise editors may lose hints.
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["next"] //ensures that global Next types (e.g. next/image) are picked up without manual /// <reference
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

@@ -4,8 +4,8 @@ import React from "react";
 
 import Header from "@/components/Header";
 
-import "@/styles/index.scss"; //for root classes
 import "@/styles/reset.scss"; //resetting styles
+import "@/styles/index.scss"; //for root classes
 
 const notoSerif = Noto_Serif({
   variable: "--font-notoSerif",

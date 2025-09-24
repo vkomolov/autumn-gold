@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { TPageCmsAttributes } from "@/types/types";
 
 /////////
 
@@ -25,18 +26,36 @@ export interface IContactsDataHeader {
   addressItems: string[];
 }
 
-export interface IPageHref {
+/*export interface IPageMetaCms {
+  title: string;
+  description: string;
+  keywords?: string;
+  noIndex?: boolean; // to hide from indexation
+  canonical?: string; // custom canonical
+  alternate?: string; // custom alternate
+  themeColor?: string | null; // overwrites global
+}*/
+
+// The full page type that comes from the CMS
+export interface IPageCms {
   id: string;
-  label: string;
-  href: string | null;
+  attributes: TPageCmsAttributes;
+
+  blocks: unknown[]; //rest page content
 }
 
-export interface INavItem extends IPageHref {
-  type: "link" | "node";
-  children: INavItem[] | null;
+export interface IPageHref {
+  id: string;
+  label: string; //label for navigation menu
+  href: string | null; //if null then it is the node with a list of typeof IPageHref
 }
 
 export interface INormalizedPagesHref {
   pagesHrefMap: Map<IPageHref["id"], IPageHref>;
   idList: IPageHref["id"][];
+}
+
+export interface INavItem extends IPageHref {
+  type: "link" | "node";
+  children: INavItem[] | null;
 }

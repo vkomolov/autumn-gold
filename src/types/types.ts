@@ -1,8 +1,33 @@
 import { INavLinkProps, IPageHref } from "@/types/interfaces";
 import React, { JSX, ReactElement } from "react";
 import { imageMap } from "@/lib/generated/imageMap";
+import { type Metadata } from "next";
 
 /* END OF IMPORTS */
+
+/* META DATA */
+export type TPageCmsAttributes = {
+  href: string; // "", "about", "about/history"
+  label: string; //"About","Services" .... for navigation links
+  meta: TCmsPageMeta;
+};
+
+export type TStrictMetaData = Omit<Metadata, "title" | "description"> & {
+  //! making "title" and "description" to be required
+  title: Metadata["title"]; //making required
+  description: Metadata["description"]; //making required
+};
+
+export type TCmsPageMeta = TStrictMetaData & {
+  //! adding custom meta which is not in Metadata
+  noIndex?: boolean;
+  noFollow?: boolean;
+  canonical?: string;
+  alternate?: Record<string, string>; //'en-US': '/en/contact', 'es-ES': '/es/contact'
+
+  // any future properties...
+  [key: string]: unknown;
+};
 
 export type TNavItemStyles = {
   className?: string; //basic className of NavLink

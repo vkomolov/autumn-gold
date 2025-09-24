@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
+import { type Metadata } from "next";
 import { Noto_Serif } from "next/font/google";
 import React from "react";
 
 import Header from "@/components/Header";
+
+import { cmsPageMetaDefault, metaHandlers, normalizeCMSPageMeta } from "@/lib/data";
 
 import "@/styles/reset.scss"; //resetting styles
 import "@/styles/index.scss"; //for root classes
@@ -15,40 +17,7 @@ const notoSerif = Noto_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Landscape Design & Hardscaping in Front Range Metro | Autumn Gold Landscapes",
-  description:
-    "Autumn Gold Landscapes provides expert landscaping, landscape design, hardscaping, and retaining wall services in the Front Range Metro Area. With over 60 years of combined experience, our team delivers sustainable solutions for your outdoor space. Get a free consultation today!",
-  manifest: "/manifest.json",
-  other: {
-    "apple-mobile-web-app-title": "AGL",
-    "apple-mobile-web-app-capable": "yes",
-    "mask-icon": "/favicons/safari-pinned-tab.svg",
-    "theme-color": "#F1881C",
-  },
-  icons: {
-    icon: [
-      {
-        //rel: "icon",
-        url: "/favicons/icon.png",
-        sizes: "96x96",
-        type: "image/png",
-      },
-      {
-        //rel: "icon",
-        url: "/favicons/icon.svg",
-        type: "image/svg+xml",
-        sizes: "any",
-      },
-    ],
-    apple: [
-      {
-        //rel: "apple-touch-icon",
-        url: "/favicons/apple-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
-  },
+  ...normalizeCMSPageMeta(cmsPageMetaDefault, metaHandlers),
 };
 
 export default function RootLayout({

@@ -260,3 +260,18 @@ export function getImageSizes(breakPoints: TImageSizes): string | undefined {
         .join(", ")
     : undefined;
 }
+
+//is used for getting href with label from the pagesHrefMapByLabel at @lib/data/pagesHrefList.ts
+export function getHrefbyLabelFromPagesHrefMap(
+  map: Map<string, string | null>,
+  label: string,
+): string {
+  const labelLowered = label.toLowerCase();
+  const res = map.get(labelLowered);
+  if (!res) {
+    console.warn(
+      `[getHrefbyLabelFromPagesHrefMap]: no href found with label "${label}"... switched to "/"...`,
+    );
+  }
+  return res || "/";
+}

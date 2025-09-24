@@ -1,2 +1,2 @@
-export * from "@/utils/partial/jsxInUtils";
+export * from "@/utils/partial/specUtils";
 export * from "@/utils/partial/regularUtils";

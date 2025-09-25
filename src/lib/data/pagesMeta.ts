@@ -1,5 +1,7 @@
 //todo: TO MAKE FAKE CMS DATA FOR ALL PAGES
+
 import { IPageCms, TCmsPageMeta } from "@/types";
+import path from "path";
 
 export const cmsPageDataList: IPageCms[] = [
   {
@@ -14,6 +16,7 @@ export const cmsPageDataList: IPageCms[] = [
           "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
         noIndex: true,
         noFollow: true,
+        canonical: "/", //!Правильно ли прописывать так корневую страницу?
 
         /**
          * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
@@ -68,6 +71,7 @@ export const cmsPageDataList: IPageCms[] = [
           "Pavel Byezgachin in the sole owner and President of Autumn Gold Landscapes. He moved to Colorado with his family in 2016, with the intention to own and manage Autumn Gold Landscapes. He considered it to be a unique business with excellent reputation and potential.",
         noIndex: true,
         noFollow: true,
+        canonical: "/about",
 
         /**
          * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
@@ -506,9 +510,9 @@ export const clearPageDataCache = () => {
 };
 export const getCmsPageData = async (
   pageHref: string,
-  fakeDelay: number = 0,
+  fakeDelay: number = 1000,
 ): Promise<IPageCms | undefined> => {
-    console.log("pageHref from getCmsPageData: ", pageHref);
+  console.log("pageHref from getCmsPageData: ", pageHref);
 
   if (pageDataByHrefCache.has(pageHref)) {
     //! fake getting data from CMS with "pageHref";
@@ -535,7 +539,6 @@ export const getCmsPageData = async (
   console.log(`data with ${pageHref} is not still cashed... it will be cashed...`);
   console.log(pageData);
 
-
   pageDataByHrefCache.set(pageHref, pageData);
 
   return new Promise(resolve => {
@@ -544,21 +547,17 @@ export const getCmsPageData = async (
     }, fakeDelay);
   });
 };
-
 export const getAbsPath = (rel: string) => {
-  const base = (process.env.NEXT_PUBLIC_URL || "").replace(/\/+$/, "");
+  const base = process.env.NEXT_PUBLIC_URL || "";
 
-  console.log("base: ", base);
-  console.log("NEXT_PUBLIC_URL: ", process.env.NEXT_PUBLIC_URL);
+  console.log("[getAbsPath]: base: ", base);
+  console.log("[getAbsPath]: rel: ", rel);
 
+  const absUrl = new URL(rel, base).toString();
 
+  console.log("absUrl: ", absUrl);
 
-  const clean = rel.replace(/^\/+/, "");
-
-  console.log("cleanPath: ", clean);
-  console.log("combined: ", `${base}/${clean}`);
-
-  return clean ? `${base}/${clean}` : base;
+  return absUrl;
 };
 
 export const getAlternateWithAbsolutePaths = (alternate: Record<string, string>) => {

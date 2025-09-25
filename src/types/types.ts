@@ -29,6 +29,8 @@ export type TCmsPageMeta = TStrictMetaData & {
   [key: string]: unknown;
 };
 
+export type TMetaHandler = (cmsPageMeta: TCmsPageMeta) => TCmsPageMeta;
+
 export type TNavItemStyles = {
   className?: string; //basic className of NavLink
   activeClassName?: string; //active className of NavLink (when NavLink href === usePathname()

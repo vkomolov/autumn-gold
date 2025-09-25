@@ -23,3 +23,20 @@ export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Om
   }
   return clone;
 }
+
+export const getAbsPath = (rel: string) => {
+  const base = process.env.NEXT_PUBLIC_URL || "";
+
+  console.log("[getAbsPath]: base: ", base);
+  console.log("[getAbsPath]: rel: ", rel);
+
+  const absUrl = new URL(rel, base).toString();
+
+  console.log("absUrl: ", absUrl);
+
+  return absUrl;
+};
+
+export function isSafeObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}

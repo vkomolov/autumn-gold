@@ -26,16 +26,6 @@ export interface IContactsDataHeader {
   addressItems: string[];
 }
 
-/*export interface IPageMetaCms {
-  title: string;
-  description: string;
-  keywords?: string;
-  noIndex?: boolean; // to hide from indexation
-  canonical?: string; // custom canonical
-  alternate?: string; // custom alternate
-  themeColor?: string | null; // overwrites global
-}*/
-
 // The full page type that comes from the CMS
 export interface IPageCms {
   id: string;

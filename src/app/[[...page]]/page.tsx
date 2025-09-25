@@ -1,13 +1,14 @@
 import { type Metadata } from "next";
-import { getCmsPageData, metaHandlers, normalizeCMSPageMeta } from "@/lib/data";
 import { notFound } from "next/navigation";
+
+import { metaHandlers } from "@/lib/data";
+import { getCmsPageData, normalizeCMSPageMeta } from "@/utils";
 
 type TParams = Promise<{ page?: string[] }>;
 
 const getPageHref = (page?: string[]) => {
   return "/" + (page?.join("/") || "");
 };
-
 export const generateMetadata = async ({
   params,
 }: {
@@ -22,9 +23,6 @@ export const generateMetadata = async ({
   const {
     attributes: { meta },
   } = cmsPageData;
-
-  console.log("meta before: ", meta);
-  console.log("meta after: ", normalizeCMSPageMeta(meta, metaHandlers));
 
   return normalizeCMSPageMeta(meta, metaHandlers);
 };

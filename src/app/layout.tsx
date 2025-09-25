@@ -4,10 +4,13 @@ import React from "react";
 
 import Header from "@/components/Header";
 
-import { cmsPageMetaDefault, metaHandlers, normalizeCMSPageMeta } from "@/lib/data";
+import { cmsPageMetaDefault, metaHandlers } from "@/lib/data";
+import { normalizeCMSPageMeta } from "@/utils";
 
 import "@/styles/reset.scss"; //resetting styles
 import "@/styles/index.scss"; //for root classes
+
+/////////// END OF IMPORTS /////////////
 
 const notoSerif = Noto_Serif({
   variable: "--font-notoSerif",
@@ -30,8 +33,9 @@ export default function RootLayout({
    * notoSerif.className - it applies the font-family
    */
   //! giving css variable of notoSerif in to the context without applying the font-family
+  //! adding attribute data-scroll-behavior="smooth"
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${notoSerif.variable}`}>
         <div className="total-wrapper">
           <Header />

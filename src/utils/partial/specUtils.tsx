@@ -7,6 +7,9 @@ import {
   IPageHref,
   TLinkItem,
   INormalizedPagesHref,
+  IPageCms,
+  TCmsPageMeta,
+  TMetaHandler,
 } from "@/types";
 
 import cn from "@/lib/cn";
@@ -16,7 +19,8 @@ import NavLink from "@/components/NavLink";
 
 import s from "@/components/Header/header.module.scss";
 import { StaticImageData } from "next/image";
-import { omit } from "@/utils";
+import { omit, getAbsPath } from "@/utils";
+import { cmsPageDataMapByHref } from "@/lib/data";
 
 /* END OF IMPORTS */
 
@@ -275,3 +279,71 @@ export function getHrefbyLabelFromPagesHrefMap(
   }
   return res || "/";
 }
+
+/* Metadata handling */
+
+//making cache for each request with href path
+const pageDataByHrefCache = new Map<string, IPageCms>();
+
+//to clear cache...
+export const clearPageDataCache = () => {
+  pageDataByHrefCache.clear();
+};
+
+export const getCmsPageData = async (
+  pageHref: string,
+  fakeDelay: number = 0,
+): Promise<IPageCms | undefined> => {
+  //console.log("pageHref from getCmsPageData: ", pageHref);
+
+  if (pageDataByHrefCache.has(pageHref)) {
+    //! fake getting data from CMS with "pageHref";
+    return new Promise(resolve => {
+      setTimeout(() => {
+        /* console.log(
+          `the pageHref: ${pageHref} was cashed before...:`,
+          pageDataByHrefCache.get(pageHref),
+        );*/
+
+        resolve(pageDataByHrefCache.get(pageHref));
+      }, fakeDelay);
+    });
+  }
+
+  const pageData = cmsPageDataMapByHref.get(pageHref);
+
+  if (!pageData) {
+    console.warn(`Page Data with href: ${pageHref} not found`);
+
+    return undefined;
+  }
+
+  pageDataByHrefCache.set(pageHref, pageData);
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(pageData);
+    }, fakeDelay);
+  });
+};
+
+export const getAlternateWithAbsolutePaths = (alternate: Record<string, string>) => {
+  return Object.entries(alternate).reduce((acc, [key, relativePath]) => {
+    return { ...acc, [key]: getAbsPath(relativePath) };
+  }, {});
+};
+
+export const normalizeCMSPageMeta = (
+  meta: TCmsPageMeta,
+  metaHandlers: Record<string, TMetaHandler>,
+): TCmsPageMeta => {
+  //TStrictMetaData must contain only Metadata keys
+  return Object.entries(metaHandlers).reduce((acc, [key, handler]) => {
+    if (key in acc) {
+      return {
+        ...handler(acc),
+      };
+    }
+    return acc;
+  }, meta);
+};

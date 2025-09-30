@@ -1,11 +1,12 @@
-import { contactsDataHeader, navLinksData } from "@/lib/data";
+import { contactsDataHeader } from "@/lib/data";
 import { IContactsDataHeader } from "@/types";
+import { getNavItems } from "@/utils";
 
 import ContactsWrapper from "@/components/ContactsWrapper";
 import NavWrapper from "@/components/NavWrapper";
 import LogoBlock from "@/components/LogoBlock";
 import { FaEnvelope } from "react-icons/fa6";
-import { logoBlockImageData } from "@/lib/data";
+import { getLogoBlockImageData } from "@/lib/data";
 
 import s from "./header.module.scss"; // for className={s.someClass}
 
@@ -21,9 +22,10 @@ const addressItems: string[] = [
 	"Wheat Ridge, CO"
 ];*/
 
-export default function Header() {
+export default async function Header() {
   const { hrefMailTo, email, ...rest } = contactsDataHeader as IContactsDataHeader;
-  const { wrapperProps, imageProps } = logoBlockImageData;
+  const { wrapperProps, imageProps } = getLogoBlockImageData();
+  const navLinksData = await getNavItems();
 
   return (
     <div className={s.headerLayer}>

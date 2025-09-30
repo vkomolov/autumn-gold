@@ -1,4 +1,4 @@
-import { INavLinkProps, IPageHref } from "@/types/interfaces";
+import { INavLinkProps } from "@/types/interfaces";
 import React, { JSX, ReactElement } from "react";
 import { imageMap } from "@/lib/generated/imageMap";
 import { type Metadata } from "next";
@@ -34,11 +34,6 @@ export type TMetaHandler = (cmsPageMeta: TCmsPageMeta) => TCmsPageMeta;
 export type TNavItemStyles = {
   className?: string; //basic className of NavLink
   activeClassName?: string; //active className of NavLink (when NavLink href === usePathname()
-};
-
-export type TLinkItem = {
-  id: IPageHref["id"];
-  children: TLinkItem[] | null;
 };
 
 // acceptable types of children

@@ -533,12 +533,6 @@ export const cmsPageDataList: IPageCms[] = [
   },
 ];
 
-export const cmsPageDataMapByHref = new Map<string, IPageCms>(
-  cmsPageDataList.map(pageCms => {
-    return [pageCms.attributes.href, pageCms];
-  }),
-);
-
 export const metaHandlers: Record<string, TMetaHandler> = {
   noIndex: (cmsPageMeta: TCmsPageMeta): TCmsPageMeta => {
     const { noIndex, ...rest } = cmsPageMeta;

@@ -1,15 +1,15 @@
+import process from "process";
 import {
   INavItem,
   TNavItemStyles,
   TImageSizes,
   TBreakPoints,
   TImageSizeValue,
-  IPageHref,
-  TLinkItem,
-  INormalizedPagesHref,
   IPageCms,
   TCmsPageMeta,
   TMetaHandler,
+  INavItemFlat,
+  TPageCmsAttributes,
 } from "@/types";
 
 import cn from "@/lib/cn";
@@ -20,9 +20,55 @@ import NavLink from "@/components/NavLink";
 import s from "@/components/Header/header.module.scss";
 import { StaticImageData } from "next/image";
 import { omit, getAbsPath } from "@/utils";
-import { cmsPageDataMapByHref } from "@/lib/data";
+import { cmsPageDataList, getNavItemFlatList, getNavItemsIdList } from "@/lib/data";
 
 /* END OF IMPORTS */
+
+export type TNavItemId = INavItemFlat["id"];
+
+export function getLocalEnv<T = unknown>(
+  envKey: string,
+  cb: (value: string) => T,
+): T | undefined {
+  const envValue = process.env[envKey];
+
+  if (!envValue) {
+    console.warn(`process.env.${envKey} is undefined.`);
+    return undefined;
+  }
+
+  return cb(envValue);
+}
+
+const buildNavItem = (
+  id: TNavItemId,
+  navItemMap: Map<TNavItemId, INavItemFlat>,
+): INavItem => {
+  const navItemFlat = navItemMap.get(id);
+
+  if (!navItemFlat) {
+    throw new Error(`INavItemFlat with id "${id}" not found`);
+  }
+
+  return {
+    id: navItemFlat.id,
+    label: navItemFlat.label,
+    href: navItemFlat.href,
+    children: navItemFlat.children.map(childId => buildNavItem(childId, navItemMap)),
+  };
+};
+
+export const getNavItems = async (): Promise<INavItem[]> => {
+  const navItemsIdList: string[] = await getNavItemsIdList();
+  const navItemFlatList: INavItemFlat[] = await getNavItemFlatList();
+  const navItemFlatMapById: Map<TNavItemId, INavItemFlat> = new Map(
+    navItemFlatList.map((item: INavItemFlat) => {
+      return [item.id, item];
+    }),
+  );
+
+  return navItemsIdList.map(id => buildNavItem(id, navItemFlatMapById));
+};
 
 export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.Element {
   const { className, activeClassName } = stylesData;
@@ -30,9 +76,9 @@ export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.El
   const navItems: JSX.Element[] = [];
 
   for (const item of data) {
-    const { id, label, type, href, children } = item;
+    const { id, label, href, children } = item;
 
-    if (type === "link" && href) {
+    if (href) {
       navItems.push(
         <li key={id}>
           <NavLink
@@ -49,7 +95,7 @@ export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.El
       continue;
     }
 
-    if (type === "node" && children) {
+    if (href === null && children.length > 0) {
       navItems.push(
         <li
           key={id}
@@ -61,13 +107,7 @@ export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.El
         >
           {label}
 
-          {/*! <DropDownMenu style={} className={} ...other props of HTMLDivElement, HTMLUListElement >  */}
-
           {getNavMenu(children, stylesData)}
-
-          {/*					<DropDownMenu >
-						{getNavMenu(children, stylesData)}
-					</DropDownMenu>*/}
         </li>,
       );
     } else {
@@ -98,47 +138,162 @@ export function getSpans(textItems: string[]) {
   });
 }
 
-export function getNavItems(
-  pagesHrefList: IPageHref[],
-  navlinkList: TLinkItem[],
-): INavItem[] {
-  const { pagesHrefMap } = getPagesHrefNormalized(pagesHrefList);
+///////////////
 
-  return getNavItemList(pagesHrefMap, navlinkList);
-}
+type TPagesLabel = TPageCmsAttributes["label"];
+type TPagesHrefMapValue = {
+  id: IPageCms["id"];
+  href: TPageCmsAttributes["href"];
+};
 
-function getNavItemList(pagesMap: Map<string, IPageHref>, navlinkList: TLinkItem[]) {
-  const auxList = [];
+export const getPagesHrefMapByLabel = (
+  cmsPageDataList: IPageCms[],
+): Map<TPagesLabel, TPagesHrefMapValue> => {
+  return new Map(
+    cmsPageDataList.map(pageCms => {
+      const {
+        id,
+        attributes: { label, href },
+      } = pageCms;
+      return [label.toLowerCase(), { id, href }];
+    }),
+  );
+};
 
-  for (const linkData of navlinkList) {
-    const itemData = pagesMap.get(linkData.id);
-    const children: TLinkItem[] | null = linkData.children ?? null;
+type TPageCmsDataHref = TPageCmsAttributes["href"];
+type TPageCmsDataHrefMap = Map<TPageCmsDataHref, IPageCms>;
 
-    if (itemData) {
-      const navItem: INavItem = {
-        ...itemData,
-        type: children ? "node" : "link",
-        children: children ? getNavItemList(pagesMap, children) : null,
-      };
-      auxList.push(navItem);
-    } else {
-      console.warn(`getNavItemList: missing page data for id: "${linkData.id}"`);
-    }
+export const getCmsPageDataMapByHref = (): Map<TPageCmsDataHref, IPageCms> => {
+  return new Map<TPageCmsDataHref, IPageCms>(
+    cmsPageDataList.map(pageCms => {
+      return [pageCms.attributes.href, pageCms];
+    }),
+  );
+};
+
+/*** CACHING MAP for [getPageHrefByLabel] ***/
+
+let hrefByLabelMap: Map<TPagesLabel, TPagesHrefMapValue> | null = null;
+let hrefMapCreatedAt: number | null = null;
+
+const TTL_MS = getLocalEnv("NEXT_PUBLIC_TTL_MS", val => parseInt(val, 10)) ?? 1800000;
+export const getPageHrefByLabel = (label: string, cmsPageDataList: IPageCms[]) => {
+  const now = Date.now();
+  const _label = label.toLowerCase();
+
+  const isCacheExpired =
+    !hrefByLabelMap || !hrefMapCreatedAt || now - hrefMapCreatedAt > TTL_MS;
+
+  if (isCacheExpired) {
+    hrefByLabelMap = getPagesHrefMapByLabel(cmsPageDataList);
+
+    hrefMapCreatedAt = now;
   }
 
-  return auxList;
-}
+  if (!hrefByLabelMap) {
+    throw new Error(
+      `[getPageHrefByLabel]: hrefByLabelMap is null with label: ${_label}... `,
+    );
+  }
 
-function getPagesHrefNormalized(pages: IPageHref[]): INormalizedPagesHref {
-  const pagesHrefMap: INormalizedPagesHref["pagesHrefMap"] = new Map(
-    pages.map(page => [page.id, page]),
-  );
-  const idList: INormalizedPagesHref["idList"] = [...pagesHrefMap.keys()];
-  return {
-    pagesHrefMap,
-    idList,
-  };
-}
+  const hrefRes = hrefByLabelMap.get(_label);
+
+  if (!hrefRes) {
+    throw new Error(
+      `[getPageHrefByLabel]: could not find href for the given label: ${label} lowered to ${_label}`,
+    );
+    //console.warn(`could not find href for the given label: ${label}`);
+    //return undefined;
+  }
+
+  return hrefRes.href;
+};
+
+/*** CACHING REQUESTS IN [getCmsPageDataByHref] ***/
+//making cache for each request with href path
+const pageDataByHrefCache = new Map<string, IPageCms>();
+
+//to clear cache...
+export const clearPageDataCache = () => {
+  pageDataByHrefCache.clear();
+};
+
+let cmsPageDataMap: TPageCmsDataHrefMap | null = null;
+let cmsPageDataMapCreatedAt: number | null = null;
+//const TTL_MS = getLocalEnv("NEXT_PUBLIC_TTL_MS", val => parseInt(val, 10)) ?? 1800000;
+export const getCmsPageDataByHref = async (
+  pageHref: string,
+  fakeDelay: number = 0,
+): Promise<IPageCms | undefined> => {
+  //console.log("pageHref from getCmsPageData: ", pageHref);
+
+  if (pageDataByHrefCache.has(pageHref)) {
+    //! fake getting data from CMS with "pageHref";
+    return new Promise(resolve => {
+      setTimeout(() => {
+        /* console.log(
+					`the pageHref: ${pageHref} was cashed before...:`,
+					pageDataByHrefCache.get(pageHref),
+				);*/
+
+        resolve(pageDataByHrefCache.get(pageHref));
+      }, fakeDelay);
+    });
+  }
+
+  const now = Date.now();
+
+  const isCacheExpired =
+    !cmsPageDataMap || !cmsPageDataMapCreatedAt || now - cmsPageDataMapCreatedAt > TTL_MS;
+
+  if (isCacheExpired) {
+    cmsPageDataMap = getCmsPageDataMapByHref();
+    cmsPageDataMapCreatedAt = now;
+  }
+
+  if (!cmsPageDataMap) {
+    throw new Error(
+      `[getCmsPageDataByHref]: cmsPageDataMap is null with pageHref: ${pageHref}... `,
+    );
+  }
+
+  const pageData = cmsPageDataMap.get(pageHref);
+
+  if (!pageData) {
+    throw new Error(
+      `[getCmsPageDataByHref]: Page Data with href: ${pageHref} not found...`,
+    );
+  }
+
+  pageDataByHrefCache.set(pageHref, pageData);
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(pageData);
+    }, fakeDelay);
+  });
+};
+
+export const getAlternateWithAbsolutePaths = (alternate: Record<string, string>) => {
+  return Object.entries(alternate).reduce((acc, [key, relativePath]) => {
+    return { ...acc, [key]: getAbsPath(relativePath) };
+  }, {});
+};
+
+export const normalizeCMSPageMeta = (
+  meta: TCmsPageMeta,
+  metaHandlers: Record<string, TMetaHandler>,
+): TCmsPageMeta => {
+  //TStrictMetaData must contain only Metadata keys
+  return Object.entries(metaHandlers).reduce((acc, [key, handler]) => {
+    if (key in acc) {
+      return {
+        ...handler(acc),
+      };
+    }
+    return acc;
+  }, meta);
+};
 
 /**
  * Calculates the aspect ratio (as a string) to be used in inline styles like `aspectRatio`.
@@ -264,86 +419,3 @@ export function getImageSizes(breakPoints: TImageSizes): string | undefined {
         .join(", ")
     : undefined;
 }
-
-//is used for getting href with label from the pagesHrefMapByLabel at @lib/data/pagesHrefList.ts
-export function getHrefbyLabelFromPagesHrefMap(
-  map: Map<string, string | null>,
-  label: string,
-): string {
-  const labelLowered = label.toLowerCase();
-  const res = map.get(labelLowered);
-  if (!res) {
-    console.warn(
-      `[getHrefbyLabelFromPagesHrefMap]: no href found with label "${label}"... switched to "/"...`,
-    );
-  }
-  return res || "/";
-}
-
-/* Metadata handling */
-
-//making cache for each request with href path
-const pageDataByHrefCache = new Map<string, IPageCms>();
-
-//to clear cache...
-export const clearPageDataCache = () => {
-  pageDataByHrefCache.clear();
-};
-
-export const getCmsPageData = async (
-  pageHref: string,
-  fakeDelay: number = 0,
-): Promise<IPageCms | undefined> => {
-  //console.log("pageHref from getCmsPageData: ", pageHref);
-
-  if (pageDataByHrefCache.has(pageHref)) {
-    //! fake getting data from CMS with "pageHref";
-    return new Promise(resolve => {
-      setTimeout(() => {
-        /* console.log(
-          `the pageHref: ${pageHref} was cashed before...:`,
-          pageDataByHrefCache.get(pageHref),
-        );*/
-
-        resolve(pageDataByHrefCache.get(pageHref));
-      }, fakeDelay);
-    });
-  }
-
-  const pageData = cmsPageDataMapByHref.get(pageHref);
-
-  if (!pageData) {
-    console.warn(`Page Data with href: ${pageHref} not found`);
-
-    return undefined;
-  }
-
-  pageDataByHrefCache.set(pageHref, pageData);
-
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(pageData);
-    }, fakeDelay);
-  });
-};
-
-export const getAlternateWithAbsolutePaths = (alternate: Record<string, string>) => {
-  return Object.entries(alternate).reduce((acc, [key, relativePath]) => {
-    return { ...acc, [key]: getAbsPath(relativePath) };
-  }, {});
-};
-
-export const normalizeCMSPageMeta = (
-  meta: TCmsPageMeta,
-  metaHandlers: Record<string, TMetaHandler>,
-): TCmsPageMeta => {
-  //TStrictMetaData must contain only Metadata keys
-  return Object.entries(metaHandlers).reduce((acc, [key, handler]) => {
-    if (key in acc) {
-      return {
-        ...handler(acc),
-      };
-    }
-    return acc;
-  }, meta);
-};

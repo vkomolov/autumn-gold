@@ -37,15 +37,14 @@ export interface IPageCms {
 export interface IPageHref {
   id: string;
   label: string; //label for navigation menu
-  href: string | null; //if null then it is the node with a list of typeof IPageHref
+  href: string; //each page must have href
 }
 
-export interface INormalizedPagesHref {
-  pagesHrefMap: Map<IPageHref["id"], IPageHref>;
-  idList: IPageHref["id"][];
+export interface INavItem extends Omit<IPageHref, "href"> {
+  href: string | null;
+  children: INavItem[];
 }
 
-export interface INavItem extends IPageHref {
-  type: "link" | "node";
-  children: INavItem[] | null;
+export interface INavItemFlat extends Omit<INavItem, "children"> {
+  children: string[];
 }

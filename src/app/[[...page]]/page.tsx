@@ -2,7 +2,7 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { metaHandlers } from "@/lib/data";
-import { getCmsPageData, normalizeCMSPageMeta } from "@/utils";
+import { getCmsPageDataByHref, normalizeCMSPageMeta } from "@/utils";
 
 type TParams = Promise<{ page?: string[] }>;
 
@@ -17,7 +17,7 @@ export const generateMetadata = async ({
   const { page } = await params;
   const pageHref = getPageHref(page);
 
-  const cmsPageData = await getCmsPageData(pageHref);
+  const cmsPageData = await getCmsPageDataByHref(pageHref);
   if (!cmsPageData) return { title: "404" };
 
   const {
@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: TParams }) {
 
   const pageHref = getPageHref(page);
 
-  const cmsPageData = await getCmsPageData(pageHref);
+  const cmsPageData = await getCmsPageDataByHref(pageHref);
 
   if (!cmsPageData) {
     console.log(`not found page data with href: ${pageHref}`);

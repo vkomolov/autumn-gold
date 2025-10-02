@@ -1,3 +1,6 @@
+import { getLocalEnv } from "@/utils";
+import { defaultBaseUrl } from "@/lib/data";
+
 /**
  * Creates a shallow copy of an object with specific keys removed.
  *
@@ -25,16 +28,14 @@ export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Om
 }
 
 export const getAbsPath = (rel: string) => {
-  const base = process.env.NEXT_PUBLIC_URL || "";
+  const base = getLocalEnv("NEXT_PUBLIC_URL") || defaultBaseUrl;
 
-  console.log("[getAbsPath]: base: ", base);
-  console.log("[getAbsPath]: rel: ", rel);
+  //console.log("[getAbsPath]: base: ", base);
+  //console.log("[getAbsPath]: rel: ", rel);
 
-  const absUrl = new URL(rel, base).toString();
+  //console.log("absUrl: ", absUrl);
 
-  console.log("absUrl: ", absUrl);
-
-  return absUrl;
+  return new URL(rel, base).toString();
 };
 
 export function isSafeObject(value: unknown): value is Record<string, unknown> {

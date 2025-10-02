@@ -3,6 +3,8 @@
 import { IPageCms, TCmsPageMeta, TMetaHandler } from "@/types";
 import { isSafeObject, getAbsPath, getAlternateWithAbsolutePaths } from "@/utils";
 
+export const defaultBaseUrl = "https://autumngoldlandscapes.com";
+
 export const cmsPageDataList: IPageCms[] = [
   {
     id: "1",
@@ -19,42 +21,29 @@ export const cmsPageDataList: IPageCms[] = [
         /* !will be written in root layout.tsx */
         //noIndex: true,
         //noFollow: true,
+      },
+      sitemapEntry: {
+        url: "/",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 1,
+        //TODO: to add images...
+        images: [`/image1.jpg`],
 
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
+                videos: [
+          {
+            title: "video title",
+            thumbnail_loc: `/thumb.jpg`,
+            description: "Company intro",
+          },
+        ],
 
-        /*        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+        /*        alternates: {
+          languages: {
+            en: "https://example.com/en",
+            de: "https://example.com/de",
+          },
+        },*/
       },
     },
 
@@ -74,46 +63,12 @@ export const cmsPageDataList: IPageCms[] = [
         description:
           "Pavel Byezgachin in the sole owner and President of Autumn Gold Landscapes. He moved to Colorado with his family in 2016, with the intention to own and manage Autumn Gold Landscapes. He considered it to be a unique business with excellent reputation and potential.",
         canonical: "/about",
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
-
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
-        /*
-        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+      },
+      sitemapEntry: {
+        url: "/about",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       },
     },
 
@@ -133,46 +88,12 @@ export const cmsPageDataList: IPageCms[] = [
         description:
           "We carry you through the whole process from conceptual design to manifesting your dream outdoor living space. We'll take the time to discover your priorities so we can create a space perfectly suited to your family's lifestyle. Our design staff is involved with your project  from start to completion to make sure the design intent is implemented. But it's better to see once. Please have a look at the GALLERY of our jobs.",
         canonical: "/services/design-and-build",
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
-
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
-        /*
-        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+      },
+      sitemapEntry: {
+        url: "/services/design-and-build",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       },
     },
 
@@ -192,46 +113,12 @@ export const cmsPageDataList: IPageCms[] = [
         description:
           "We have been aware of and have practiced xeriscape concepts from the start.  Creating a beautiful space with low water consumption can be easily obtained and will end up actually costing less in the future. We embrace the Best Management Practices developed by GreenCO, the seven principles of xeriscaping, and many of our staff have completed the Landscape Association’s training in Sustainable Landscapes. But it's better to see once. Please have a look at the GALLERY of our jobs.",
         canonical: "/services/xeriscape-experts",
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
-
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
-        /*
-        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+      },
+      sitemapEntry: {
+        url: "/services/xeriscape-experts",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       },
     },
 
@@ -251,46 +138,12 @@ export const cmsPageDataList: IPageCms[] = [
         description:
           "The Ag-Landscape team of professionals have extensive experience in the design, installation and maintenance of sprinkler systems. More than 300 homeowners have relied on us to keep their yards green and healthy.",
         canonical: "/services/sprinkler-service",
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
-
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
-        /*
-        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+      },
+      sitemapEntry: {
+        url: "/services/sprinkler-service",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       },
     },
 
@@ -310,46 +163,12 @@ export const cmsPageDataList: IPageCms[] = [
         title: "Our Projects",
         description: "Some examples of our work, made for the Customers",
         canonical: "/portfolio/gallery",
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
-
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
-        /*
-        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+      },
+      sitemapEntry: {
+        url: "/portfolio/gallery",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       },
     },
 
@@ -368,46 +187,12 @@ export const cmsPageDataList: IPageCms[] = [
         title: "Before & After",
         description: "Some examples of our work, made for the Customers",
         canonical: "/portfolio/before-after",
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
-
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
-        /*
-        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+      },
+      sitemapEntry: {
+        url: "/portfolio/before-after",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       },
     },
     blocks: [
@@ -425,46 +210,12 @@ export const cmsPageDataList: IPageCms[] = [
         title: "Blog Posts",
         description: "Blog Posts and company events",
         canonical: "/blog",
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
-
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
-        /*
-        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+      },
+      sitemapEntry: {
+        url: "/blog",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       },
     },
     blocks: [
@@ -483,46 +234,12 @@ export const cmsPageDataList: IPageCms[] = [
         description:
           "Autumn Gold Landscapes Phone: 303.467.9619 Email: agl@ag-landscape.com",
         canonical: "/contact",
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
-
-        /**
-         * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-         */
-        /*
-        manifest: "/manifest.json",
-        other: {
-          "apple-mobile-web-app-title": "AGL",
-          "mobile-web-app-capable": "yes",
-          "mask-icon": "/favicons/safari-pinned-tab.svg",
-        },
-        icons: {
-          icon: [
-            {
-              //rel: "icon",
-              url: "/favicons/icon.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              //rel: "icon",
-              url: "/favicons/icon.svg",
-              type: "image/svg+xml",
-              sizes: "any",
-            },
-          ],
-          apple: [
-            {
-              //rel: "apple-touch-icon",
-              url: "/favicons/apple-icon.png",
-              sizes: "180x180",
-              type: "image/png",
-            },
-          ],
-        },
-        */
+      },
+      sitemapEntry: {
+        url: "/contact",
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       },
     },
     blocks: [

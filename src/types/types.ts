@@ -1,15 +1,45 @@
 import { INavLinkProps } from "@/types/interfaces";
 import React, { JSX, ReactElement } from "react";
 import { imageMap } from "@/lib/generated/imageMap";
-import { type Metadata } from "next";
+import type { Metadata, MetadataRoute } from "next";
 
 /* END OF IMPORTS */
 
 /* META DATA */
+
+type TChangeFrequency =
+  | "always"
+  | "hourly"
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "yearly"
+  | "never";
+
+export type TSitemapVideoEntry = {
+  title: string;
+  thumbnail_loc: string;
+  description?: string;
+  [key: string]: unknown;
+};
+
+export type TSitemapEntry = Omit<MetadataRoute.Sitemap[number], "lastModified"> & {
+  lastModified?: string | Date; //adding case with Date...
+  //url: string;
+  changeFrequency?: TChangeFrequency;
+  priority?: number;
+  alternates?: {
+    languages?: Record<string, string>;
+  };
+  images?: string[];
+  videos?: TSitemapVideoEntry[];
+};
+
 export type TPageCmsAttributes = {
   href: string; // "", "about", "about/history"
   label: string; //"About","Services" .... for navigation links
   meta: TCmsPageMeta;
+  sitemapEntry: TSitemapEntry;
 };
 
 export type TStrictMetaData = Omit<Metadata, "title" | "description"> & {

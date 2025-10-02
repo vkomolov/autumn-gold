@@ -26,18 +26,17 @@ import { cmsPageDataList, getNavItemFlatList, getNavItemsIdList } from "@/lib/da
 
 export type TNavItemId = INavItemFlat["id"];
 
-export function getLocalEnv<T = unknown>(
+export function getLocalEnv<T = string>(
   envKey: string,
-  cb: (value: string) => T,
+  cb?: (value: string) => T,
 ): T | undefined {
   const envValue = process.env[envKey];
-
   if (!envValue) {
     console.warn(`process.env.${envKey} is undefined.`);
     return undefined;
   }
 
-  return cb(envValue);
+  return cb ? cb(envValue) : (envValue as T);
 }
 
 const buildNavItem = (
@@ -177,6 +176,7 @@ let hrefByLabelMap: Map<TPagesLabel, TPagesHrefMapValue> | null = null;
 let hrefMapCreatedAt: number | null = null;
 
 const TTL_MS = getLocalEnv("NEXT_PUBLIC_TTL_MS", val => parseInt(val, 10)) ?? 1800000;
+
 export const getPageHrefByLabel = (label: string, cmsPageDataList: IPageCms[]) => {
   const now = Date.now();
   const _label = label.toLowerCase();

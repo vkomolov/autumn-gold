@@ -25,18 +25,18 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 1,
         //TODO: to add images...
-        images: [`/image1.jpg`],
+        //images: [`/image1.jpg`],
 
-                videos: [
+        /*                videos: [
           {
             title: "video title",
             thumbnail_loc: `/thumb.jpg`,
             description: "Company intro",
           },
-        ],
+        ],*/
 
         /*        alternates: {
           languages: {
@@ -67,7 +67,7 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/about",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 0.8,
       },
     },
@@ -92,7 +92,7 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/services/design-and-build",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 0.8,
       },
     },
@@ -117,7 +117,7 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/services/xeriscape-experts",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 0.8,
       },
     },
@@ -142,7 +142,7 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/services/sprinkler-service",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 0.8,
       },
     },
@@ -167,7 +167,7 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/portfolio/gallery",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 0.8,
       },
     },
@@ -191,7 +191,7 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/portfolio/before-after",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 0.8,
       },
     },
@@ -214,7 +214,7 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/blog",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 0.8,
       },
     },
@@ -238,7 +238,7 @@ export const cmsPageDataList: IPageCms[] = [
       sitemapEntry: {
         url: "/contact",
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "monthly",
         priority: 0.8,
       },
     },

@@ -8,6 +8,7 @@ export default function NotFound() {
 
   useEffect(() => {
     setTimeout(() => {
+      console.log(``);
       router.replace("/"); // заменяет текущий url без добавления в history
     }, 1000);
   }, [router]);

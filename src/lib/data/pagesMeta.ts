@@ -18,10 +18,34 @@ export const cmsPageDataList: IPageCms[] = [
           "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
         canonical: "/",
         keywords: ["Autumn Gold Landscapes", "retaining wall", "landscape architect"],
-
-        /* !will be written in root layout.tsx */
-        //noIndex: true,
-        //noFollow: true,
+        og: {
+          title: "Landscape Design & Hardscaping in Front Range Metro",
+          description:
+            "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
+          url: "/",
+          siteName: "Autumn Gold Landscapes",
+          images: [
+            {
+              url: "/someimage.jpg",
+              width: 1200,
+              height: 630,
+              alt: "Autumn Gold Landscapes OG image",
+            },
+          ],
+        },
+        twitter: {
+          title: "Landscape Design & Hardscaping in Front Range Metro",
+          description:
+            "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
+          images: [
+            {
+              url: "/someimage.jpg",
+              width: 1200,
+              height: 630,
+              alt: "Autumn Gold Landscapes OG image",
+            },
+          ],
+        },
       },
       sitemapEntry: {
         url: "/",
@@ -345,45 +369,11 @@ export const metaHandlers: Record<string, TMetaHandler> = {
   },
 };
 
-//TODO: прописать дефолтные значения иконок и тд...
 export const cmsPageMetaDefault: TCmsPageMeta = {
   title: "Landscape Design & Hardscaping in Front Range Metro",
   description:
     "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
   noIndex: true,
   noFollow: true,
-
-  /**
-   * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-   */
-  manifest: "/manifest.json",
-  other: {
-    "apple-mobile-web-app-title": "AGL",
-    "mobile-web-app-capable": "yes",
-    "mask-icon": "/favicons/safari-pinned-tab.svg",
-  },
-  icons: {
-    icon: [
-      {
-        //rel: "icon",
-        url: "/favicons/icon.png",
-        sizes: "96x96",
-        type: "image/png",
-      },
-      {
-        //rel: "icon",
-        url: "/favicons/icon.svg",
-        type: "image/svg+xml",
-        sizes: "any",
-      },
-    ],
-    apple: [
-      {
-        //rel: "apple-touch-icon",
-        url: "/favicons/apple-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
-  },
 };
+

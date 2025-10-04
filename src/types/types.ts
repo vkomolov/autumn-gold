@@ -1,4 +1,4 @@
-import { INavLinkProps } from "@/types/interfaces";
+import { INavLinkProps, IStrictOpenGraph, IStrictTwitter } from "@/types/interfaces";
 import React, { JSX, ReactElement } from "react";
 import { imageMap } from "@/lib/generated/imageMap";
 import type { Metadata, MetadataRoute } from "next";
@@ -53,6 +53,9 @@ export type TCmsPageMeta = TStrictMetaData & {
   noIndex?: boolean;
   noFollow?: boolean;
   canonical?: string;
+  og?: IStrictOpenGraph;
+  twitter?: IStrictTwitter;
+
   alternate?: Record<string, string>; //'en-US': '/en/contact', 'es-ES': '/es/contact'
 
   // any future properties...

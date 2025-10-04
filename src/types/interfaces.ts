@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { TPageCmsAttributes } from "@/types/types";
+import { type Metadata } from "next";
 
 /////////
 
@@ -48,3 +49,53 @@ export interface INavItem extends Omit<IPageHref, "href"> {
 export interface INavItemFlat extends Omit<INavItem, "children"> {
   children: string[];
 }
+
+// Тип для OG
+export type TOG = Metadata["openGraph"];
+// Тип для Twitter
+export type TTW = Metadata["twitter"];
+
+export interface IStrictOpenGraph
+  extends Omit<TOG, "title" | "description" | "url" | "siteName" | "images"> {
+  //making them to be required...
+  title: string;
+  description: string;
+  url: string;
+  siteName: string;
+  images?: NonNullable<TOG>["images"];
+}
+
+export interface IStrictTwitter extends Omit<TTW, "title" | "description" | "images"> {
+  //making them to be required...
+  title: string;
+  description: string;
+  images?: NonNullable<TTW>["images"];
+}
+
+/**
+ * interface OpenGraph {
+ *   title?: string;
+ *   description?: string;
+ *   url?: string;
+ *   siteName?: string;
+ *   images?: Array<{
+ *     url: string;
+ *     secureUrl?: string;
+ *     type?: string;
+ *     width?: number;
+ *     height?: number;
+ *     alt?: string;
+ *   }>;
+ *   locale?: string;
+ *   type?: 'website' | 'article' | 'book' | 'profile' | string;
+ * }
+ *
+ * interface Twitter {
+ *   card?: 'summary' | 'summary_large_image' | 'app' | 'player';
+ *   title?: string;
+ *   description?: string;
+ *   site?: string;
+ *   creator?: string;
+ *   images?: string[]; // массив строк (в отличие от openGraph.images)
+ * }
+ */

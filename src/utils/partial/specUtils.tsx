@@ -20,7 +20,12 @@ import NavLink from "@/components/NavLink";
 import s from "@/components/Header/header.module.scss";
 import { StaticImageData } from "next/image";
 import { omit, getAbsPath } from "@/utils";
-import { cmsPageDataList, getNavItemFlatList, getNavItemsIdList } from "@/lib/data";
+import {
+  cmsPageDataList,
+  cmsPageMetaDefault,
+  getNavItemFlatList,
+  getNavItemsIdList,
+} from "@/lib/data";
 
 /* END OF IMPORTS */
 
@@ -278,6 +283,10 @@ export const getAlternateWithAbsolutePaths = (alternate: Record<string, string>)
   return Object.entries(alternate).reduce((acc, [key, relativePath]) => {
     return { ...acc, [key]: getAbsPath(relativePath) };
   }, {});
+};
+
+export const getCmsPageMetaDefault = (): TCmsPageMeta => {
+  return cmsPageDataList[0] ? cmsPageDataList[0].attributes.meta : cmsPageMetaDefault;
 };
 
 export const normalizeCMSPageMeta = (

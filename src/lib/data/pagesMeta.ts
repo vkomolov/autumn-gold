@@ -1,7 +1,12 @@
 //todo: TO MAKE FAKE CMS DATA FOR ALL PAGES
 
 import { IPageCms, TCmsPageMeta, TMetaHandler } from "@/types";
-import { isSafeObject, getAbsPath, getAlternateWithAbsolutePaths } from "@/utils";
+import {
+  isSafeObject,
+  getAbsPath,
+  getAlternateWithAbsolutePaths,
+  makeOgImageUrlsAbsolute,
+} from "@/utils";
 
 export const defaultBaseUrl = "https://autumngoldlandscapes.com";
 
@@ -18,34 +23,6 @@ export const cmsPageDataList: IPageCms[] = [
           "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
         canonical: "/",
         keywords: ["Autumn Gold Landscapes", "retaining wall", "landscape architect"],
-        og: {
-          title: "Landscape Design & Hardscaping in Front Range Metro",
-          description:
-            "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
-          url: "/",
-          siteName: "Autumn Gold Landscapes",
-          images: [
-            {
-              url: "/someimage.jpg",
-              width: 1200,
-              height: 630,
-              alt: "Autumn Gold Landscapes OG image",
-            },
-          ],
-        },
-        twitter: {
-          title: "Landscape Design & Hardscaping in Front Range Metro",
-          description:
-            "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
-          images: [
-            {
-              url: "/someimage.jpg",
-              width: 1200,
-              height: 630,
-              alt: "Autumn Gold Landscapes OG image",
-            },
-          ],
-        },
       },
       sitemapEntry: {
         url: "/",
@@ -56,19 +33,19 @@ export const cmsPageDataList: IPageCms[] = [
         //images: [`/image1.jpg`],
 
         /*                videos: [
-          {
-            title: "video title",
-            thumbnail_loc: `/thumb.jpg`,
-            description: "Company intro",
-          },
-        ],*/
+					{
+						title: "video title",
+						thumbnail_loc: `/thumb.jpg`,
+						description: "Company intro",
+					},
+				],*/
 
         /*        alternates: {
-          languages: {
-            en: "https://example.com/en",
-            de: "https://example.com/de",
-          },
-        },*/
+					languages: {
+						en: "https://example.com/en",
+						de: "https://example.com/de",
+					},
+				},*/
       },
     },
 
@@ -332,19 +309,13 @@ export const metaHandlers: Record<string, TMetaHandler> = {
     if (!canonical) {
       return cmsPageMeta;
     }
-
-    let canonicalCleaned;
-    if (canonical.startsWith("http")) {
-      canonicalCleaned = canonical.replace(/^\/+/, "");
-    } else {
-      canonicalCleaned = getAbsPath(canonical);
-    }
+    const canonicalAbs = getAbsPath(canonical);
 
     return {
       ...rest,
       alternates: isSafeObject(rest.alternates)
-        ? { ...rest.alternates, canonical: canonicalCleaned }
-        : { canonical: canonicalCleaned },
+        ? { ...rest.alternates, canonical: canonicalAbs }
+        : { canonical: canonicalAbs },
     };
   },
   alternate: (cmsPageMeta: TCmsPageMeta): TCmsPageMeta => {
@@ -367,6 +338,42 @@ export const metaHandlers: Record<string, TMetaHandler> = {
       },
     };
   },
+
+  og: (cmsPageMeta: TCmsPageMeta): TCmsPageMeta => {
+    const { og, ...rest } = cmsPageMeta;
+    if (!og) {
+      return cmsPageMeta;
+    }
+
+    const { url, images, ...ogRest } = og;
+
+    return {
+      ...rest,
+      openGraph: {
+        //writing existing openGraph from previous meta handlers...
+        ...(isSafeObject(rest.openGraph) ? rest.openGraph : {}),
+        ...ogRest,
+        url: getAbsPath(url),
+        images: makeOgImageUrlsAbsolute(images),
+      },
+    };
+  },
+  twitter: (cmsPageMeta: TCmsPageMeta): TCmsPageMeta => {
+    const { twitter, ...rest } = cmsPageMeta;
+    if (!twitter) {
+      return cmsPageMeta;
+    }
+
+    const { images, ...twRest } = twitter;
+
+    return {
+      ...rest,
+      twitter: {
+        ...twRest,
+        images: makeOgImageUrlsAbsolute(images), //or undefined which will be ingored...
+      },
+    };
+  },
 };
 
 export const cmsPageMetaDefault: TCmsPageMeta = {
@@ -375,5 +382,68 @@ export const cmsPageMetaDefault: TCmsPageMeta = {
     "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
   noIndex: true,
   noFollow: true,
-};
 
+  /**
+   * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
+   */
+  manifest: "/manifest.json",
+  other: {
+    "apple-mobile-web-app-title": "AGL",
+    "mobile-web-app-capable": "yes",
+    "mask-icon": "/favicons/safari-pinned-tab.svg",
+  },
+  icons: {
+    icon: [
+      {
+        //rel: "icon",
+        url: "/favicons/icon.png",
+        sizes: "96x96",
+        type: "image/png",
+      },
+      {
+        //rel: "icon",
+        url: "/favicons/icon.svg",
+        type: "image/svg+xml",
+        sizes: "any",
+      },
+    ],
+    apple: [
+      {
+        //rel: "apple-touch-icon",
+        url: "/favicons/apple-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
+
+  /*  OG and Twitter Data:  */
+  og: {
+    title: "Landscape Design & Hardscaping in Front Range Metro",
+    description:
+      "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
+    url: "/",
+    siteName: "Autumn Gold Landscapes",
+    images: [
+      {
+        url: "/ogImages/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Autumn Gold Landscapes OG image",
+      },
+    ],
+  },
+  twitter: {
+    title: "Landscape Design & Hardscaping in Front Range Metro",
+    description:
+      "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
+    images: [
+      {
+        url: "/ogImages/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Autumn Gold Landscapes OG image",
+      },
+    ],
+  },
+};

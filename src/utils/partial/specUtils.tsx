@@ -10,6 +10,7 @@ import {
   TMetaHandler,
   INavItemFlat,
   TPageCmsAttributes,
+  TOGImages,
 } from "@/types";
 
 import cn from "@/lib/cn";
@@ -285,8 +286,33 @@ export const getAlternateWithAbsolutePaths = (alternate: Record<string, string>)
   }, {});
 };
 
+export const makeOgImageUrlsAbsolute = (images?: TOGImages): TOGImages | undefined => {
+  if (!images) return undefined;
+
+  const imageArray = Array.isArray(images) ? images : [images];
+
+  return imageArray.map(img => {
+    // If it's a string or URL, just wrap it in getAbsPath
+    if (typeof img === "string" || img instanceof URL) {
+      return getAbsPath(img.toString());
+    }
+
+    // Otherwise, we consider it to be an OGImageDescriptor
+    return {
+      ...img,
+      url: getAbsPath(img.url.toString()),
+    };
+  });
+};
+
 export const getCmsPageMetaDefault = (): TCmsPageMeta => {
-  return cmsPageDataList[0] ? cmsPageDataList[0].attributes.meta : cmsPageMetaDefault;
+  const mainPageMeta = cmsPageDataList[0]?.attributes.meta || {};
+
+  return {
+    ...mainPageMeta,
+    ...cmsPageMetaDefault,
+  };
+  //return cmsPageMetaDefault ?? cmsPageDataList[0].attributes.meta;
 };
 
 export const normalizeCMSPageMeta = (

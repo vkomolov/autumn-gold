@@ -27,15 +27,16 @@ export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Om
   return clone;
 }
 
-export const getAbsPath = (rel: string) => {
+export const getAbsPath = (rel: string): string => {
   const base = getLocalEnv("NEXT_PUBLIC_URL") || defaultBaseUrl;
 
-  //console.log("[getAbsPath]: base: ", base);
-  //console.log("[getAbsPath]: rel: ", rel);
-
-  //console.log("absUrl: ", absUrl);
-
-  return new URL(rel, base).toString();
+  try {
+    // If rel is already an absolute URL
+    return new URL(rel).toString();
+  } catch {
+    // If rel is relative
+    return new URL(rel, base).toString();
+  }
 };
 
 export function isSafeObject(value: unknown): value is Record<string, unknown> {

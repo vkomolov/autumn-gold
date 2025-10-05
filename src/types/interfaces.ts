@@ -55,6 +55,8 @@ export type TOG = Metadata["openGraph"];
 // Тип для Twitter
 export type TTW = Metadata["twitter"];
 
+export type TOGImages = NonNullable<TOG>["images"];
+
 export interface IStrictOpenGraph
   extends Omit<TOG, "title" | "description" | "url" | "siteName" | "images"> {
   //making them to be required...
@@ -62,14 +64,14 @@ export interface IStrictOpenGraph
   description: string;
   url: string;
   siteName: string;
-  images?: NonNullable<TOG>["images"];
+  images?: TOGImages;
 }
 
 export interface IStrictTwitter extends Omit<TTW, "title" | "description" | "images"> {
   //making them to be required...
   title: string;
   description: string;
-  images?: NonNullable<TTW>["images"];
+  images?: TOGImages;
 }
 
 /**

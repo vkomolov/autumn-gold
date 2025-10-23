@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { getLocalEnv } from "@/utils";
 import { cmsPageDataList, defaultBaseUrl } from "@/lib/data";
-import { IPageCms, TSitemapEntry, TSitemapVideoEntry } from "@/types";
+import type { IPageCms, TSitemapEntry, TSitemapVideoEntry } from "@/types";
 
 // Helper to build <image:image> tags
 function generateImageTags(images: string[] | undefined, baseUrl: string): string {

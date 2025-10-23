@@ -1,31 +1,172 @@
 {
+  // -----------------------------
+  // 🌍 Global Project Configuration
+  // A universal and documented tsconfig.json (adapted for Next.js + Mux + modern stack)
+  // -----------------------------
   "compilerOptions": {
+    /*----------------------------------*
+ |   ECMAScript Target & Libraries  |
+ *----------------------------------*/
     "target": "ES2020",
+    // The JavaScript version to which TypeScript will compile your code.
+    // Recommended for Next.js since modern browsers support ES2020+ features.
     "lib": ["dom", "dom.iterable", "es2022"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "noUncheckedIndexedAccess": true, //catches the error “Cannot read property of undefined” already at the compilation stage
-    "noImplicitOverride": true, // protection against accidental method overriding in classes.
-    "esModuleInterop": true,
+    // Defines which built-in libraries are available globally.
+    // "dom" and "dom.iterable" are needed for web APIs; "es2022" adds new JS features.
+    /*----------------------------------*
+     |        Module System             |
+     *----------------------------------*/
     "module": "esnext",
+    // Defines the module code generation method.
+    // "esnext" allows using top-level await and is ideal for Next.js + bundler pipelines.
     "moduleResolution": "bundler",
+    // How TypeScript looks up modules. "bundler" is optimized for tools like Next.js, Vite, etc.
     "resolveJsonModule": true,
+    // Allows importing .json files directly (e.g., import data from './config.json').
+    "esModuleInterop": true,
+    // Enables interoperability between CommonJS and ES Modules.
+    // Required for many npm packages that export default in CommonJS style.
+    //! If "module": "esnext", "moduleResolution": "bundler", "jsx": "preserve", "isolatedModules": true,
+    //! then to use "verbatimModuleSyntax": true
+    //!
+    "allowSyntheticDefaultImports": true,
+    // Lets you use `import x from 'y'` even if the module uses `module.exports = ...`.
+    // Keep it `true` for legacy CommonJS deps; set to `false` if you migrate to `verbatimModuleSyntax`
+    // and want stricter ESM-only imports (`import * as pkg` instead).
     "isolatedModules": true,
+    // Ensures each file can be safely transpiled independently (required by Next.js).
     "jsx": "preserve",
-    "incremental": true,
+    // Keeps JSX as-is for Next.js to process (do NOT use "react-jsx" in Next.js).
+    "jsxImportSource": "react",
+    // Specifies the JSX runtime import source; relevant for custom JSX runtimes.
+    //This is a safe declaration. It can be left for clarity or for future reference if a custom JSX runtime
+    //! No effect in Next.js ≥13, reserved for custom runtimes (e.g. Preact in micro-frontends)
+    //! Safe no-op in Next.js, but useful if migrating to a custom JSX runtime later.
+    /*----------------------------------*
+     |         Type Checking            |
+     *----------------------------------*/
+    "strict": true,
+    // Enables all strict type checking options — essential for code safety.
+    "noImplicitAny": true,
+    // Disallows using variables with an implicit `any` type.
+    //This is a declarative option if "strict": true is already enabled.
+    "strictNullChecks": true,
+    // Makes `null` and `undefined` distinct types (a key safety measure).
+    "strictBindCallApply": true,
+    // Checks correctness of `bind`, `call`, and `apply` method arguments.
+    "strictFunctionTypes": true,
+    // Ensures function types are checked for compatibility strictly.
+    "noImplicitThis": true,
+    // Ensures `this` is typed explicitly in functions.
+    //It improves security when working with classes and object methods
+    "alwaysStrict": true,
+    // Forces `"use strict"` mode in emitted JavaScript. This is more of a declarative safety net than a necessity,
+    // especially if the project is entirely in TypeScript and uses standard ES module syntax.
+    //"noUncheckedIndexedAccess": true,
+    // Forces checking index access safety: `arr[i]` may be `undefined`.
+    // catches the error “Cannot read property of undefined” already at the compilation stage
+    //"noPropertyAccessFromIndexSignature": true,
+    // Prevents accessing undeclared properties when using index signatures.
+    // Will force writing data["userId"] instead of data.userId
+    "noImplicitOverride": true,
+    // Requires explicit `override` keyword for overridden class methods.
+    // protection against accidental method overriding in classes.
+    "noFallthroughCasesInSwitch": true,
+    // Prevents unintended fallthrough in `switch` statements.
+    //"exactOptionalPropertyTypes": true,
+    // Makes optional property types behave strictly (X | undefined instead of optional).
+    // The option helps to accurately distinguish between "the property is missing"
+    // and "the property is present, but equal to undefined"
+    /*----------------------------------*
+     |          JS / Emission           |
+    *----------------------------------*/
+    "allowJs": true,
+    // Allows .js files to be included in compilation (useful for gradual migration).
+    //"checkJs": false,
+    // Enables type-checking inside .js files (useful for JS-only projects).
+    "noEmit": true,
+    // Tells TS not to output compiled .js files — Next.js handles transpilation.
+    //"declaration": false,
+    // If true, generates .d.ts files. Usually false in Next.js since it’s handled differently.
+    //"declarationMap": false,
+    // Generates source maps for declaration files.
+    //"sourceMap": false,
+    // Generates .map files for debugging compiled JavaScript (Next.js does its own).
+    //"inlineSourceMap": false,
+    // Embeds the source map directly into the .js output (rarely used in Next).
+    //"removeComments": false,
+    // Removes comments from emitted files (irrelevant for Next).
+    //"preserveConstEnums": true,
+    // Keeps `const enum` definitions instead of erasing them at compile time.
+    "skipLibCheck": true,
+    // Skips type checking for .d.ts declaration files to speed up builds.
+    //"incremental": true,
+    // Enables incremental compilation (builds only changed files).
+    //"tsBuildInfoFile": ".tsbuildinfo",
+    // By default, it is created next to tsconfig.json with the name .tsbuildinfo.
+    //"tsBuildInfoFile": "./node_modules/.cache/.tsbuildinfo",
+    //! Next.js ignores node_modules and the cache will not be committed
+    // File where incremental build info is stored (useful in monorepos).
+    // ↑ Uncomment for faster incremental builds in CI or large codebases.
+    /*----------------------------------*
+		|      Paths & Module Aliases      |
+		*----------------------------------*/
+    "baseUrl": ".",
+    // Base directory for resolving non-relative module imports.
+    // officially required when using paths, otherwise editors may lose hints.
+    "paths": {
+      "@/*": ["./src/*"],
+      "@v/*": ["./videos/*"]
+    },
+    // Define custom import aliases. Useful for cleaner imports like "@/components/...".
+    //"typeRoots": ["./types", "./node_modules/@types"],
+    // Custom folders where type definitions are stored.
+    //! Usage: import intro from '@v/intro.mp4'  (handled by next-video)
+    "types": [],
+    //"types": ["next", "node"],
+    //! Explicitly loads ONLY the listed @types packages.
+    // Remove the line (or leave it empty: `"types": []`) if you want tsc to auto-load
+    // every @types/* package that appears in node_modules (default behaviour).
+    // Keeping it is safe for small projects, but in monorepos / large codebases
+    // it can hide missing @types packages (jest, mdx, etc.).
+    // Explicitly includes Next.js type definitions.
+    //! ensures that global Next types (e.g. next/image) are picked up without manual /// <reference
+    // "node" is included so that IntelliSense knows about standard Node.js types (process, Buffer, fs)
+    /*----------------------------------*
+     |        Experimental Features     |
+     *----------------------------------*/
+    //"experimentalDecorators": false,
+    // Enables decorator syntax (if using frameworks like NestJS).
+    //"emitDecoratorMetadata": false,
+    // Emits metadata for reflection (needed for NestJS / InversifyJS).
+    //"useDefineForClassFields": true,
+    // Uses `define` semantics for class fields (matches ESNext behavior).
+    "verbatimModuleSyntax": true,
+    // Ensures import/export statements remain untouched — aligns with ESM standards.
+    //! If "module": "esnext", "moduleResolution": "bundler", "jsx": "preserve", "isolatedModules": true,
+    //! "allowSyntheticDefaultImports": false, (can be true for old CommonJs dependencies...)
+    //! then to use "esModuleInterop": false, "verbatimModuleSyntax": true
+    //!
+    /*----------------------------------*
+    |          Plugin System           |
+    *----------------------------------*/
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "baseUrl": ".", // officially required when using paths, otherwise editors may lose hints.
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "types": ["next"] //ensures that global Next types (e.g. next/image) are picked up without manual /// <reference
+    // Integrates Next.js-specific TypeScript transformations.
+    "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  // ----------------------------------
+  // 📁 Files and Include/Exclude Rules
+  // ----------------------------------
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "video.d.ts" // Type declarations for next-video (Mux integration)
+  ],
+  "exclude": ["node_modules", "scripts", "docs", "dist", "build", "**/*.test.ts", "**/*.spec.ts"]
 }

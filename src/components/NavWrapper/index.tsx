@@ -1,5 +1,5 @@
 import { getNavMenu } from "@/utils";
-import { INavItem, TNavItemStyles } from "@/types";
+import type { INavItem, TNavItemStyles } from "@/types";
 import s from "./navWrapper.module.scss";
 
 export default function NavWrapper({ data }: { data: INavItem[] }) {

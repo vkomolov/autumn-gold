@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import s from "./iconTextLink.module.scss";
 import cn from "@/lib/cn";
-import { IIconTextLinkProps } from "@/types";
+import type { IIconTextLinkProps } from "@/types";
 
 export default function IconTextLink({
   href = "#",

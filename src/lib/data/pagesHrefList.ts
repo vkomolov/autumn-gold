@@ -1,4 +1,4 @@
-import { INavItemFlat } from "@/types";
+import type { INavItemFlat } from "@/types";
 
 const navItemsIdList = ["1", "2", "3", "7", "10", "11"];
 const navItemFlatList: INavItemFlat[] = [

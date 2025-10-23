@@ -1,0 +1,14 @@
+{
+  "status": "ready",
+  "originalFilePath": "videos\\planning_landscape.mp4",
+  "provider": "mux",
+  "providerMetadata": {
+    "mux": { "uploadId": "GKUDIWiDs00yoVt1axM98ODmvSewCTuYj1BSjeKwWQGY", "assetId": "pXqp9yvzngUCgQuG02LlAUpAWI8ybml7mMgPhQVVh009M", "playbackId": "Ec02Ks202xOoZgJGhTNEmubQ9Lom01UyRu02gcIBFj01aG94" }
+  },
+  "createdAt": 1761216026590,
+  "updatedAt": 1761216034969,
+  "size": 16165595,
+  "sources": [{ "src": "https://stream.mux.com/Ec02Ks202xOoZgJGhTNEmubQ9Lom01UyRu02gcIBFj01aG94.m3u8", "type": "application/x-mpegURL" }],
+  "poster": "https://image.mux.com/Ec02Ks202xOoZgJGhTNEmubQ9Lom01UyRu02gcIBFj01aG94/thumbnail.webp",
+  "blurDataURL": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAAAwAgCdASoQAAkAAQAcJYwCdAYqrjGNl/ecAAD+8bpfmWDGPD6tYclaODFeYCupfP4ISRsR9KfYr6u5Yx2xLKEfS3f9nXw01x+jcWFRjD81/6+l4ml1fplUDnugOvlj7vltatA67X7vWDiyNmuWNQbUykl8N32c/buPgTA0AAA="
+}

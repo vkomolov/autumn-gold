@@ -1,4 +1,4 @@
-import { IContactsDataHeader } from "@/types";
+import type { IContactsDataHeader } from "@/types";
 
 /**
  * @description

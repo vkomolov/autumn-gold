@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { TMenuRef } from "@/types";
+import type { TMenuRef } from "@/types";
 
 export function useDropDownMenu(childrenElem: TMenuRef) {
   const divRef = useRef<HTMLDivElement>(null);

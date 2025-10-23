@@ -1,5 +1,5 @@
 import { contactsDataHeader } from "@/lib/data";
-import { IContactsDataHeader } from "@/types";
+import type { IContactsDataHeader } from "@/types";
 import { getNavItems } from "@/utils";
 
 import ContactsWrapper from "@/components/ContactsWrapper";

@@ -1,6 +1,6 @@
 "use client";
 
-import { INavLinkProps } from "@/types";
+import type { INavLinkProps } from "@/types";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 

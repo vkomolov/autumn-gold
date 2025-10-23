@@ -1,6 +1,6 @@
 import React from "react";
-import Image, { StaticImageData } from "next/image";
-import { TImageWrapperProps, TWrapperProps } from "@/types";
+import Image, { type StaticImageData } from "next/image";
+import type { TImageWrapperProps, TWrapperProps } from "@/types";
 import { getImageSizes, getImageWrapperStyle, omit } from "@/utils"; //calculating Wrapper inline styles
 import { imageMap } from "@/lib/generated/imageMap";
 

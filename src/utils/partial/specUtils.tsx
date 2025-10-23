@@ -1,5 +1,5 @@
 import process from "process";
-import {
+import type {
   INavItem,
   TNavItemStyles,
   TImageSizes,
@@ -14,12 +14,12 @@ import {
 } from "@/types";
 
 import cn from "@/lib/cn";
-import React, { JSX } from "react";
+import React, { type JSX } from "react";
 
 import NavLink from "@/components/NavLink";
 
 import s from "@/components/Header/header.module.scss";
-import { StaticImageData } from "next/image";
+import { type StaticImageData } from "next/image";
 import { omit, getAbsPath } from "@/utils";
 import {
   cmsPageDataList,
@@ -32,19 +32,39 @@ import {
 
 export type TNavItemId = INavItemFlat["id"];
 
+/**
+ * Retrieves a value from `process.env` by key, with optional transformation.
+ *
+ * @template T - The return type after applying the optional callback.
+ * @param {string} envKey - The name of the environment variable to fetch.
+ * @param {(value: string) => T} [cb] - Optional callback to transform the string value into another type.
+ * @returns {(T | undefined)} The raw or transformed value if it exists, or `undefined` if the variable is not set.
+ *
+ * @example
+ * // Get the raw value
+ * const port = getLocalEnv('PORT');
+ *
+ * // Get the value parsed as a number
+ * const portNumber = getLocalEnv('PORT', parseInt);
+ */
 export function getLocalEnv<T = string>(
   envKey: string,
   cb?: (value: string) => T,
 ): T | undefined {
+  // Try to get the value from environment variables
   const envValue = process.env[envKey];
+
+  // Warn if the variable is not defined
   if (!envValue) {
     console.warn(`process.env.${envKey} is undefined.`);
     return undefined;
   }
 
+  // Apply the callback if provided, otherwise return the raw string
   return cb ? cb(envValue) : (envValue as T);
 }
 
+///////////// NAVIGATION ITEMS ////////////////
 const buildNavItem = (
   id: TNavItemId,
   navItemMap: Map<TNavItemId, INavItemFlat>,
@@ -143,7 +163,7 @@ export function getSpans(textItems: string[]) {
   });
 }
 
-///////////////
+///////  CMS PAGES DATA  ////////
 
 type TPagesLabel = TPageCmsAttributes["label"];
 type TPagesHrefMapValue = {
@@ -330,6 +350,7 @@ export const normalizeCMSPageMeta = (
   }, meta);
 };
 
+////////////// IMAGE WRAPPER ////////////////
 /**
  * Calculates the aspect ratio (as a string) to be used in inline styles like `aspectRatio`.
  *

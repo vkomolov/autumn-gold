@@ -6,7 +6,7 @@ import NavLink from "@/components/NavLink";
 
 import { alccImageData } from "@/lib/data";
 import { getSpans } from "@/utils";
-import { IContactsDataHeader, INavLinkProps } from "@/types";
+import type { IContactsDataHeader, INavLinkProps } from "@/types";
 
 import s from "./contactsWrapper.module.scss";
 import { FaPhoneVolume } from "react-icons/fa6";

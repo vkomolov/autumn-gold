@@ -1,5 +1,6 @@
-import { INavLinkProps, IStrictOpenGraph, IStrictTwitter } from "@/types/interfaces";
-import React, { JSX, ReactElement } from "react";
+import type { INavLinkProps, IStrictOpenGraph, IStrictTwitter } from "@/types/interfaces";
+import React from "react";
+import type { JSX, ReactElement } from "react";
 import { imageMap } from "@/lib/generated/imageMap";
 import type { Metadata, MetadataRoute } from "next";
 

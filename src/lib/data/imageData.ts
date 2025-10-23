@@ -2,7 +2,7 @@ import { getPageHrefByLabel } from "@/utils";
 //import { getPagesHrefMapByLabel } from "@/lib/data/pagesHrefList";
 import { cmsPageDataList } from "@/lib/data/pagesMeta";
 
-import { TImageSizes, TNavImageWrapperProps } from "@/types";
+import type { TImageSizes, TNavImageWrapperProps } from "@/types";
 
 export const getLogoBlockImageData = (): TNavImageWrapperProps => {
   const href = getPageHrefByLabel("Home", cmsPageDataList);

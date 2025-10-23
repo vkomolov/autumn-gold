@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { TPageCmsAttributes } from "@/types/types";
+import type { TPageCmsAttributes } from "@/types/types";
 import { type Metadata } from "next";
 
 /////////

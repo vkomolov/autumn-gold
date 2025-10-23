@@ -3,7 +3,7 @@
 //! Import the Promise-based version of the 'fs' module for using async/await with file system operations
 import {promises as fs} from "fs";
 import path from "path";
-import fg from 'fast-glob';
+import fg from "fast-glob";
 
 //Path to the directory with the imagesStatic to be imported for StaticImageData
 //! read docs/image-strategy.md
@@ -28,7 +28,7 @@ const run = async () => {
 		 * Just replacing \ with / in pattern before passing it to fg():
 		 */
 		const pattern = `${IMAGES_DIR}/**/*.{${SUPPORTED_EXTENSIONS.join(",")}}`
-			.replace(/\\/g, '/');
+			.replace(/\\/g, "/");
 
 		//! Getting a list of files (fast-glob returns paths in POSIX format)
 		const files = await fg(pattern);
@@ -47,14 +47,14 @@ const run = async () => {
 			 * (e.g., 'src/assets/imagesStatic/foo.webp' → 'assets/imagesStatic/foo.webp')
 			 *! Also it ensures compatibility on Windows by replacing backslashes with forward slashes
 			 */
-			const relativePath = path.relative('src', filePath).replace(/\\/g, '/');
+			const relativePath = path.relative("src", filePath).replace(/\\/g, "/");
 
 			const importPath = `@/${relativePath}`;
 			const fileName = path.basename(filePath);
 			const key = `generated-${fileName}`;
 			const varName = `img${index}`;
 
-			imports.push(`import ${varName} from '${importPath}';`);
+			imports.push(`import ${varName} from "${importPath}";`);
 			mapEntries.push(`"${key}": ${varName},`);
 		}
 
@@ -66,12 +66,12 @@ const run = async () => {
 		 */
 		const output = `
 // ⚠️ AUTO-GENERATED FILE — DO NOT EDIT MANUALLY
-// 'npm run generate:images'
+// "npm run generate:images"
 // imports
-${imports.join('\n')}
+${imports.join("\n")}
 
 export const imageMap = {
-${mapEntries.join('\n')}
+${mapEntries.join("\n")}
 } as const;
 `;
 
@@ -86,7 +86,7 @@ ${mapEntries.join('\n')}
 		await fs.mkdir(path.dirname(OUTPUT_FILE), { recursive: true });
 
 		// write the output file with adding a final line (\n) to the end of the file:
-		await fs.writeFile(OUTPUT_FILE, output + '\n');
+		await fs.writeFile(OUTPUT_FILE, output + "\n");
 	}
 	
 	catch (err) {
@@ -110,6 +110,6 @@ run()
 	console.log("✅ imageMap.ts written successfully.");
 })
 	.catch((err) => {
-		console.error('❌ Unhandled error in run():', err);
+		console.error("❌ Unhandled error in run():", err);
 		process.exit(1);
 	});

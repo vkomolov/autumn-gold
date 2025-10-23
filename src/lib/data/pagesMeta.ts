@@ -1,6 +1,6 @@
 //todo: TO MAKE FAKE CMS DATA FOR ALL PAGES
 
-import { IPageCms, TCmsPageMeta, TMetaHandler } from "@/types";
+import type { IPageCms, TCmsPageMeta, TMetaHandler } from "@/types";
 import {
   isSafeObject,
   getAbsPath,

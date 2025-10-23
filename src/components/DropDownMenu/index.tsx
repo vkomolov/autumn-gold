@@ -1,8 +1,9 @@
 "use client";
 
-import React, { cloneElement, JSX, ReactElement, RefObject, useMemo } from "react";
+import React, { cloneElement, useMemo } from "react";
+import type { JSX, ReactElement, RefObject } from "react";
 
-import { TRef, TMenuRef } from "@/types";
+import type { TRef, TMenuRef } from "@/types";
 import cn from "@/lib/cn/index";
 import s from "./DropDownMenu.module.scss";
 import { useDropDownMenu } from "@/hooks";

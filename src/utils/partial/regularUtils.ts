@@ -1,5 +1,5 @@
-import { getLocalEnv } from "@/utils";
-import { defaultBaseUrl } from "@/lib/data";
+import { baseUrl } from "@/lib/data";
+import React from "react";
 
 /**
  * Creates a shallow copy of an object with specific keys removed.
@@ -28,17 +28,25 @@ export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Om
 }
 
 export const getAbsPath = (rel: string): string => {
-  const base = getLocalEnv("NEXT_PUBLIC_URL") || defaultBaseUrl;
-
   try {
     // If rel is already an absolute URL
     return new URL(rel).toString();
   } catch {
     // If rel is relative
-    return new URL(rel, base).toString();
+    return new URL(rel, baseUrl).toString();
   }
 };
 
 export function isSafeObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+export function mergeStyles(
+  baseStyle: React.CSSProperties,
+  overideStyle?: React.CSSProperties,
+): React.CSSProperties {
+  return {
+    ...baseStyle,
+    ...overideStyle,
+  };
 }

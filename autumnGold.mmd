@@ -1,0 +1,216 @@
+[Scia Reto](https://sciareto.org) mind map   
+> __version__=`1.1`,generatorId=`com.igormaznitsa:idea-mindmap:intellij-2024.17.0-WebStorm`
+---
+
+# layout\.tsx
+
+## metadata: <br/>Metadata
+> align=`left`
+
+
+### normalizeCMSPageMeta\(<br/>getCmsPageMetaDefault\(\),<br/>metaHandlers<br/>\)
+> align=`left`,mmd.emoticon=`application`
+
+- NOTE
+<pre>Создает MetaData для страницы
+из данных TCmsPageMeta</pre>
+
+#### getCmsPageMetaDefault\(\)
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
+
+
+##### mainPageMeta
+> align=`left`,fillColor=`#808080`,mmd.emoticon=`barcode`
+
+- NOTE
+<pre>cmsPageDataList[0]?.attributes.meta || {}</pre>
+
+##### cmsPageMetaDefault
+> fillColor=`#808080`,mmd.emoticon=`barcode`
+
+- NOTE
+<pre>TCmsPageMeta default</pre>
+
+#### metaHandlers
+> align=`left`,fillColor=`#00FF12`
+
+- NOTE
+<pre>Обработчики noIndex, noFollow, canonical,
+alternate, og, twitter</pre>
+
+## RootLayout
+> align=`left`,fillColor=`#FF00FF`
+
+
+### Header
+> align=`left`,fillColor=`#FF00FF`
+
+
+#### hrefMailTo, <br/>email, <br/>\.\.\.rest
+> align=`left`,fillColor=`#808080`
+
+- NOTE
+<pre>returns Promise&lt;IContactsHeaderData&gt;
+
+export interface IContactsHeaderData {
+  hrefMailTo: string;
+  hrefTelTo: string;
+  telLabel: string;
+  telAriaLabel: string;
+  email: string;
+  addressItems: string[];
+}</pre>
+
+##### getContactsHeaderData\(\)
+> fillColor=`#808080`,mmd.emoticon=`application`
+
+- NOTE
+<pre>Mock CMS getter returns
+IContactsHeaderData | null</pre>
+
+###### cmsHeaderData\.contactsData
+> fillColor=`#808080`,mmd.emoticon=`barcode`
+
+- NOTE
+<pre>export interface ICmsHeaderData {
+  logoData?: {
+    linkHref: string;
+    imageData: TImageProps;
+  };
+  contactsData?: IContactsHeaderData;
+}
+
+
+
+const contactsData?: IContactsHeaderData = {
+  hrefMailTo: &quot;mailto:agl@ag-landscape.com&quot;,
+  hrefTelTo: &quot;tel:+13034679619&quot;,
+  telLabel: &quot;303-467-9619&quot;,
+  telAriaLabel: &quot;make a call to the master&quot;,
+  email: &quot;agl@ag-landscape.com&quot;,
+  addressItems: [&quot;4310 Youngfield St.&quot;, &quot;Wheat Ridge, CO&quot;],
+};
+</pre>
+
+#### wrapperProps, <br/>imageProps
+> align=`left`,fillColor=`#808080`
+
+- NOTE
+<pre>returns TNavImageWrapperProps
+
+export type TNavImageWrapperProps = {
+  wrapperProps: TWrapperProps&lt;INavLinkProps&gt;; //href is required...
+  imageProps: TImageProps;
+};
+
+export type TWrapperProps&lt;P&gt; = Omit&lt;P, &quot;style&quot;&gt; &amp; {
+  style?: React.CSSProperties;
+  [key: `data-${string}`]: string | undefined;
+};
+
+export interface INavLinkProps extends React.ComponentProps&lt;typeof Link&gt; {
+  href: string;
+  exact?: boolean; // exact path match or &quot;starts from ...&quot;
+  className?: string;
+  replace?: boolean;
+  activeClassName?: string; //is used when &quot;active&quot;
+}
+
+// Final shape of image data (used in CMS, UI configs, etc.)
+export type TImageProps = {
+  src: TImageSource;
+  alt: string;
+
+  // Required width for container, aspect ratio will be calculated
+  width: number;
+
+  // Optional height — required if src is a string (not StaticImageData)
+  height?: number;
+
+  //objectFit?: React.CSSProperties['objectFit'];
+  objectFit?: string; //objectFit is taken from imageProps.objectFit which is string
+
+  // Responsive sizes
+  breakPoints?: TImageSizes;
+
+  // Allow passing any other native &lt;img&gt; or &lt;Image&gt; props if needed
+  [key: string]: unknown;
+};
+</pre>
+
+##### getLogoBlockImageData\(\)
+> fillColor=`#808080`,mmd.emoticon=`application`
+
+- NOTE
+<pre>Mock CMS getter returns
+Promise&lt;TNavImageWrapperProps | null&gt;</pre>
+
+###### cmsHeaderData\.logoData
+> fillColor=`#808080`,mmd.emoticon=`barcode`
+
+- NOTE
+<pre>export interface ICmsHeaderData {
+  logoData?: {
+    linkHref: string;
+    imageData: TImageProps;
+  };
+  contactsData?: IContactsHeaderData;
+}
+
+// Final shape of image data (used in CMS, UI configs, etc.)
+export type TImageProps = {
+  src: TImageSource;
+  alt: string;
+
+  // Required width for container, aspect ratio will be calculated
+  width: number;
+
+  // Optional height — required if src is a string (not StaticImageData)
+  height?: number;
+
+  //objectFit?: React.CSSProperties['objectFit'];
+  objectFit?: string; //objectFit is taken from imageProps.objectFit which is string
+
+  // Responsive sizes
+  breakPoints?: TImageSizes;
+
+  // Allow passing any other native &lt;img&gt; or &lt;Image&gt; props if needed
+  [key: string]: unknown;
+};</pre>
+
+#### navLinksData
+> fillColor=`#808080`
+
+- NOTE
+<pre>return INavItem[]
+
+export interface INavItem extends Omit&lt;IPageHref, &quot;href&quot;&gt; {
+  href: string | null;
+  children: INavItem[];
+}
+
+export interface IPageHref {
+  id: string;
+  label: string; //label for navigation menu
+  href: string; //each page must have href
+}</pre>
+
+##### getNavItems\(\)
+> fillColor=`#808080`,mmd.emoticon=`application`
+
+
+###### navItemsIdList
+> fillColor=`#808080`
+
+
+####### getNavItemsIdList\(\)
+> fillColor=`#808080`,mmd.emoticon=`application`
+
+
+### children
+> align=`left`,fillColor=`#241919`,textColor=`#FFFFFF`
+
+
+## App
+> fillColor=`#FFC800`,leftSide=`true`,textColor=`#0000FF`
+

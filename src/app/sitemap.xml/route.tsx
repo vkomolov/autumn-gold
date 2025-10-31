@@ -1,6 +1,5 @@
 import { type NextRequest } from "next/server";
-import { getLocalEnv } from "@/utils";
-import { cmsPageDataList, defaultBaseUrl } from "@/lib/data";
+import { cmsPageDataList, baseUrl } from "@/lib/data";
 import type { IPageCms, TSitemapEntry, TSitemapVideoEntry } from "@/types";
 
 // Helper to build <image:image> tags
@@ -111,8 +110,6 @@ function generateUrlEntry(entry: TSitemapEntry, baseUrl: string): string {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
-  const baseUrl = getLocalEnv("NEXT_PUBLIC_URL") || defaultBaseUrl;
-
   // Extract sitemapEntry from CMS data
   const entries = await getSiteMapData(cmsPageDataList);
 

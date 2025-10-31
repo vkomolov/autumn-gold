@@ -1,6 +1,5 @@
 import process from "process";
 import type {
-  INavItem,
   TNavItemStyles,
   TImageSizes,
   TBreakPoints,
@@ -8,9 +7,13 @@ import type {
   IPageCms,
   TCmsPageMeta,
   TMetaHandler,
-  INavItemFlat,
-  TPageCmsAttributes,
+  TPageCmsDataHref,
+  TPageCmsDataHrefMap,
   TOGImages,
+  THeaderNavMenuItem,
+  THeaderNavMenuNode,
+  ICmsHeaderData,
+  TNavImageWrapperProps,
 } from "@/types";
 
 import cn from "@/lib/cn";
@@ -21,16 +24,9 @@ import NavLink from "@/components/NavLink";
 import s from "@/components/Header/header.module.scss";
 import { type StaticImageData } from "next/image";
 import { omit, getAbsPath } from "@/utils";
-import {
-  cmsPageDataList,
-  cmsPageMetaDefault,
-  getNavItemFlatList,
-  getNavItemsIdList,
-} from "@/lib/data";
+import { cmsPageDataList } from "@/lib/data";
 
-/* END OF IMPORTS */
-
-export type TNavItemId = INavItemFlat["id"];
+/*** END OF IMPORTS ***/
 
 /**
  * Retrieves a value from `process.env` by key, with optional transformation.
@@ -64,40 +60,94 @@ export function getLocalEnv<T = string>(
   return cb ? cb(envValue) : (envValue as T);
 }
 
-///////////// NAVIGATION ITEMS ////////////////
-const buildNavItem = (
-  id: TNavItemId,
-  navItemMap: Map<TNavItemId, INavItemFlat>,
-): INavItem => {
-  const navItemFlat = navItemMap.get(id);
+/**
+ * Converts an array of dynamic route segments (slug parameters)
+ * into a normalized page href path string.
+ *
+ * For example:
+ *   ["services", "design-and-build"] → "/services/design-and-build"
+ *   undefined → "/"
+ */
+export const getPageHrefFromSlugParams = (page?: string[]) => {
+  return "/" + (page?.join("/") || "");
+};
 
-  if (!navItemFlat) {
-    throw new Error(`INavItemFlat with id "${id}" not found`);
-  }
-
+/*** HEADER LOGO IMAGE ***/
+export const buildLogoBlockImageData = (
+  logoData: ICmsHeaderData["logoData"],
+): TNavImageWrapperProps | null => {
+  if (!logoData) return null;
   return {
-    id: navItemFlat.id,
-    label: navItemFlat.label,
-    href: navItemFlat.href,
-    children: navItemFlat.children.map(childId => buildNavItem(childId, navItemMap)),
+    wrapperProps: {
+      href: logoData.linkHref,
+      rel: "noopener", //It disables new tab access to window.opener, protects against phishing
+      "aria-label": "to the Main Page",
+    },
+    imageProps: logoData.imageData,
   };
 };
 
-export const getNavItems = async (): Promise<INavItem[]> => {
-  const navItemsIdList: string[] = await getNavItemsIdList();
-  const navItemFlatList: INavItemFlat[] = await getNavItemFlatList();
-  const navItemFlatMapById: Map<TNavItemId, INavItemFlat> = new Map(
-    navItemFlatList.map((item: INavItemFlat) => {
-      return [item.id, item];
-    }),
-  );
+/*** NAVIGATION ITEMS ***/
 
-  return navItemsIdList.map(id => buildNavItem(id, navItemFlatMapById));
+const sortTree = (nodes: THeaderNavMenuNode[]) => {
+  nodes.sort((a, b) => a.order - b.order);
+  nodes.forEach(node => node.children && sortTree(node.children));
 };
 
-export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.Element {
-  const { className, activeClassName } = stylesData;
+/**
+ * Builds a hierarchical navigation tree from a flat list of menu items.
+ *
+ * Each item with a `parentId` is attached as a child to its parent node,
+ * forming a nested structure suitable for rendering multi-level navigation menus.
+ *
+ * Steps:
+ * 1. Creates a lookup map of all items by ID.
+ * 2. Connects child items to their parent nodes.
+ * 3. Collects root-level items (where `parentId` is null).
+ * 4. Sorts each level by the `order` property.
+ *
+ * @param {THeaderNavMenuItem[]} items - Flat array of navigation menu items.
+ * @returns {THeaderNavMenuNode[]} Hierarchical tree of menu nodes, sorted by order.
+ */
+export const buildHeaderNavMenuTree = (
+  items: THeaderNavMenuItem[],
+): THeaderNavMenuNode[] => {
+  const map: Record<string, THeaderNavMenuNode> = {};
+  const roots: THeaderNavMenuNode[] = [];
 
+  // 1️⃣ creating a map of all elements
+  items.forEach(item => {
+    map[item.id] = { ...item };
+  });
+
+  // 2️⃣ forming a tree of navigation nodes
+  items.forEach((item: THeaderNavMenuItem) => {
+    if (item.parentId) {
+      const parentItem = map[item.parentId];
+
+      if (parentItem) {
+        parentItem.children = parentItem.children || [];
+        parentItem.children.push(map[item.id]);
+      } else {
+        console.warn(
+          `[buildHeaderNavMenuTree]: referencing to unavailable parentId ${item.parentId}. Omitting...`,
+        );
+      }
+    } else {
+      roots.push(map[item.id]);
+    }
+  });
+
+  // 3️⃣ sorting by order
+  sortTree(roots);
+  return roots;
+};
+
+export const renderHeaderNavMenu = (
+  data: THeaderNavMenuNode[],
+  classNameData: TNavItemStyles,
+): JSX.Element => {
+  const { className, activeClassName } = classNameData;
   const navItems: JSX.Element[] = [];
 
   for (const item of data) {
@@ -110,17 +160,14 @@ export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.El
             href={href}
             className={className}
             activeClassName={activeClassName}
-            aria-label={`to ${label}`}
+            aria-label={`Go to ${label}`}
             tabIndex={0}
           >
             {label}
           </NavLink>
         </li>,
       );
-      continue;
-    }
-
-    if (href === null && children.length > 0) {
+    } else if (href === null && children && children.length > 0) {
       navItems.push(
         <li
           key={id}
@@ -132,7 +179,7 @@ export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.El
         >
           {label}
 
-          {getNavMenu(children, stylesData)}
+          {renderHeaderNavMenu(children, classNameData)}
         </li>,
       );
     } else {
@@ -142,7 +189,7 @@ export function getNavMenu(data: INavItem[], stylesData: TNavItemStyles): JSX.El
   }
 
   return <ul>{navItems}</ul>;
-}
+};
 
 export function getSpans(textItems: string[]) {
   const lastIndex = textItems.length - 1;
@@ -163,30 +210,7 @@ export function getSpans(textItems: string[]) {
   });
 }
 
-///////  CMS PAGES DATA  ////////
-
-type TPagesLabel = TPageCmsAttributes["label"];
-type TPagesHrefMapValue = {
-  id: IPageCms["id"];
-  href: TPageCmsAttributes["href"];
-};
-
-export const getPagesHrefMapByLabel = (
-  cmsPageDataList: IPageCms[],
-): Map<TPagesLabel, TPagesHrefMapValue> => {
-  return new Map(
-    cmsPageDataList.map(pageCms => {
-      const {
-        id,
-        attributes: { label, href },
-      } = pageCms;
-      return [label.toLowerCase(), { id, href }];
-    }),
-  );
-};
-
-type TPageCmsDataHref = TPageCmsAttributes["href"];
-type TPageCmsDataHrefMap = Map<TPageCmsDataHref, IPageCms>;
+/***  CMS PAGES DATA  ***/
 
 export const getCmsPageDataMapByHref = (): Map<TPageCmsDataHref, IPageCms> => {
   return new Map<TPageCmsDataHref, IPageCms>(
@@ -198,12 +222,13 @@ export const getCmsPageDataMapByHref = (): Map<TPageCmsDataHref, IPageCms> => {
 
 /*** CACHING MAP for [getPageHrefByLabel] ***/
 
-let hrefByLabelMap: Map<TPagesLabel, TPagesHrefMapValue> | null = null;
-let hrefMapCreatedAt: number | null = null;
+/*let hrefByLabelMap: Map<TPagesLabel, TPagesHrefMapValue> | null = null;
+let hrefMapCreatedAt: number | null = null;*/
 
 const TTL_MS = getLocalEnv("NEXT_PUBLIC_TTL_MS", val => parseInt(val, 10)) ?? 1800000;
 
-export const getPageHrefByLabel = (label: string, cmsPageDataList: IPageCms[]) => {
+//TODO: to delete getPageHrefByLabel
+/*export const getPageHrefByLabel = (label: string, cmsPageDataList: IPageCms[]) => {
   const now = Date.now();
   const _label = label.toLowerCase();
 
@@ -233,9 +258,10 @@ export const getPageHrefByLabel = (label: string, cmsPageDataList: IPageCms[]) =
   }
 
   return hrefRes.href;
-};
+};*/
 
 /*** CACHING REQUESTS IN [getCmsPageDataByHref] ***/
+
 //making cache for each request with href path
 const pageDataByHrefCache = new Map<string, IPageCms>();
 
@@ -246,7 +272,6 @@ export const clearPageDataCache = () => {
 
 let cmsPageDataMap: TPageCmsDataHrefMap | null = null;
 let cmsPageDataMapCreatedAt: number | null = null;
-//const TTL_MS = getLocalEnv("NEXT_PUBLIC_TTL_MS", val => parseInt(val, 10)) ?? 1800000;
 export const getCmsPageDataByHref = async (
   pageHref: string,
   fakeDelay: number = 0,
@@ -300,6 +325,8 @@ export const getCmsPageDataByHref = async (
   });
 };
 
+/*** METADATA HELPERS ***/
+
 export const getAlternateWithAbsolutePaths = (alternate: Record<string, string>) => {
   return Object.entries(alternate).reduce((acc, [key, relativePath]) => {
     return { ...acc, [key]: getAbsPath(relativePath) };
@@ -325,16 +352,6 @@ export const makeOgImageUrlsAbsolute = (images?: TOGImages): TOGImages | undefin
   });
 };
 
-export const getCmsPageMetaDefault = (): TCmsPageMeta => {
-  const mainPageMeta = cmsPageDataList[0]?.attributes.meta || {};
-
-  return {
-    ...mainPageMeta,
-    ...cmsPageMetaDefault,
-  };
-  //return cmsPageMetaDefault ?? cmsPageDataList[0].attributes.meta;
-};
-
 export const normalizeCMSPageMeta = (
   meta: TCmsPageMeta,
   metaHandlers: Record<string, TMetaHandler>,
@@ -350,7 +367,7 @@ export const normalizeCMSPageMeta = (
   }, meta);
 };
 
-////////////// IMAGE WRAPPER ////////////////
+/*** IMAGE WRAPPER ***/
 /**
  * Calculates the aspect ratio (as a string) to be used in inline styles like `aspectRatio`.
  *

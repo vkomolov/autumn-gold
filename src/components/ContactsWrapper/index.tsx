@@ -6,14 +6,13 @@ import NavLink from "@/components/NavLink";
 
 import { alccImageData } from "@/lib/data";
 import { getSpans } from "@/utils";
-import type { IContactsDataHeader, INavLinkProps } from "@/types";
+import type { IContactsHeaderData, INavLinkProps } from "@/types";
 
 import s from "./contactsWrapper.module.scss";
 import { FaPhoneVolume } from "react-icons/fa6";
 
 /* END OF IMPORTS */
-
-type TContactsDataHeaderRest = Omit<IContactsDataHeader, "hrefMailTo" | "email">;
+type TContactsDataHeaderRest = Omit<IContactsHeaderData, "hrefMailTo" | "email">;
 
 export default function ContactsWrapper({ data }: { data: TContactsDataHeaderRest }) {
   const { hrefTelTo, telAriaLabel, telLabel, addressItems } = data;

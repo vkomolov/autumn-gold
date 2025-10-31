@@ -1,4 +1,9 @@
-import type { INavLinkProps, IStrictOpenGraph, IStrictTwitter } from "@/types/interfaces";
+import type {
+  INavLinkProps,
+  IPageCms,
+  IStrictOpenGraph,
+  IStrictTwitter,
+} from "@/types/interfaces";
 import React from "react";
 import type { JSX, ReactElement } from "react";
 import { imageMap } from "@/lib/generated/imageMap";
@@ -6,7 +11,7 @@ import type { Metadata, MetadataRoute } from "next";
 
 /* END OF IMPORTS */
 
-/* META DATA */
+/*** META DATA ***/
 
 type TChangeFrequency =
   | "always"
@@ -64,6 +69,23 @@ export type TCmsPageMeta = TStrictMetaData & {
 };
 
 export type TMetaHandler = (cmsPageMeta: TCmsPageMeta) => TCmsPageMeta;
+
+export type TPageCmsDataHref = TPageCmsAttributes["href"];
+export type TPageCmsDataHrefMap = Map<TPageCmsDataHref, IPageCms>;
+
+/*** NAVIGATION HEADER MENU ***/
+
+export type THeaderNavMenuItem = {
+  id: string;
+  label: string;
+  href: string | null;
+  parentId: string | null;
+  order: number;
+};
+
+export type THeaderNavMenuNode = THeaderNavMenuItem & {
+  children?: THeaderNavMenuNode[];
+};
 
 export type TNavItemStyles = {
   className?: string; //basic className of NavLink
@@ -164,4 +186,20 @@ export type TNavImageWrapperProps = {
 export type TLogoBlockProps = TNavImageWrapperProps & {
   textLinkHref: string;
   children: React.ReactNode;
+};
+
+export type TContentTags = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div";
+
+export type TSlogan = {
+  type: TContentTags;
+  props: {
+    style?: React.CSSProperties; //for inline style
+    children: string; //textContent
+  };
+  delay: number; //delay for emerging
+  duration: number; //duration of showing the element
+};
+
+export type TSloganCarouselProps = {
+  slogans: Array<TSlogan[]>; //The array of the text elems array
 };

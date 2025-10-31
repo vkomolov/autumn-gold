@@ -1,9 +1,18 @@
 import React from "react";
 import Link from "next/link";
-import type { TPageCmsAttributes } from "@/types/types";
+import type { THeaderNavMenuItem, TImageProps, TPageCmsAttributes } from "@/types/types";
 import { type Metadata } from "next";
 
 /////////
+
+export interface ICmsHeaderData {
+  logoData?: {
+    linkHref: string;
+    imageData: TImageProps;
+  };
+  contactsData?: IContactsHeaderData;
+  navMenuData?: THeaderNavMenuItem[];
+}
 
 export interface INavLinkProps extends React.ComponentProps<typeof Link> {
   href: string;
@@ -18,7 +27,7 @@ export interface IIconTextLinkProps
   className?: string;
 }
 
-export interface IContactsDataHeader {
+export interface IContactsHeaderData {
   hrefMailTo: string;
   hrefTelTo: string;
   telLabel: string;
@@ -27,12 +36,17 @@ export interface IContactsDataHeader {
   addressItems: string[];
 }
 
+export interface IBlocksItem {
+  type: string; //type of the data for the separate section of the page
+  content: Record<string, unknown>;
+}
+
 // The full page type that comes from the CMS
 export interface IPageCms {
   id: string;
   attributes: TPageCmsAttributes;
 
-  blocks: unknown[]; //rest page content
+  blocks: IBlocksItem[]; //rest page content
 }
 
 export interface IPageHref {

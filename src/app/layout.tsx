@@ -4,8 +4,8 @@ import React from "react";
 
 import Header from "@/components/Header";
 
-import { metaHandlers } from "@/lib/data";
-import { normalizeCMSPageMeta, getCmsPageMetaDefault } from "@/utils";
+import { metaHandlers, getCmsPageMetaDefault } from "@/lib/data";
+import { normalizeCMSPageMeta } from "@/utils";
 
 import "@/styles/reset.scss"; //resetting styles
 import "@/styles/index.scss"; //for root classes
@@ -19,8 +19,14 @@ const notoSerif = Noto_Serif({
   display: "swap", // better loading...
 });
 
-export const metadata: Metadata = {
-  ...normalizeCMSPageMeta(getCmsPageMetaDefault(), metaHandlers),
+export const generateMetadata = async (): Promise<Metadata> => {
+  const cmsPageMetaDefault = await getCmsPageMetaDefault();
+
+  console.log("cmsPageMetaDefault", cmsPageMetaDefault);
+
+  return {
+    ...normalizeCMSPageMeta(cmsPageMetaDefault, metaHandlers),
+  };
 };
 
 export default function RootLayout({

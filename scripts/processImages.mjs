@@ -5,16 +5,16 @@ import {promises as fs} from "fs";
 import path from "path";
 import fg from "fast-glob";
 
-//Path to the directory with the imagesStatic to be imported for StaticImageData
 //! read docs/image-strategy.md
 
+//! Path to the directory with the images to be imported for StaticImageData
 const IMAGES_DIR = path.resolve("./src/assets/imagesStatic");
 
 //! Path to the output file
-const OUTPUT_FILE = path.resolve('./src/lib/generated/imageMap.ts');
+const OUTPUT_FILE = path.resolve("./src/lib/generated/imageMap.ts");
 
 //! Image extensions we support
-const SUPPORTED_EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png', 'svg'];
+const SUPPORTED_EXTENSIONS = ["webp", "jpg", "jpeg", "png", "svg"];
 
 //! Searching for the files in the IMAGES_DIR
 
@@ -92,17 +92,6 @@ ${mapEntries.join("\n")}
 	catch (err) {
 		console.error("❌ Failed to write file imageMap.ts", err);
 	}
-
-	//without try / catch
-/*	fs.mkdir(path.dirname(OUTPUT_FILE), { recursive: true }, (err) => {
-		if (err) throw err;
-		fs.writeFile(OUTPUT_FILE, output, (err) => {
-			if (err) throw err;
-
-			console.log("✅ imageMap.ts written successfully.");
-		});
-	});*/
-
 }
 
 run()

@@ -1,15 +1,18 @@
-//todo: TO MAKE FAKE CMS DATA FOR ALL PAGES
-
 import type { IPageCms, TCmsPageMeta, TMetaHandler } from "@/types";
 import {
   isSafeObject,
   getAbsPath,
   getAlternateWithAbsolutePaths,
   makeOgImageUrlsAbsolute,
+  getLocalEnv,
 } from "@/utils";
 
-export const defaultBaseUrl = "https://autumngoldlandscapes.com";
+/*** END OF IMPORTS ***/
 
+export const baseUrl =
+  getLocalEnv("NEXT_PUBLIC_URL") || "https://autumngoldlandscapes.com";
+
+//! MOCK CMS DATA
 export const cmsPageDataList: IPageCms[] = [
   {
     id: "1",
@@ -29,29 +32,97 @@ export const cmsPageDataList: IPageCms[] = [
         lastModified: new Date(),
         changeFrequency: "monthly",
         priority: 1,
-        //TODO: to add images...
-        //images: [`/image1.jpg`],
-
-        /*                videos: [
-					{
-						title: "video title",
-						thumbnail_loc: `/thumb.jpg`,
-						description: "Company intro",
-					},
-				],*/
-
-        /*        alternates: {
-					languages: {
-						en: "https://example.com/en",
-						de: "https://example.com/de",
-					},
-				},*/
       },
     },
 
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
@@ -77,7 +148,92 @@ export const cmsPageDataList: IPageCms[] = [
 
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
@@ -103,7 +259,92 @@ export const cmsPageDataList: IPageCms[] = [
 
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
@@ -129,7 +370,92 @@ export const cmsPageDataList: IPageCms[] = [
 
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
@@ -162,7 +488,92 @@ export const cmsPageDataList: IPageCms[] = [
 
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
@@ -192,7 +603,92 @@ export const cmsPageDataList: IPageCms[] = [
 
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
@@ -216,7 +712,92 @@ export const cmsPageDataList: IPageCms[] = [
     },
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
@@ -240,7 +821,92 @@ export const cmsPageDataList: IPageCms[] = [
     },
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
@@ -265,11 +931,169 @@ export const cmsPageDataList: IPageCms[] = [
     },
     blocks: [
       {
-        someKey: "someKey value",
+        type: "heroVideo",
+        content: {
+          video: "planning_landscape.mp4", //could be api path to CMS
+          slogans: [
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Welcome to Autumn Gold Landscapes",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "We Listen! - It's all about your vision",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Design & Build",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "From conceptual design to Your dream",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Sprinkler Service",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Keeping Your yard looking its best",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+            [
+              {
+                type: "h2",
+                props: {
+                  style: {},
+                  children: "Xeriscape Experts",
+                },
+                delay: 300,
+                duration: 3000,
+              },
+              {
+                type: "p",
+                props: {
+                  style: {},
+                  children: "Practicing xeriscape concepts from the start",
+                },
+                delay: 300,
+                duration: 2700,
+              },
+            ],
+          ],
+        },
       },
     ], //rest page content
   },
 ];
+
+//! MOCK CMS DATA
+export const cmsPageMetaDefault: TCmsPageMeta = {
+  title: "Landscape Design & Hardscaping in Front Range Metro",
+  description:
+    "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
+  noIndex: true,
+  noFollow: true,
+
+  /**
+   * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
+   */
+  manifest: "/manifest.json",
+  other: {
+    "apple-mobile-web-app-title": "AGL",
+    "mobile-web-app-capable": "yes",
+    "mask-icon": "/favicons/safari-pinned-tab.svg",
+  },
+  icons: {
+    icon: [
+      {
+        //rel: "icon",
+        url: "/favicons/icon.png",
+        sizes: "96x96",
+        type: "image/png",
+      },
+      {
+        //rel: "icon",
+        url: "/favicons/icon.svg",
+        type: "image/svg+xml",
+        sizes: "any",
+      },
+    ],
+    apple: [
+      {
+        //rel: "apple-touch-icon",
+        url: "/favicons/apple-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
+
+  /*  OG and Twitter Data:  */
+  og: {
+    title: "Landscape Design & Hardscaping in Front Range Metro",
+    description:
+      "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
+    url: "/",
+    siteName: "Autumn Gold Landscapes",
+    images: [
+      {
+        url: "/ogImages/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Autumn Gold Landscapes OG image",
+      },
+    ],
+  },
+  twitter: {
+    title: "Landscape Design & Hardscaping in Front Range Metro",
+    description:
+      "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
+    images: [
+      {
+        url: "/ogImages/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Autumn Gold Landscapes OG image",
+      },
+    ],
+  },
+};
 
 export const metaHandlers: Record<string, TMetaHandler> = {
   noIndex: (cmsPageMeta: TCmsPageMeta): TCmsPageMeta => {
@@ -376,74 +1200,16 @@ export const metaHandlers: Record<string, TMetaHandler> = {
   },
 };
 
-export const cmsPageMetaDefault: TCmsPageMeta = {
-  title: "Landscape Design & Hardscaping in Front Range Metro",
-  description:
-    "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
-  noIndex: true,
-  noFollow: true,
+//! MOCK CMS GETTERS to be replaced with real fetchers
+export const getCmsPageMetaDefault = async (): Promise<TCmsPageMeta> => {
+  const mainPageMeta = cmsPageDataList[0]?.attributes.meta || {};
 
-  /**
-   * metadata on favicons is general for all pages and is written in defaults at app/layout.tsx metadata
-   */
-  manifest: "/manifest.json",
-  other: {
-    "apple-mobile-web-app-title": "AGL",
-    "mobile-web-app-capable": "yes",
-    "mask-icon": "/favicons/safari-pinned-tab.svg",
-  },
-  icons: {
-    icon: [
-      {
-        //rel: "icon",
-        url: "/favicons/icon.png",
-        sizes: "96x96",
-        type: "image/png",
-      },
-      {
-        //rel: "icon",
-        url: "/favicons/icon.svg",
-        type: "image/svg+xml",
-        sizes: "any",
-      },
-    ],
-    apple: [
-      {
-        //rel: "apple-touch-icon",
-        url: "/favicons/apple-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
-  },
-
-  /*  OG and Twitter Data:  */
-  og: {
-    title: "Landscape Design & Hardscaping in Front Range Metro",
-    description:
-      "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
-    url: "/",
-    siteName: "Autumn Gold Landscapes",
-    images: [
-      {
-        url: "/ogImages/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Autumn Gold Landscapes OG image",
-      },
-    ],
-  },
-  twitter: {
-    title: "Landscape Design & Hardscaping in Front Range Metro",
-    description:
-      "Autumn Gold Landscapes has been serving the front range metro area since 1984. Our focus has always been on blending beautiful creativity with conservation and care for our environment. We have over 60 years combined experience with both certified landscape technicians and retaining wall experts on staff. A landscape architect will put your vision on paper and will provide detailed proposals for your project.",
-    images: [
-      {
-        url: "/ogImages/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Autumn Gold Landscapes OG image",
-      },
-    ],
-  },
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({
+        ...mainPageMeta,
+        ...cmsPageMetaDefault,
+      });
+    }, 0);
+  });
 };

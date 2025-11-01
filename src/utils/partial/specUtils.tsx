@@ -106,8 +106,8 @@ const sortTree = (nodes: THeaderNavMenuNode[]) => {
  * 3. Collects root-level items (where `parentId` is null).
  * 4. Sorts each level by the `order` property.
  *
- * @param {THeaderNavMenuItem[]} items - Flat array of navigation menu items.
- * @returns {THeaderNavMenuNode[]} Hierarchical tree of menu nodes, sorted by order.
+ * THeaderNavMenuItem[] - Flat array of navigation menu items.
+ * THeaderNavMenuNode[] - Hierarchical tree of menu nodes, sorted by order.
  */
 export const buildHeaderNavMenuTree = (
   items: THeaderNavMenuItem[],
@@ -143,19 +143,28 @@ export const buildHeaderNavMenuTree = (
   return roots;
 };
 
+/**
+ * Renders a hierarchical navigation menu recursively (server-safe).
+ *
+ * Each item with an `href` is rendered as a <NavLink>.
+ * Items with children (but no `href`) act as parent menu nodes.
+ *
+ *! THeaderNavMenuNode[] - Tree of navigation nodes.
+ *! TNavItemStyles - CSS class configuration for menu items.
+ *! it returns a nested list of navigation links (<ul><li>...</li></ul>).
+ */
 export const renderHeaderNavMenu = (
   data: THeaderNavMenuNode[],
   classNameData: TNavItemStyles,
 ): JSX.Element => {
   const { className, activeClassName } = classNameData;
-  const navItems: JSX.Element[] = [];
-
-  for (const item of data) {
-    const { id, label, href, children } = item;
+  const renderMenuItem = (item: THeaderNavMenuNode): JSX.Element | null => {
+    const { id, label, href, children, parentId } = item;
+    const key = `${parentId ?? "root"}-${id}`;
 
     if (href) {
-      navItems.push(
-        <li key={id}>
+      return (
+        <li key={key}>
           <NavLink
             href={href}
             className={className}
@@ -165,30 +174,31 @@ export const renderHeaderNavMenu = (
           >
             {label}
           </NavLink>
-        </li>,
+        </li>
       );
-    } else if (href === null && children && children.length > 0) {
-      navItems.push(
+    } else if (children?.length) {
+      return (
         <li
-          key={id}
-          className={className} //<li> with the type "node" will take the styles of NavLink component
+          key={key}
+          aria-haspopup="true"
+          className={className}
           style={{
-            position: "relative", //getNavMenu writes position: "relative"
+            position: "relative",
             cursor: "default",
           }}
+          tabIndex={0}
         >
           {label}
-
           {renderHeaderNavMenu(children, classNameData)}
-        </li>,
+        </li>
       );
     } else {
-      // Optional for dev
-      console.warn(`${id} with ${label} is omitted with not proper data...`);
+      console.warn(`${id} (${label}) is omitted due to invalid data.`);
+      return null;
     }
-  }
+  };
 
-  return <ul>{navItems}</ul>;
+  return <ul>{data.map(renderMenuItem)}</ul>;
 };
 
 export function getSpans(textItems: string[]) {

@@ -62,11 +62,12 @@ export interface IContactsHeaderData {
 }</pre>
 
 ##### getContactsHeaderData\(\)
-> fillColor=`#808080`,mmd.emoticon=`application`
+> fillColor=`#00FF12`,mmd.emoticon=`application`
 
 - NOTE
-<pre>Mock CMS getter returns
-IContactsHeaderData | null</pre>
+<pre>MOCK CMS GETTERS to be replaced with real getters on fetching CMS Data
+it is temporary used for async getting data from mock cms...
+It returns Promise&lt;IContactsHeaderData | null&gt;</pre>
 
 ###### cmsHeaderData\.contactsData
 > fillColor=`#808080`,mmd.emoticon=`barcode`
@@ -96,7 +97,7 @@ const contactsData?: IContactsHeaderData = {
 > align=`left`,fillColor=`#808080`
 
 - NOTE
-<pre>returns TNavImageWrapperProps
+<pre>The data, taken from the mock cms for building logo block in header...
 
 export type TNavImageWrapperProps = {
   wrapperProps: TWrapperProps&lt;INavLinkProps&gt;; //href is required...
@@ -139,11 +140,13 @@ export type TImageProps = {
 </pre>
 
 ##### getLogoBlockImageData\(\)
-> fillColor=`#808080`,mmd.emoticon=`application`
+> fillColor=`#00FF00`,mmd.emoticon=`application`
 
 - NOTE
-<pre>Mock CMS getter returns
-Promise&lt;TNavImageWrapperProps | null&gt;</pre>
+<pre>MOCK CMS GETTERS to be replaced with real getters on fetching CMS Data
+it is temporary used for async getting data from mock cms...
+It returns Promise&lt;TNavImageWrapperProps | null&gt;
+</pre>
 
 ###### cmsHeaderData\.logoData
 > fillColor=`#808080`,mmd.emoticon=`barcode`
@@ -178,33 +181,94 @@ export type TImageProps = {
   [key: string]: unknown;
 };</pre>
 
+###### buildLogoBlockImageData\(logData\)
+> fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>It is used to handle the received CMS header data, or mock cms data
+It returns TNavImageWrapperProps | null
+</pre>
+
 #### navLinksData
 > fillColor=`#808080`
 
 - NOTE
-<pre>return INavItem[]
-
-export interface INavItem extends Omit&lt;IPageHref, &quot;href&quot;&gt; {
-  href: string | null;
-  children: INavItem[];
-}
-
-export interface IPageHref {
+<pre>export type THeaderNavMenuItem = {
   id: string;
-  label: string; //label for navigation menu
-  href: string; //each page must have href
-}</pre>
+  label: string;
+  href: string | null;
+  parentId: string | null;
+  order: number;
+};
 
-##### getNavItems\(\)
-> fillColor=`#808080`,mmd.emoticon=`application`
+export type THeaderNavMenuNode = THeaderNavMenuItem &amp; {
+  children?: THeaderNavMenuNode[];
+};
+
+navLinksData: THeaderNavMenuNode[]</pre>
+
+##### getHeaderNavMenuTree\(\)
+> fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>MOCK CMS GETTERS to be replaced with real getters on fetching CMS Data
+it is temporary used for async getting data from mock cms...
+
+It returns Promise&lt;THeaderNavMenuNode[] | null&gt;</pre>
+
+###### cmsHeaderData\.navMenuData
+> fillColor=`#808080`,mmd.emoticon=`barcode`
+
+- NOTE
+<pre>THeaderNavMenuItem[]
+
+export type THeaderNavMenuItem = {
+  id: string;
+  label: string;
+  href: string | null;
+  parentId: string | null;
+  order: number;
+};
+
+</pre>
+
+###### buildHeaderNavMenuTree\(navMenuData\)
+> fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>Builds a hierarchical navigation tree from a flat list of menu items.
+
+Returns THeaderNavMenuNode[]
+
+</pre>
+
+#### \<LogoBlock<br/> wrapperProps=\{wrapperProps\}<br/> imageProps=\{imageProps\}<br/> textLinkHref=\{hrefMailTo\}<br/>\>
+> align=`left`,fillColor=`#FF00FF`
+
+- NOTE
+<pre>function LogoBlock({
+  wrapperProps,
+  imageProps,
+  textLinkHref,
+  children,
+}: TLogoBlockProps)</pre>
+
+##### \<ImageWrapper\<INavLinkProps\><br/> wrapper=\{NavLink\}<br/> wrapperProps=\{wrapperPropsStyled\}<br/> imageProps=\{imageProps\}<br/>/\>
+> align=`left`,fillColor=`#FF00FF`
+
+- NOTE
+<pre>wraps logo image</pre>
+
+##### \<IconTextLink<br/> href=\{textLinkHref\}<br/> aria\-label="mail to us"<br/> tabIndex=\{0\}<br/> className="iconTextLink"<br/>\>
+> align=`left`,fillColor=`#FF00FF`
 
 
-###### navItemsIdList
-> fillColor=`#808080`
+#### \<ContactsWrapper <br/>  data=\{rest\} <br/>/\>
+> align=`left`,fillColor=`#FF00FF`
 
 
-####### getNavItemsIdList\(\)
-> fillColor=`#808080`,mmd.emoticon=`application`
+#### \<NavWrapper <br/>  data=\{navLinksData\} <br/>/\>
+> align=`left`,fillColor=`#FF00FF`
 
 
 ### children

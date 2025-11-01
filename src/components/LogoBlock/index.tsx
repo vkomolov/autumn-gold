@@ -23,7 +23,6 @@ export default function LogoBlock({
         wrapperProps={wrapperPropsStyled}
         imageProps={imageProps}
       />
-
       <IconTextLink
         href={textLinkHref}
         aria-label="mail to us"

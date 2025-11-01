@@ -49,6 +49,7 @@ export default function NavLink({
       className={
         isActive && activeClassName ? `${className} ${activeClassName}` : className
       }
+      aria-current={isActive ? "page" : undefined}
       onNavigate={e => {
         if (isActive) {
           e.preventDefault();

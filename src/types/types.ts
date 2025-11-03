@@ -103,6 +103,8 @@ export type TRef<T extends HTMLElement> = {
   style?: React.CSSProperties;
 };
 
+/*** IMAGE DATA ***/
+
 // Keys from imageMap (auto-generated from /imagesStatic and located at @lib/genereated/imageMap.ts)
 export type TLocalImageKeys = keyof typeof imageMap;
 
@@ -163,6 +165,13 @@ export type TImageProps = {
   [key: string]: unknown;
 };
 
+export type TCmsNavImageData = {
+  href: string;
+  target?: string;
+  ariaLabel: string;
+  imageProps: TImageProps;
+};
+
 export type TImageWrapper<P = object> =
   | keyof JSX.IntrinsicElements //"div", "a", "section", etc...
   | React.ComponentType<P & { children?: React.ReactNode }>;
@@ -174,8 +183,8 @@ export type TWrapperProps<P> = Omit<P, "style"> & {
 
 export type TImageWrapperProps<P = object> = {
   wrapper: TImageWrapper<P>;
-  imageProps: TImageProps;
   wrapperProps?: TWrapperProps<P>;
+  imageProps: TImageProps;
 };
 
 export type TNavImageWrapperProps = {
@@ -184,9 +193,12 @@ export type TNavImageWrapperProps = {
 };
 
 export type TLogoBlockProps = TNavImageWrapperProps & {
-  textLinkHref: string;
+  hrefMailTo: string;
+  mailToAriaLabel: string;
   children: React.ReactNode;
 };
+
+/***  ***/
 
 export type TContentTags = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div";
 

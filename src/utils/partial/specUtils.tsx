@@ -12,8 +12,8 @@ import type {
   TOGImages,
   THeaderNavMenuItem,
   THeaderNavMenuNode,
-  ICmsHeaderData,
   TNavImageWrapperProps,
+  TCmsNavImageData,
 } from "@/types";
 
 import cn from "@/lib/cn";
@@ -73,22 +73,25 @@ export const getPageHrefFromSlugParams = (page?: string[]) => {
 };
 
 /*** HEADER LOGO IMAGE ***/
-export const buildLogoBlockImageData = (
-  logoData: ICmsHeaderData["logoData"],
+export const buildNavImageWrapperProps = (
+  cmsNavImageData: TCmsNavImageData | undefined,
 ): TNavImageWrapperProps | null => {
-  if (!logoData) return null;
+  if (!cmsNavImageData) return null;
+
+  const { href, target, ariaLabel, imageProps } = cmsNavImageData;
+
   return {
     wrapperProps: {
-      href: logoData.linkHref,
+      href,
+      target: target || "_self",
       rel: "noopener", //It disables new tab access to window.opener, protects against phishing
-      "aria-label": "to the Main Page",
+      "aria-label": ariaLabel,
     },
-    imageProps: logoData.imageData,
+    imageProps,
   };
 };
 
 /*** NAVIGATION ITEMS ***/
-
 const sortTree = (nodes: THeaderNavMenuNode[]) => {
   nodes.sort((a, b) => a.order - b.order);
   nodes.forEach(node => node.children && sortTree(node.children));
@@ -378,6 +381,7 @@ export const normalizeCMSPageMeta = (
 };
 
 /*** IMAGE WRAPPER ***/
+
 /**
  * Calculates the aspect ratio (as a string) to be used in inline styles like `aspectRatio`.
  *
@@ -475,6 +479,15 @@ export function getImageWrapperStyle(
   };
 }
 
+/**
+ * It takes breakpoint data retrieved from the CMS and generates
+ * responsive image breakpoints. These breakpoints are later processed and
+ * applied in the Next.js Image Component.
+ *
+ * @param breakPoint - A breakpoint string from the CMS, e.g. "max_1920" or "min_768".
+ * @param value - The corresponding image size value for that breakpoint.
+ * @returns A formatted media query string, e.g. "(max-width: 1920px) 100vw".
+ */
 function normalizeBreakPoint(breakPoint: TBreakPoints, value: TImageSizeValue): string {
   const [prefix, bp] = breakPoint.split("_"); // e.g. ["max", "1920"]
   return `(${prefix}-width: ${bp}px) ${value}`;

@@ -8,7 +8,8 @@ import type { INavLinkProps, TLogoBlockProps } from "@/types";
 export default function LogoBlock({
   wrapperProps,
   imageProps,
-  textLinkHref,
+  hrefMailTo,
+  mailToAriaLabel,
   children,
 }: TLogoBlockProps) {
   const wrapperPropsStyled = {
@@ -24,8 +25,8 @@ export default function LogoBlock({
         imageProps={imageProps}
       />
       <IconTextLink
-        href={textLinkHref}
-        aria-label="mail to us"
+        href={hrefMailTo}
+        aria-label={mailToAriaLabel}
         tabIndex={0}
         className="iconTextLink"
       >

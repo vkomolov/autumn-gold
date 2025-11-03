@@ -1,15 +1,17 @@
 import React from "react";
 import Link from "next/link";
-import type { THeaderNavMenuItem, TImageProps, TPageCmsAttributes } from "@/types/types";
+import type {
+  THeaderNavMenuItem,
+  TPageCmsAttributes,
+  TCmsNavImageData,
+} from "@/types/types";
 import { type Metadata } from "next";
 
 /////////
 
 export interface ICmsHeaderData {
-  logoData?: {
-    linkHref: string;
-    imageData: TImageProps;
-  };
+  logoData?: TCmsNavImageData;
+  partnerData?: TCmsNavImageData;
   contactsData?: IContactsHeaderData;
   navMenuData?: THeaderNavMenuItem[];
 }
@@ -29,9 +31,10 @@ export interface IIconTextLinkProps
 
 export interface IContactsHeaderData {
   hrefMailTo: string;
+  mailToAriaLabel: string;
   hrefTelTo: string;
+  telToAriaLabel: string;
   telLabel: string;
-  telAriaLabel: string;
   email: string;
   addressItems: string[];
 }

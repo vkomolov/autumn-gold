@@ -4,7 +4,7 @@ import ContactsWrapper from "@/components/ContactsWrapper";
 import NavWrapper from "@/components/NavWrapper";
 import LogoBlock from "@/components/LogoBlock";
 import { FaEnvelope } from "react-icons/fa6";
-import { getLogoBlockImageData } from "@/lib/data";
+import { getNavImageWrapperProps } from "@/lib/data";
 
 import s from "./header.module.scss";
 import type { IContactsHeaderData } from "@/types"; // for className={s.someClass}
@@ -28,9 +28,9 @@ export default async function Header() {
    * - the fallback `{}` is never rendered unless `hasContactsData` is true
    * - this ensures correct typing for `rest` (TContactsDataHeaderRest) without runtime risk
    */
-  const { hrefMailTo, email, ...rest } =
+  const { hrefMailTo, mailToAriaLabel, email, ...rest } =
     (await getContactsHeaderData()) ?? ({} as NonNullable<IContactsHeaderData>);
-  const { wrapperProps, imageProps } = (await getLogoBlockImageData()) ?? {};
+  const { wrapperProps, imageProps } = (await getNavImageWrapperProps("logoData")) ?? {};
 
   const navLinksData = (await getHeaderNavMenuTree()) ?? [];
 
@@ -47,7 +47,8 @@ export default async function Header() {
           <LogoBlock
             wrapperProps={wrapperProps}
             imageProps={imageProps}
-            textLinkHref={hrefMailTo}
+            hrefMailTo={hrefMailTo}
+            mailToAriaLabel={mailToAriaLabel}
           >
             <FaEnvelope size={14} className="icon-sm" />
             {email}

@@ -139,7 +139,7 @@ export type TImageProps = {
 };
 </pre>
 
-##### getLogoBlockImageData\(\)
+##### getNavImageWrapperProps\(\)
 > fillColor=`#00FF00`,mmd.emoticon=`application`
 
 - NOTE
@@ -153,12 +153,18 @@ It returns Promise&lt;TNavImageWrapperProps | null&gt;
 
 - NOTE
 <pre>export interface ICmsHeaderData {
-  logoData?: {
-    linkHref: string;
-    imageData: TImageProps;
-  };
+  logoData?: TCmsNavImageData;
+  partnerData?: TCmsNavImageData;
   contactsData?: IContactsHeaderData;
+  navMenuData?: THeaderNavMenuItem[];
 }
+
+export type TCmsNavImageData = {
+  href: string;
+  target?: string;
+  ariaLabel: string;
+  imageProps: TImageProps;
+};
 
 // Final shape of image data (used in CMS, UI configs, etc.)
 export type TImageProps = {
@@ -181,13 +187,19 @@ export type TImageProps = {
   [key: string]: unknown;
 };</pre>
 
-###### buildLogoBlockImageData\(logData\)
+###### buildNavImageWrapperProps\(logoData\)
 > fillColor=`#00FF12`,mmd.emoticon=`application`
 
 - NOTE
 <pre>It is used to handle the received CMS header data, or mock cms data
 It returns TNavImageWrapperProps | null
-</pre>
+
+props - type TCmsNavImageData = {
+  href: string;
+  target?: string;
+  ariaLabel: string;
+  imageProps: TImageProps;
+};</pre>
 
 #### navLinksData
 > fillColor=`#808080`
@@ -242,14 +254,14 @@ Returns THeaderNavMenuNode[]
 
 </pre>
 
-#### \<LogoBlock<br/> wrapperProps=\{wrapperProps\}<br/> imageProps=\{imageProps\}<br/> textLinkHref=\{hrefMailTo\}<br/>\>
+#### \<LogoBlock<br/> wrapperProps=\{wrapperProps\}<br/> imageProps=\{imageProps\}<br/> hrefMailTo=\{hrefMailTo\}<br/>\>
 > align=`left`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>function LogoBlock({
   wrapperProps,
   imageProps,
-  textLinkHref,
+  hrefMailTo,
   children,
 }: TLogoBlockProps)</pre>
 
@@ -257,17 +269,388 @@ Returns THeaderNavMenuNode[]
 > align=`left`,fillColor=`#FF00FF`
 
 - NOTE
-<pre>wraps logo image</pre>
+<pre>wraps logo image with a custom Wrapper and returns Next Component Image, wrapped</pre>
 
-##### \<IconTextLink<br/> href=\{textLinkHref\}<br/> aria\-label="mail to us"<br/> tabIndex=\{0\}<br/> className="iconTextLink"<br/>\>
+###### wrapperStyle
+> fillColor=`#808080`
+
+- NOTE
+<pre>inline `style` object for an image wrapper
+
+React.CSSProperties
+</pre>
+
+####### getImageWrapperStyle\(<br/>resolvedSrc, <br/>width, <br/>height, <br/>style<br/>\)
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>Build inline wrapper styles.
+ - Includes relative positioning, width, aspect-ratio.
+ - Preserves safe inline styles passed via propStyle (except restricted keys).
+
+Generates a reliable inline `style` object for an image wrapper
+that works seamlessly with `&lt;Image fill /&gt;` in Next.js.
+
+returns React.CSSProperties</pre>
+
+######## aspectRatio
+> fillColor=`#808080`
+
+
+######### getAspectRatio\(<br/>width, <br/>src, <br/>height<br/>\)
+> align=`left`,fillColor=`#00FF12`
+
+- NOTE
+<pre>Calculates the aspect ratio (as a string) to be used in inline styles like `aspectRatio`.
+
+Supports two cases:
+
+1. If `src` is a string (e.g. dynamic URL from CMS or API), both `width` and `height` must be provided manually.
+2. If `src` is a StaticImageData object (e.g. from `import example from &quot;../image.jpg&quot;`),
+the intrinsic dimensions from `src.width` and `src.height` are used.
+
+If height is missing in case 1 or the StaticImageData object is malformed,
+a warning is logged and the function returns `undefined`.
+
+@returns The calculated aspect ratio as a string (e.g. &quot;3.0000&quot;), or `undefined` if it cannot be determined.</pre>
+
+###### sizes
+> fillColor=`#808080`
+
+- NOTE
+<pre>responsive sizes attribute for the image if breakPoints are defined
+sizes and imageProps.width are recommended to be in consistent units (px ↔ px, vw ↔ vw)</pre>
+
+####### getImageSizes\(breakPoints\)
+> fillColor=`#00FF12`
+
+- NOTE
+<pre>Generate responsive sizes attribute if breakPoints are defined.
+sizes and imageProps.width are recommended to be in consistent units (px ↔ px, vw ↔ vw)</pre>
+
+######## normalizeBreakPoint\(<br/>key, value<br/>\)
+> align=`left`,fillColor=`#00FF12`
+
+
+###### \<Navlink\><br/>Image<br/>\</Navlink\>
+> align=`left`,fillColor=`#FF00FF`
+
+
+####### \<link\><br/> Image<br/>\</Link\>
+> align=`left`,fillColor=`#FF00FF`
+
+
+##### \<IconTextLink<br/> href=\{hrefMailTo\}<br/> aria\-label=\{mailToAriaLabel\}<br/> tabIndex=\{0\}<br/> className="iconTextLink"<br/>\>
+> align=`left`,fillColor=`#FF00FF`
+
+- NOTE
+<pre>export default function IconTextLink({
+  href = &quot;#&quot;,
+  className,
+  children,
+  ...rest
+}: IIconTextLinkProps)
+
+</pre>
+
+###### \<Link\><br/>children<br/>\</Link\>
 > align=`left`,fillColor=`#FF00FF`
 
 
 #### \<ContactsWrapper <br/>  data=\{rest\} <br/>/\>
 > align=`left`,fillColor=`#FF00FF`
 
+- NOTE
+<pre>export default async function ContactsWrapper({
+  data,
+}: {
+  data: TContactsDataHeaderRest;
+})
+
+export interface IContactsHeaderData {
+  hrefMailTo: string;
+  mailToAriaLabel: string;
+  hrefTelTo: string;
+  telToAriaLabel: string;
+  telLabel: string;
+  email: string;
+  addressItems: string[];
+}
+
+
+type TContactsDataHeaderRest = Omit&lt;
+  IContactsHeaderData,
+  &quot;hrefMailTo&quot; | &quot;email&quot; | &quot;mailToAriaLabel&quot;
+&gt;;
+</pre>
+
+##### wrapperProps, <br/>imageProps
+> align=`left`,fillColor=`#808080`
+
+- NOTE
+<pre>The data, taken from the mock cms for building partners` block in header...
+
+export type TNavImageWrapperProps = {
+  wrapperProps: TWrapperProps&lt;INavLinkProps&gt;; //href is required...
+  imageProps: TImageProps;
+};
+
+export type TWrapperProps&lt;P&gt; = Omit&lt;P, &quot;style&quot;&gt; &amp; {
+  style?: React.CSSProperties;
+  [key: `data-${string}`]: string | undefined;
+};
+
+export interface INavLinkProps extends React.ComponentProps&lt;typeof Link&gt; {
+  href: string;
+  exact?: boolean; // exact path match or &quot;starts from ...&quot;
+  className?: string;
+  replace?: boolean;
+  activeClassName?: string; //is used when &quot;active&quot;
+}
+
+// Final shape of image data (used in CMS, UI configs, etc.)
+export type TImageProps = {
+  src: TImageSource;
+  alt: string;
+
+  // Required width for container, aspect ratio will be calculated
+  width: number;
+
+  // Optional height — required if src is a string (not StaticImageData)
+  height?: number;
+
+  //objectFit?: React.CSSProperties['objectFit'];
+  objectFit?: string; //objectFit is taken from imageProps.objectFit which is string
+
+  // Responsive sizes
+  breakPoints?: TImageSizes;
+
+  // Allow passing any other native &lt;img&gt; or &lt;Image&gt; props if needed
+  [key: string]: unknown;
+};
+</pre>
+
+###### getNavImageWrapperProps\(\)
+> fillColor=`#00FF00`,mmd.emoticon=`application`
+
+- NOTE
+<pre>MOCK CMS GETTERS to be replaced with real getters on fetching CMS Data
+it is temporary used for async getting data from mock cms...
+It returns Promise&lt;TNavImageWrapperProps | null&gt;
+</pre>
+
+####### cmsHeaderData\.partnerData
+> fillColor=`#808080`,mmd.emoticon=`barcode`
+
+- NOTE
+<pre>export interface ICmsHeaderData {
+  logoData?: TCmsNavImageData;
+  partnerData?: TCmsNavImageData;
+  contactsData?: IContactsHeaderData;
+  navMenuData?: THeaderNavMenuItem[];
+}
+
+export type TCmsNavImageData = {
+  href: string;
+  target?: string;
+  ariaLabel: string;
+  imageProps: TImageProps;
+};
+
+// Final shape of image data (used in CMS, UI configs, etc.)
+export type TImageProps = {
+  src: TImageSource;
+  alt: string;
+
+  // Required width for container, aspect ratio will be calculated
+  width: number;
+
+  // Optional height — required if src is a string (not StaticImageData)
+  height?: number;
+
+  //objectFit?: React.CSSProperties['objectFit'];
+  objectFit?: string; //objectFit is taken from imageProps.objectFit which is string
+
+  // Responsive sizes
+  breakPoints?: TImageSizes;
+
+  // Allow passing any other native &lt;img&gt; or &lt;Image&gt; props if needed
+  [key: string]: unknown;
+};</pre>
+
+####### buildNavImageWrapperProps\(partnerData\)
+> fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>It is used to handle the received CMS header data, or mock cms data
+It returns TNavImageWrapperProps | null
+
+props - type TCmsNavImageData = {
+  href: string;
+  target?: string;
+  ariaLabel: string;
+  imageProps: TImageProps;
+};</pre>
+
+##### \<IconTextLink<br/> href=\{hrefTelTo\}<br/> aria\-label=\{telAriaLabel\}<br/> tabIndex=\{0\}<br/> className="iconTextLink"<br/>\>
+> align=`left`,fillColor=`#FF00FF`
+
+- NOTE
+<pre>/**
+ * A reusable React component that renders a styled text link with an optional icon.
+ * It automatically determines whether to use Next.js &lt;Link&gt; (for internal links)
+ * or a regular &lt;a&gt; tag (for external links).
+ *
+ * @component
+ * @param props - The component props.
+ * @param props.href - The link target URL. Internal links start with '/'.
+ * @param props.className - Optional additional class names.
+ * @param props.children - The link content (text and/or icon).
+ * @returns The rendered link element with proper styling and behavior.
+ *
+ * @example
+ * &lt;IconTextLink href=&quot;/about&quot;&gt;
+ *   &lt;Icon name=&quot;info&quot; /&gt; About Us
+ * &lt;/IconTextLink&gt;
+ */
+export default function IconTextLink({
+  href = &quot;#&quot;,
+  className,
+  children,
+  ...rest
+}: IIconTextLinkProps)</pre>
+
+###### \<Link <br/> href=\{href\} <br/> className=\{\.\.\.\} <br/>\{\.\.\.rest\}\><br/>  \{children\}<br/>\</Link\>
+> align=`left`,fillColor=`#FF00FF`
+
+
+##### \<ImageWrapper\<INavLinkProps\><br/> wrapper=\{NavLink\}<br/> wrapperProps=\{wrapperProps\}<br/> imageProps=\{imageProps\}<br/>/\>
+> align=`left`,fillColor=`#FF00FF`
+
+- NOTE
+<pre>wraps logo image with a custom Wrapper and returns Next Component Image, wrapped
+</pre>
+
+###### wrapperStyle
+> fillColor=`#808080`
+
+- NOTE
+<pre>inline `style` object for an image wrapper
+
+React.CSSProperties
+</pre>
+
+####### getImageWrapperStyle\(<br/>resolvedSrc, <br/>width, <br/>height, <br/>style<br/>\)
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>Build inline wrapper styles.
+ - Includes relative positioning, width, aspect-ratio.
+ - Preserves safe inline styles passed via propStyle (except restricted keys).
+
+Generates a reliable inline `style` object for an image wrapper
+that works seamlessly with `&lt;Image fill /&gt;` in Next.js.
+
+returns React.CSSProperties</pre>
+
+######## aspectRatio
+> fillColor=`#808080`
+
+
+######### getAspectRatio\(<br/>width, <br/>src, <br/>height<br/>\)
+> align=`left`,fillColor=`#00FF12`
+
+- NOTE
+<pre>Calculates the aspect ratio (as a string) to be used in inline styles like `aspectRatio`.
+
+Supports two cases:
+
+1. If `src` is a string (e.g. dynamic URL from CMS or API), both `width` and `height` must be provided manually.
+2. If `src` is a StaticImageData object (e.g. from `import example from &quot;../image.jpg&quot;`),
+the intrinsic dimensions from `src.width` and `src.height` are used.
+
+If height is missing in case 1 or the StaticImageData object is malformed,
+a warning is logged and the function returns `undefined`.
+
+@returns The calculated aspect ratio as a string (e.g. &quot;3.0000&quot;), or `undefined` if it cannot be determined.</pre>
+
+###### sizes
+> fillColor=`#808080`
+
+- NOTE
+<pre>responsive sizes attribute for the image if breakPoints are defined
+sizes and imageProps.width are recommended to be in consistent units (px ↔ px, vw ↔ vw)</pre>
+
+####### getImageSizes\(breakPoints\)
+> fillColor=`#00FF12`
+
+- NOTE
+<pre>Generate responsive sizes attribute if breakPoints are defined.
+sizes and imageProps.width are recommended to be in consistent units (px ↔ px, vw ↔ vw)</pre>
+
+######## normalizeBreakPoint\(<br/>key, value<br/>\)
+> align=`left`,fillColor=`#00FF12`
+
+
+###### \<Navlink\><br/>Image<br/>\</Navlink\>
+> align=`left`,fillColor=`#FF00FF`
+
+
+####### \<Link\><br/> Image<br/>\</Link\>
+> align=`left`,fillColor=`#FF00FF`
+
 
 #### \<NavWrapper <br/>  data=\{navLinksData\} <br/>/\>
+> align=`left`,fillColor=`#FF00FF`
+
+- NOTE
+<pre>export default function NavWrapper({ data }: { data: THeaderNavMenuNode[] })
+
+export type THeaderNavMenuItem = {
+  id: string;
+  label: string;
+  href: string | null;
+  parentId: string | null;
+  order: number;
+};
+
+export type THeaderNavMenuNode = THeaderNavMenuItem &amp; {
+  children?: THeaderNavMenuNode[];
+};
+</pre>
+
+##### renderHeaderNavMenu\(<br/>data, <br/>stylesData<br/>\)
+> align=`left`,fillColor=`#00FF00`,mmd.emoticon=`application`
+
+- NOTE
+<pre>export const renderHeaderNavMenu = (
+  data: THeaderNavMenuNode[],
+  classNameData: TNavItemStyles,
+): JSX.Element
+
+</pre>
+
+###### renderMenuItem\(<br/>item: THeaderNavMenuNode<br/>\): JSX\.Element | null
+> align=`left`,fillColor=`#00FF00`,mmd.emoticon=`application`
+
+- NOTE
+<pre>handles each navigation item within map cycles</pre>
+
+####### \<Navlink\><br/> label<br/>\</Navlink\>
+> align=`left`,fillColor=`#FF00FF`
+
+- NOTE
+<pre>&lt;NavLink
+ href={href}
+ className={className}
+ activeClassName={activeClassName}
+ aria-label={`Go to ${label}`}
+ tabIndex={0}
+&gt;
+ {label}
+&lt;/NavLink&gt;</pre>
+
+######## \<Link\><br/> label<br/>\</Link\>
 > align=`left`,fillColor=`#FF00FF`
 
 

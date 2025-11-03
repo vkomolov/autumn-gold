@@ -39,7 +39,7 @@ export interface IContactsHeaderData {
   addressItems: string[];
 }
 
-export interface IBlocksItem {
+export interface ISectionsItem {
   type: string; //type of the data for the separate section of the page
   content: Record<string, unknown>;
 }
@@ -49,7 +49,7 @@ export interface IPageCms {
   id: string;
   attributes: TPageCmsAttributes;
 
-  blocks: IBlocksItem[]; //rest page content
+  sections: ISectionsItem[]; //rest page content
 }
 
 export interface IPageHref {

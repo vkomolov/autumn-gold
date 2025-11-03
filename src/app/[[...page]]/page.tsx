@@ -44,10 +44,10 @@ export default async function Page({ params }: { params: TParams }) {
 
   const {
     attributes: { label },
-    blocks,
+    sections,
   } = cmsPageData;
 
-  console.log("blocks: ", blocks);
+  console.log("sections: ", sections);
 
   return (
     <div>

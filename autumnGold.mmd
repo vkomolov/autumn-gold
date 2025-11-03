@@ -3,13 +3,15 @@
 ---
 
 # layout\.tsx
+> fillColor=`#000066`
 
-## metadata: <br/>Metadata
+
+## generateMetadata\(\):<br/>Promise\<Metadata\>
 > align=`left`
 
 
 ### normalizeCMSPageMeta\(<br/>getCmsPageMetaDefault\(\),<br/>metaHandlers<br/>\)
-> align=`left`,mmd.emoticon=`application`
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
 
 - NOTE
 <pre>Создает MetaData для страницы
@@ -43,11 +45,11 @@ alternate, og, twitter</pre>
 
 
 ### Header
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 
 #### hrefMailTo, <br/>email, <br/>\.\.\.rest
-> align=`left`,fillColor=`#808080`
+> align=`left`,collapsed=`true`,fillColor=`#808080`
 
 - NOTE
 <pre>returns Promise&lt;IContactsHeaderData&gt;
@@ -62,7 +64,7 @@ export interface IContactsHeaderData {
 }</pre>
 
 ##### getContactsHeaderData\(\)
-> fillColor=`#00FF12`,mmd.emoticon=`application`
+> collapsed=`true`,fillColor=`#00FF12`,mmd.emoticon=`application`
 
 - NOTE
 <pre>MOCK CMS GETTERS to be replaced with real getters on fetching CMS Data
@@ -94,7 +96,7 @@ const contactsData?: IContactsHeaderData = {
 </pre>
 
 #### wrapperProps, <br/>imageProps
-> align=`left`,fillColor=`#808080`
+> align=`left`,collapsed=`true`,fillColor=`#808080`
 
 - NOTE
 <pre>The data, taken from the mock cms for building logo block in header...
@@ -140,7 +142,7 @@ export type TImageProps = {
 </pre>
 
 ##### getNavImageWrapperProps\(\)
-> fillColor=`#00FF00`,mmd.emoticon=`application`
+> collapsed=`true`,fillColor=`#00FF00`,mmd.emoticon=`application`
 
 - NOTE
 <pre>MOCK CMS GETTERS to be replaced with real getters on fetching CMS Data
@@ -202,7 +204,7 @@ props - type TCmsNavImageData = {
 };</pre>
 
 #### navLinksData
-> fillColor=`#808080`
+> collapsed=`true`,fillColor=`#808080`
 
 - NOTE
 <pre>export type THeaderNavMenuItem = {
@@ -220,7 +222,7 @@ export type THeaderNavMenuNode = THeaderNavMenuItem &amp; {
 navLinksData: THeaderNavMenuNode[]</pre>
 
 ##### getHeaderNavMenuTree\(\)
-> fillColor=`#00FF12`,mmd.emoticon=`application`
+> collapsed=`true`,fillColor=`#00FF12`,mmd.emoticon=`application`
 
 - NOTE
 <pre>MOCK CMS GETTERS to be replaced with real getters on fetching CMS Data
@@ -255,7 +257,7 @@ Returns THeaderNavMenuNode[]
 </pre>
 
 #### \<LogoBlock<br/> wrapperProps=\{wrapperProps\}<br/> imageProps=\{imageProps\}<br/> hrefMailTo=\{hrefMailTo\}<br/>\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>function LogoBlock({
@@ -266,13 +268,13 @@ Returns THeaderNavMenuNode[]
 }: TLogoBlockProps)</pre>
 
 ##### \<ImageWrapper\<INavLinkProps\><br/> wrapper=\{NavLink\}<br/> wrapperProps=\{wrapperPropsStyled\}<br/> imageProps=\{imageProps\}<br/>/\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>wraps logo image with a custom Wrapper and returns Next Component Image, wrapped</pre>
 
 ###### wrapperStyle
-> fillColor=`#808080`
+> collapsed=`true`,fillColor=`#808080`
 
 - NOTE
 <pre>inline `style` object for an image wrapper
@@ -281,7 +283,7 @@ React.CSSProperties
 </pre>
 
 ####### getImageWrapperStyle\(<br/>resolvedSrc, <br/>width, <br/>height, <br/>style<br/>\)
-> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
+> align=`left`,collapsed=`true`,fillColor=`#00FF12`,mmd.emoticon=`application`
 
 - NOTE
 <pre>Build inline wrapper styles.
@@ -294,7 +296,7 @@ that works seamlessly with `&lt;Image fill /&gt;` in Next.js.
 returns React.CSSProperties</pre>
 
 ######## aspectRatio
-> fillColor=`#808080`
+> collapsed=`true`,fillColor=`#808080`
 
 
 ######### getAspectRatio\(<br/>width, <br/>src, <br/>height<br/>\)
@@ -315,14 +317,14 @@ a warning is logged and the function returns `undefined`.
 @returns The calculated aspect ratio as a string (e.g. &quot;3.0000&quot;), or `undefined` if it cannot be determined.</pre>
 
 ###### sizes
-> fillColor=`#808080`
+> collapsed=`true`,fillColor=`#808080`
 
 - NOTE
 <pre>responsive sizes attribute for the image if breakPoints are defined
 sizes and imageProps.width are recommended to be in consistent units (px ↔ px, vw ↔ vw)</pre>
 
 ####### getImageSizes\(breakPoints\)
-> fillColor=`#00FF12`
+> collapsed=`true`,fillColor=`#00FF12`
 
 - NOTE
 <pre>Generate responsive sizes attribute if breakPoints are defined.
@@ -333,7 +335,7 @@ sizes and imageProps.width are recommended to be in consistent units (px ↔ px,
 
 
 ###### \<Navlink\><br/>Image<br/>\</Navlink\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 
 ####### \<link\><br/> Image<br/>\</Link\>
@@ -341,7 +343,7 @@ sizes and imageProps.width are recommended to be in consistent units (px ↔ px,
 
 
 ##### \<IconTextLink<br/> href=\{hrefMailTo\}<br/> aria\-label=\{mailToAriaLabel\}<br/> tabIndex=\{0\}<br/> className="iconTextLink"<br/>\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>export default function IconTextLink({
@@ -358,7 +360,7 @@ sizes and imageProps.width are recommended to be in consistent units (px ↔ px,
 
 
 #### \<ContactsWrapper <br/>  data=\{rest\} <br/>/\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>export default async function ContactsWrapper({
@@ -385,7 +387,7 @@ type TContactsDataHeaderRest = Omit&lt;
 </pre>
 
 ##### wrapperProps, <br/>imageProps
-> align=`left`,fillColor=`#808080`
+> align=`left`,collapsed=`true`,fillColor=`#808080`
 
 - NOTE
 <pre>The data, taken from the mock cms for building partners` block in header...
@@ -431,7 +433,7 @@ export type TImageProps = {
 </pre>
 
 ###### getNavImageWrapperProps\(\)
-> fillColor=`#00FF00`,mmd.emoticon=`application`
+> collapsed=`true`,fillColor=`#00FF00`,mmd.emoticon=`application`
 
 - NOTE
 <pre>MOCK CMS GETTERS to be replaced with real getters on fetching CMS Data
@@ -493,7 +495,7 @@ props - type TCmsNavImageData = {
 };</pre>
 
 ##### \<IconTextLink<br/> href=\{hrefTelTo\}<br/> aria\-label=\{telAriaLabel\}<br/> tabIndex=\{0\}<br/> className="iconTextLink"<br/>\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>/**
@@ -524,15 +526,19 @@ export default function IconTextLink({
 > align=`left`,fillColor=`#FF00FF`
 
 
+##### getSpans\(addressItems\)
+> fillColor=`#00FF12`,mmd.emoticon=`application`
+
+
 ##### \<ImageWrapper\<INavLinkProps\><br/> wrapper=\{NavLink\}<br/> wrapperProps=\{wrapperProps\}<br/> imageProps=\{imageProps\}<br/>/\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>wraps logo image with a custom Wrapper and returns Next Component Image, wrapped
 </pre>
 
 ###### wrapperStyle
-> fillColor=`#808080`
+> collapsed=`true`,fillColor=`#808080`
 
 - NOTE
 <pre>inline `style` object for an image wrapper
@@ -541,7 +547,7 @@ React.CSSProperties
 </pre>
 
 ####### getImageWrapperStyle\(<br/>resolvedSrc, <br/>width, <br/>height, <br/>style<br/>\)
-> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
+> align=`left`,collapsed=`true`,fillColor=`#00FF12`,mmd.emoticon=`application`
 
 - NOTE
 <pre>Build inline wrapper styles.
@@ -554,7 +560,7 @@ that works seamlessly with `&lt;Image fill /&gt;` in Next.js.
 returns React.CSSProperties</pre>
 
 ######## aspectRatio
-> fillColor=`#808080`
+> collapsed=`true`,fillColor=`#808080`
 
 
 ######### getAspectRatio\(<br/>width, <br/>src, <br/>height<br/>\)
@@ -575,14 +581,14 @@ a warning is logged and the function returns `undefined`.
 @returns The calculated aspect ratio as a string (e.g. &quot;3.0000&quot;), or `undefined` if it cannot be determined.</pre>
 
 ###### sizes
-> fillColor=`#808080`
+> collapsed=`true`,fillColor=`#808080`
 
 - NOTE
 <pre>responsive sizes attribute for the image if breakPoints are defined
 sizes and imageProps.width are recommended to be in consistent units (px ↔ px, vw ↔ vw)</pre>
 
 ####### getImageSizes\(breakPoints\)
-> fillColor=`#00FF12`
+> collapsed=`true`,fillColor=`#00FF12`
 
 - NOTE
 <pre>Generate responsive sizes attribute if breakPoints are defined.
@@ -593,7 +599,7 @@ sizes and imageProps.width are recommended to be in consistent units (px ↔ px,
 
 
 ###### \<Navlink\><br/>Image<br/>\</Navlink\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 
 ####### \<Link\><br/> Image<br/>\</Link\>
@@ -601,7 +607,7 @@ sizes and imageProps.width are recommended to be in consistent units (px ↔ px,
 
 
 #### \<NavWrapper <br/>  data=\{navLinksData\} <br/>/\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>export default function NavWrapper({ data }: { data: THeaderNavMenuNode[] })
@@ -620,7 +626,7 @@ export type THeaderNavMenuNode = THeaderNavMenuItem &amp; {
 </pre>
 
 ##### renderHeaderNavMenu\(<br/>data, <br/>stylesData<br/>\)
-> align=`left`,fillColor=`#00FF00`,mmd.emoticon=`application`
+> align=`left`,collapsed=`true`,fillColor=`#00FF00`,mmd.emoticon=`application`
 
 - NOTE
 <pre>export const renderHeaderNavMenu = (
@@ -631,13 +637,13 @@ export type THeaderNavMenuNode = THeaderNavMenuItem &amp; {
 </pre>
 
 ###### renderMenuItem\(<br/>item: THeaderNavMenuNode<br/>\): JSX\.Element | null
-> align=`left`,fillColor=`#00FF00`,mmd.emoticon=`application`
+> align=`left`,collapsed=`true`,fillColor=`#00FF00`,mmd.emoticon=`application`
 
 - NOTE
 <pre>handles each navigation item within map cycles</pre>
 
 ####### \<Navlink\><br/> label<br/>\</Navlink\>
-> align=`left`,fillColor=`#FF00FF`
+> align=`left`,collapsed=`true`,fillColor=`#FF00FF`
 
 - NOTE
 <pre>&lt;NavLink
@@ -654,10 +660,121 @@ export type THeaderNavMenuNode = THeaderNavMenuItem &amp; {
 > align=`left`,fillColor=`#FF00FF`
 
 
-### children
-> align=`left`,fillColor=`#241919`,textColor=`#FFFFFF`
-
-
 ## App
 > fillColor=`#FFC800`,leftSide=`true`,textColor=`#0000FF`
 
+
+### \[\[\.\.\.page\]\]/<br/>page\.tsx
+> fillColor=`#000066`,textColor=`#C0C0C0`
+
+
+#### generateMetadata\(\):<br/>Promise\<Metadata\>
+> align=`left`,fillColor=`#CCCCFF`
+
+
+##### getPageHrefFromSlugParams\(<br/>page<br/>\)
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>/**
+ * Converts an array of dynamic route segments (slug parameters)
+ * into a normalized page href path string.
+ *
+ * For example:
+ *   [&quot;services&quot;, &quot;design-and-build&quot;] → &quot;/services/design-and-build&quot;
+ *   undefined → &quot;/&quot;
+ */
+export const getPageHrefFromSlugParams = (page?: string[])</pre>
+
+##### getCmsPageDataByHref\(<br/>pageHref<br/>\)
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>making cache for each request with href path
+
+export const getCmsPageDataByHref = async (
+  pageHref: string,
+  fakeDelay: number = 0,
+): Promise&lt;IPageCms | undefined&gt;
+
+export interface IPageCms {
+  id: string;
+  attributes: TPageCmsAttributes;
+
+  sections: ISectionsItem[]; //rest page content
+}
+
+export type TPageCmsAttributes = {
+  href: string; // &quot;&quot;, &quot;about&quot;, &quot;about/history&quot;
+  label: string; //&quot;About&quot;,&quot;Services&quot; .... for navigation links
+  meta: TCmsPageMeta;
+  sitemapEntry: TSitemapEntry;
+};</pre>
+
+###### pageDataByHrefCache
+> fillColor=`#808080`
+
+- NOTE
+<pre>Making cache with time validity
+
+const pageDataByHrefCache = new Map&lt;string, IPageCms&gt;();</pre>
+
+####### TTL\_MS
+> fillColor=`#808080`
+
+- NOTE
+<pre>.env.local
+
+NEXT_PUBLIC_TTL_MS=1800000
+
+validity time period for the data to be refetched</pre>
+
+##### normalizeCMSPageMeta\(<br/>meta, metaHandlers<br/>\)
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`
+
+- NOTE
+<pre>Создает MetaData для страницы
+из данных TCmsPageMeta</pre>
+
+#### Page\(<br/>\{ params \}: <br/>\{ params: TParams \}<br/>\)
+> align=`left`,fillColor=`#FF00FF`,textColor=`#121212`
+
+
+##### getPageHrefFromSlugParams\(<br/>page<br/>\)
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`,textColor=`#121212`
+
+- NOTE
+<pre>/**
+ * Converts an array of dynamic route segments (slug parameters)
+ * into a normalized page href path string.
+ *
+ * For example:
+ *   [&quot;services&quot;, &quot;design-and-build&quot;] → &quot;/services/design-and-build&quot;
+ *   undefined → &quot;/&quot;
+ */
+export const getPageHrefFromSlugParams = (page?: string[])</pre>
+
+##### getCmsPageDataByHref\(<br/>pageHref<br/>\)
+> align=`left`,fillColor=`#00FF12`,mmd.emoticon=`application`,textColor=`#121212`
+
+- NOTE
+<pre>making cache for each request with href path
+
+export const getCmsPageDataByHref = async (
+  pageHref: string,
+  fakeDelay: number = 0,
+): Promise&lt;IPageCms | undefined&gt;
+
+export interface IPageCms {
+  id: string;
+  attributes: TPageCmsAttributes;
+
+  sections: ISectionsItem[]; //rest page content
+}
+
+export type TPageCmsAttributes = {
+  href: string; // &quot;&quot;, &quot;about&quot;, &quot;about/history&quot;
+  label: string; //&quot;About&quot;,&quot;Services&quot; .... for navigation links
+  meta: TCmsPageMeta;
+  sitemapEntry: TSitemapEntry;
+};</pre>

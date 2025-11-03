@@ -35,7 +35,7 @@ export const cmsPageDataList: IPageCms[] = [
       },
     },
 
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {
@@ -146,7 +146,7 @@ export const cmsPageDataList: IPageCms[] = [
       },
     },
 
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {
@@ -257,7 +257,7 @@ export const cmsPageDataList: IPageCms[] = [
       },
     },
 
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {
@@ -368,7 +368,7 @@ export const cmsPageDataList: IPageCms[] = [
       },
     },
 
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {
@@ -486,7 +486,7 @@ export const cmsPageDataList: IPageCms[] = [
       },
     },
 
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {
@@ -601,7 +601,7 @@ export const cmsPageDataList: IPageCms[] = [
       },
     },
 
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {
@@ -710,7 +710,7 @@ export const cmsPageDataList: IPageCms[] = [
         priority: 0.8,
       },
     },
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {
@@ -819,7 +819,7 @@ export const cmsPageDataList: IPageCms[] = [
         priority: 0.8,
       },
     },
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {
@@ -929,7 +929,7 @@ export const cmsPageDataList: IPageCms[] = [
         priority: 0.8,
       },
     },
-    blocks: [
+    sections: [
       {
         type: "heroVideo",
         content: {

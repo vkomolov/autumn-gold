@@ -9,6 +9,16 @@ import { type Metadata } from "next";
 
 /////////
 
+interface ICmsMediaUrl {
+  url: string;
+}
+
+//! ICmsImageItem is equal to ICmsMediaItem but scalable...
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ICmsImageItem extends ICmsMediaUrl {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ICmsVideoItem extends ICmsMediaUrl {}
+
 export interface ICmsHeaderData {
   logoData?: TCmsNavImageData;
   partnerData?: TCmsNavImageData;

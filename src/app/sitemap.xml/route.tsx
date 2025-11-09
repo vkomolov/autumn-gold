@@ -1,5 +1,6 @@
 import { type NextRequest } from "next/server";
-import { cmsPageDataList, baseUrl } from "@/lib/data";
+import { baseUrl } from "@/lib/data";
+import mockPageDataList from "@/lib/data/mockPageDataList";
 import type { IPageCms, TSitemapEntry, TSitemapVideoEntry } from "@/types";
 
 // Helper to build <image:image> tags
@@ -53,11 +54,11 @@ function generateVideoTags(
     .join("");
 }
 
-async function getSiteMapData(cmsPageDataList: IPageCms[]): Promise<TSitemapEntry[]> {
+async function getSiteMapData(mockPageDataList: IPageCms[]): Promise<TSitemapEntry[]> {
   //imitating async response...
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve(cmsPageDataList.map(page => page.attributes.sitemapEntry));
+      resolve(mockPageDataList.map(page => page.attributes.sitemapEntry));
     }, 0);
   });
 }
@@ -111,7 +112,7 @@ function generateUrlEntry(entry: TSitemapEntry, baseUrl: string): string {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
   // Extract sitemapEntry from CMS data
-  const entries = await getSiteMapData(cmsPageDataList);
+  const entries = await getSiteMapData(mockPageDataList);
 
   // Determine which namespaces are needed
   const hasImages = entries.some(entry => entry.images?.length);

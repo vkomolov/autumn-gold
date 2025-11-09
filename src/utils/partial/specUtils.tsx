@@ -24,7 +24,7 @@ import NavLink from "@/components/NavLink";
 import s from "@/components/Header/header.module.scss";
 import { type StaticImageData } from "next/image";
 import { omit, getAbsPath } from "@/utils";
-import { cmsPageDataList } from "@/lib/data";
+import mockPageDataList from "@/lib/data/mockPageDataList";
 
 /*** END OF IMPORTS ***/
 
@@ -58,6 +58,22 @@ export function getLocalEnv<T = string>(
 
   // Apply the callback if provided, otherwise return the raw string
   return cb ? cb(envValue) : (envValue as T);
+}
+
+/**
+ * Universal data fetcher from HTTP or a local module
+ * @param source - URL or path to the module (@/lib/...)
+ * @param options - RequestInit (Next.js caching options are ignored in Node.js)
+ */
+export async function fetchData<T>(source: string, options?: RequestInit): Promise<T> {
+  if (source.startsWith("http")) {
+    const res = await fetch(source, options);
+    if (!res.ok) throw new Error(`HTTP ${res.status} – ${source}`);
+    return res.json();
+  }
+  // local TS file (default export expected)
+  return import(source).then(m => m.default as T); //!when mock cms data is exported as default
+  ////return import(source).then((m) => m.mockImages); //!when mock cms data is simply exported as const mockImages
 }
 
 /**
@@ -227,7 +243,7 @@ export function getSpans(textItems: string[]) {
 
 export const getCmsPageDataMapByHref = (): Map<TPageCmsDataHref, IPageCms> => {
   return new Map<TPageCmsDataHref, IPageCms>(
-    cmsPageDataList.map(pageCms => {
+    mockPageDataList.map(pageCms => {
       return [pageCms.attributes.href, pageCms];
     }),
   );
@@ -241,7 +257,7 @@ let hrefMapCreatedAt: number | null = null;*/
 const TTL_MS = getLocalEnv("NEXT_PUBLIC_TTL_MS", val => parseInt(val, 10)) ?? 1800000;
 
 //TODO: to delete getPageHrefByLabel
-/*export const getPageHrefByLabel = (label: string, cmsPageDataList: IPageCms[]) => {
+/*export const getPageHrefByLabel = (label: string, mockPageDataList: IPageCms[]) => {
   const now = Date.now();
   const _label = label.toLowerCase();
 
@@ -249,7 +265,7 @@ const TTL_MS = getLocalEnv("NEXT_PUBLIC_TTL_MS", val => parseInt(val, 10)) ?? 18
     !hrefByLabelMap || !hrefMapCreatedAt || now - hrefMapCreatedAt > TTL_MS;
 
   if (isCacheExpired) {
-    hrefByLabelMap = getPagesHrefMapByLabel(cmsPageDataList);
+    hrefByLabelMap = getPagesHrefMapByLabel(mockPageDataList);
 
     hrefMapCreatedAt = now;
   }

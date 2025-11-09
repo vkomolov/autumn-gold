@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "tidy": "npm-run-all -s node:check format lint",
-    "generate:images": "node scripts/processImages.mjs",
+    "generate:images": "tsx scripts/processImages.ts",
     "dev": "npm-run-all -s tidy generate:images && concurrently \"next dev --turbopack\" \"npx next-video sync --watch\"",
     "build": "npm-run-all -s tidy generate:images npx next-video sync next build",
     "start": "next start"
@@ -29,11 +29,13 @@
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9.35.0",
     "@next/eslint-plugin-next": "^15.5.2",
+    "@types/cli-progress": "^3.11.6",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
+    "cli-progress": "^3.12.0",
     "cross-env": "^10.0.0",
     "eslint": "^9.35.0",
     "eslint-config-next": "^15.5.3",
@@ -44,6 +46,7 @@
     "prettier": "^3.6.2",
     "sass": "^1.92.1",
     "semver": "^7.7.2",
+    "tsx": "^4.20.6",
     "typescript": "^5",
     "typescript-eslint": "^8.43.0"
   }

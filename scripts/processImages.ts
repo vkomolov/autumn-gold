@@ -32,10 +32,6 @@ import type { ICmsImageItem } from "../src/types";
 const IMAGES_DIR = toPathUrl('src/assets/imagesStatic');
 const OUT_FILE   = toPathUrl('src/lib/generated/imageMap.ts');
 
-//console.log('IMAGES_DIR =', IMAGES_DIR);  //D:\GIT\autumn-gold\src\assets\imagesStatic
-//console.log('OUT_FILE   =', OUT_FILE); //D:\GIT\autumn-gold\src\lib\generated\imageMap.ts
-//process.exit(0);
-
 const SOURCES: string[] = [
 	//"https://cms.example.com/api/images",
 	"scripts/lib/mockImages.ts",  // export default mock images: ICmsImageItem[] from scripts
@@ -51,7 +47,9 @@ const AUTO_PREFIX = 'cms_'; // prefix for downloaded files from CMS API
 async function download(url: string, file: string): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
 		httpsGet(url, async (res) => {
-			if (res.statusCode !== 200) return reject(new Error(`Download ${res.statusCode}`));
+			if (res.statusCode !== 200) {
+				return reject(new Error(`Download failed: ${res.statusCode}`));
+			}
 			await pipeline(res, createWriteStream(file));
 			resolve();
 		}).on('error', reject);
@@ -64,6 +62,10 @@ async function download(url: string, file: string): Promise<void> {
 (async () => {
 
 	console.log('📥  Fetching image lists…');
+
+	/* ensure folder exists */
+	await fs.mkdir(IMAGES_DIR, { recursive: true });
+
 	const raw = await Promise.all(SOURCES.map(source => fetchData<ICmsImageItem[]>(source)));
 	const items: ICmsImageItem[] = raw.flat();
 
@@ -72,7 +74,7 @@ async function download(url: string, file: string): Promise<void> {
 	const unique = items.filter(it => {
 		const key = path.basename(it.url);
 
-		return !seen.has(key) && Boolean(seen.add(key));
+		return !seen.has(key) && Boolean(seen.add(key));  //!seen.has(key), then adding key to Set and return true
 	});
 
 	/* ---------- progress bar ---------- */
@@ -93,16 +95,23 @@ async function download(url: string, file: string): Promise<void> {
 		const fileName = isRemote ? `${AUTO_PREFIX}${baseName}` : baseName;
 		const localPath = path.join(IMAGES_DIR, fileName);
 
-		/* ensure folder exists */
-		await fs.mkdir(IMAGES_DIR, { recursive: true });
-
-		/* download if missing */
-		if (isRemote && !(await fs.stat(localPath).catch(() => false))) {
+	if (!(await fs.stat(localPath).catch(() => false))) {
+		/* downloading remote file if not found in localPath */
+		if (isRemote) {
 			await download(it.url, localPath);
 		}
+		else {
+			throw new Error(`[processImage]: local file is not found at ... ${localPath}`);
+		}
+	}
+
+		/* download if missing */
+/*		if (isRemote && !(await fs.stat(localPath).catch(() => false))) {
+			await download(it.url, localPath);
+		}*/
 
 		/* build descriptor */
-		const varName = `img${idx}`;
+		const varName = `item_${idx}`;
 		const importPath = `@/assets/imagesStatic/${fileName}`;
 
 		descriptors.push({ varName, baseName, importPath });

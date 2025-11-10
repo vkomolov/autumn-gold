@@ -1,3 +1,13 @@
+import {createWriteStream} from "fs";
+import {promises as fs} from "fs";
+import {pipeline} from "stream/promises";
+import * as path from "path";
+import {get as httpsGet} from "https";
+import cliProgress from "cli-progress";
+
+import { fetchData, toPathUrl } from "./utils";
+import type { ICmsVideoItem } from "../src/types";
+
 /* =========================================================
  * Auto-generates src/lib/generated/videosMap.ts
  * 1. Fetches video lists from CMS or local mocks
@@ -18,26 +28,24 @@
  *
  * ========================================================= */
 
-import { createWriteStream } from 'fs';
-import { promises as fs } from 'fs';
-import { pipeline } from 'stream/promises';
-import path from 'path';
-import { get as httpsGet } from 'https';
-import cliProgress from 'cli-progress';
-import { fetchData } from "../src/utils";
-
 /* ---------- config ---------- */
-const VIDEOS_DIR  = path.resolve('videos'); // alias @v
-const OUT_FILE    = 'src/lib/generated/videosMap.ts';
-const AUTO_PREFIX = 'cms_';
+const VIDEOS_DIR = toPathUrl("videos");
+const OUT_FILE = toPathUrl("src/lib/generated/videosMap.ts");
+
+const SOURCES: string[] = [
+	//"https://cms.example.com/api/videos",
+	"scripts/lib/mockVideos.ts",  // export default mock videos: ICmsVideoItem[] from scripts
+];
+
+const AUTO_PREFIX = "cms_"; // prefix for downloaded files from CMS API
 /* ---------------------------- */
 
-await fs.mkdir(VIDEOS_DIR, { recursive: true });
+//await fs.mkdir(VIDEOS_DIR, {recursive: true});
 
-/* ---------- types ---------- */
-interface CMSItem { href: string; videoPath: string }
 
-/* ---------- download helper ---------- */
+/* ------------------------------------------------------------------ */
+/*  Download helper                                                   */
+/* ------------------------------------------------------------------ */
 async function download(url: string, file: string): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
 		httpsGet(url, async (res) => {
@@ -50,56 +58,92 @@ async function download(url: string, file: string): Promise<void> {
 	});
 }
 
-/* ---------- main ---------- */
+/* ------------------------------------------------------------------ */
+/*  Main                                                              */
+/* ------------------------------------------------------------------ */
 (async () => {
-	const sources: string[] = [
-		'https://cms.example.com/api/videos',
-		'@/lib/data/mockVideos.ts',
-	];
-
 	console.log('📥  Fetching video lists…');
-	const raw = await Promise.all(sources.map(source => fetchData<CMSItem[]>(source)));
-	const items: CMSItem[] = raw.flat();
 
-	/* dedupe by basename */
+	/* ensure folder exists */
+	await fs.mkdir(VIDEOS_DIR, { recursive: true });
+
+	const raw = await Promise.all(SOURCES.map(source => fetchData<ICmsVideoItem[]>(source)));
+	const items: ICmsVideoItem[] = raw.flat();
+
+	/* ---------- dedupe by basename ---------- */
 	const seen = new Set<string>();
 	const unique = items.filter((it) => {
-		const key = path.basename(it.videoPath);
+		const key = path.basename(it.url);
+
 		return !seen.has(key) && Boolean(seen.add(key));  //!seen.has(key), then adding key to Set and return true
 	});
 
+	/* ---------- progress bar ---------- */
 	const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 	bar.start(unique.length, 0);
 
-	let imports = '';
-	let map = '';
+	const descriptors: {
+		varName: string;
+		baseName: string;
+		importPath: string;
+	}[] = [];
 
 	for (const [idx, it] of unique.entries()) {
 		bar.update(idx + 1);
 
-		const isRemote = it.videoPath.startsWith('http');
-		const baseName = path.basename(it.videoPath);
+		const isRemote = it.url.startsWith('http');
+		const baseName = path.basename(it.url);
 		const fileName = isRemote ? `${AUTO_PREFIX}${baseName}` : baseName;
 		const localPath = path.join(VIDEOS_DIR, fileName);
 
-		if (isRemote && !(await fs.stat(localPath).catch(() => false))) {
-			await download(it.videoPath, localPath);
+		if (!(await fs.stat(localPath).catch(() => false))) {
+			/* downloading remote file if not found in localPath */
+			if (isRemote) {
+				await download(it.url, localPath);
+			}
+			else {
+				throw new Error(`[processImage]: local file is not found at ... ${localPath}`);
+			}
 		}
 
-		const varName = `v_${baseName.replace(/\W/g, '_')}`;
-		imports += `import ${varName} from '@v/${fileName}';\n`;
-		map += `  '${it.href}': ${varName},\n`;
+		/* download if missing */
+/*		if (isRemote && !(await fs.stat(localPath).catch(() => false))) {
+			await download(it.url, localPath);
+		}*/
+
+		/* build descriptor */
+		const varName = `item_${idx}`;
+		const importPath = `@v/${fileName}`;
+		descriptors.push({ varName, baseName, importPath });
 	}
 
 	bar.stop();
 
-	const code = `/* auto-generated – do not edit */
-${imports}
-export const videoMap = {
-${map}} as const;
-export type VideoMap = typeof videoMap;
-`;
+	/* ---------- generate TS module ---------- */
+	const imports = descriptors.map(d => `import ${d.varName} from "${d.importPath}";`);
+	const mapEntries = descriptors.map(d => `  "${d.baseName}": ${d.varName},`);
 
-	await fs.writeFile(OUT_FILE, code);
+	const code = [
+		'/**',
+		' * ⚠️ AUTO-GENERATED FILE – DO NOT EDIT MANUALLY',
+		' * Generated by:  npm run generate:videos',
+		' */',
+		'',
+		...imports,
+		'',
+		'export const videoMap = {',
+		...mapEntries,
+		'} as const;',
+		'',
+		'export type VideoMapKey = keyof typeof videoMap;',
+		'',
+	].join('\n');
+
+	await fs.mkdir(path.dirname(OUT_FILE), { recursive: true });
+	await fs.writeFile(OUT_FILE, code, 'utf8');
+
 	console.log('✅  videosMap.ts created / updated');
-})();
+})().catch(err => {
+	console.error('❌  Error:', err);
+	process.exitCode = 1;
+});

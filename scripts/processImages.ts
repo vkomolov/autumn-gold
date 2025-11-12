@@ -1,11 +1,13 @@
-import { createWriteStream } from 'fs';
-import { promises as fs } from 'fs';
-import { pipeline } from 'stream/promises';
-import * as path from 'path';
-import { get as httpsGet } from 'https';
-import * as cliProgress from 'cli-progress';
-import { fetchData, toPathUrl } from "./utils";
-import type { ICmsImageItem } from "../src/types";
+import { promises as fs } from "fs";
+import * as path from "path";
+import {
+	toPathUrl,
+	getMediaEntries,
+	getUniqueMediaEntries,
+	generateTSModule,
+	getDescriptors,
+	generateModuleScript
+} from "./utils";
 
 /* =========================================================
  *  Universal image-map generator for Next.js
@@ -28,122 +30,59 @@ import type { ICmsImageItem } from "../src/types";
 /* =========================================================
 *  Configuration
 * ! read docs/image-strategy.md
+*
+* MODULE_NAME - the name of the module to generate ("imageMap", "videoMap")
+* NPM_RUN_SCRIPT - the script to be run with "npm run" to init generating imageMap.ts with the imported images
+* ASSETS_RELATIVE_DIR - relative dirname to the local image files
+* ASSETS_RELATIVE_ALIAS_DIR - relative dirname to the local image files with "@" alias replacing "src"
+* ABS_SOURCE_DIR - absolute dirname to the local image files or to be loaded to
+* MEDIA_MAP_FILE - the generated image Map file with the loaded images (StaticImageData)
+* ABS_OUT_FILE_PATH - the absolute Node path to the generated image Map file
 * ========================================================= */
-const IMAGES_DIR = toPathUrl('src/assets/imagesStatic');
-const OUT_FILE   = toPathUrl('src/lib/generated/imageMap.ts');
+
+const MODULE_NAME = "imageMap";
+const NPM_RUN_SCRIPT = "generate:images";
+
+const ASSETS_RELATIVE_DIR = "src/assets/imagesStatic";
+const ASSETS_RELATIVE_ALIAS_DIR = ASSETS_RELATIVE_DIR.replace(/^src/, "@");
+const ABS_SOURCE_DIR = toPathUrl(ASSETS_RELATIVE_DIR);
+const MEDIA_MAP_FILE = "imageMap.ts";
+const ABS_OUT_FILE_PATH   = toPathUrl(`src/lib/generated/${MEDIA_MAP_FILE}`);
 
 const SOURCES: string[] = [
 	//"https://cms.example.com/api/images",
-	"scripts/lib/mockImages.ts",  // export default mock images: ICmsImageItem[] from scripts
+	"scripts/lib/mockImages.ts",  // export default mock images: ICmsMediaItem[] from scripts
 ];
 
-const AUTO_PREFIX = 'cms_'; // prefix for downloaded files from CMS API
-//const SUPPORTED_EXT = ['webp','jpg','jpeg','png','svg'];  //option for a pattern list: string[]
-//const extGlob = SUPPORTED_EXT.join(',');  //option for a joined pattern list: string
-
-/* ------------------------------------------------------------------ */
-/*  Download helper                                                   */
-/* ------------------------------------------------------------------ */
-async function download(url: string, file: string): Promise<void> {
-	return new Promise<void>((resolve, reject) => {
-		httpsGet(url, async (res) => {
-			if (res.statusCode !== 200) {
-				return reject(new Error(`Download failed: ${res.statusCode}`));
-			}
-			await pipeline(res, createWriteStream(file));
-			resolve();
-		}).on('error', reject);
-	});
-}
 
 /* ------------------------------------------------------------------ */
 /*  Main                                                              */
 /* ------------------------------------------------------------------ */
 (async () => {
 
-	console.log('📥  Fetching image lists…');
+	console.log("📥  Fetching media list…");
 
 	/* ensure folder exists */
-	await fs.mkdir(IMAGES_DIR, { recursive: true });
+	await fs.mkdir(ABS_SOURCE_DIR, { recursive: true });
 
-	const raw = await Promise.all(SOURCES.map(source => fetchData<ICmsImageItem[]>(source)));
-	const items: ICmsImageItem[] = raw.flat();
+	const items = await getMediaEntries(SOURCES);
 
 	/* ---------- dedupe by basename ---------- */
-	const seen = new Set<string>();
-	const unique = items.filter(it => {
-		const key = path.basename(it.url);
-
-		return !seen.has(key) && Boolean(seen.add(key));  //!seen.has(key), then adding key to Set and return true
-	});
+	const unique = getUniqueMediaEntries(items);
 
 	/* ---------- progress bar ---------- */
-	const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-	bar.start(unique.length, 0);
-
-	const descriptors: {
-		varName: string;
-		baseName: string;
-		importPath: string;
-	}[] = [];
-
-	for (const [idx, it] of unique.entries()) {
-		bar.update(idx + 1);
-
-		const isRemote = it.url.startsWith('http');
-		const baseName = path.basename(it.url);
-		const fileName = isRemote ? `${AUTO_PREFIX}${baseName}` : baseName;
-		const localPath = path.join(IMAGES_DIR, fileName);
-
-	if (!(await fs.stat(localPath).catch(() => false))) {
-		/* downloading remote file if not found in localPath */
-		if (isRemote) {
-			await download(it.url, localPath);
-		}
-		else {
-			throw new Error(`[processImage]: local file is not found at ... ${localPath}`);
-		}
-	}
-
-		/* download if missing */
-/*		if (isRemote && !(await fs.stat(localPath).catch(() => false))) {
-			await download(it.url, localPath);
-		}*/
-
-		/* build descriptor */
-		const varName = `item_${idx}`;
-		const importPath = `@/assets/imagesStatic/${fileName}`;
-
-		descriptors.push({ varName, baseName, importPath });
-	}
-
-	bar.stop();
+	const descriptors = await getDescriptors(unique, ABS_SOURCE_DIR, ASSETS_RELATIVE_ALIAS_DIR);
 
 	/* ---------- generate TS module ---------- */
-	const imports = descriptors.map(d => `import ${d.varName} from "${d.importPath}";`);
-	const mapEntries = descriptors.map(d => `  "${d.baseName}": ${d.varName},`);
+	await fs.mkdir(path.dirname(ABS_OUT_FILE_PATH), { recursive: true });
+	await fs.writeFile(
+		ABS_OUT_FILE_PATH,
+		generateTSModule(descriptors, generateModuleScript(MODULE_NAME, NPM_RUN_SCRIPT)),
+		"utf8"
+	);
 
-	const code = [
-		'/**',
-		' * ⚠️ AUTO-GENERATED FILE – DO NOT EDIT MANUALLY',
-		' * Generated by:  npm run generate:images',
-		' */',
-		'',
-		...imports,
-		'',
-		'export const imageMap = {',
-		...mapEntries,
-		'} as const;',
-		'',
-		'export type ImageMapKey = keyof typeof imageMap;',
-		'',
-	].join('\n');
-
-	await fs.mkdir(path.dirname(OUT_FILE), { recursive: true });
-	await fs.writeFile(OUT_FILE, code, 'utf8');
-
-	console.log('✅  imageMap.ts created / updated');
+	console.log(`✅  ${MEDIA_MAP_FILE} created / updated successfully`);
 })().catch(err => {
-	console.error('❌  Error:', err);
+	console.error("❌  Error:", err);
 	process.exitCode = 1;
 });

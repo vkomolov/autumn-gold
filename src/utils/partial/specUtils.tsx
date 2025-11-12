@@ -1,4 +1,7 @@
 import process from "process";
+import cn from "@/lib/cn";
+import React, { type JSX } from "react";
+
 import type {
   TNavItemStyles,
   TImageSizes,
@@ -15,14 +18,11 @@ import type {
   TNavImageWrapperProps,
   TCmsNavImageData,
 } from "@/types";
-
-import cn from "@/lib/cn";
-import React, { type JSX } from "react";
+import { type StaticImageData } from "next/image";
 
 import NavLink from "@/components/NavLink";
 
 import s from "@/components/Header/header.module.scss";
-import { type StaticImageData } from "next/image";
 import { omit, getAbsPath } from "@/utils";
 import mockPageDataList from "@/lib/data/mockPageDataList";
 
@@ -66,6 +66,7 @@ export function getLocalEnv<T = string>(
  * @param options - RequestInit (Next.js caching options are ignored in Node.js)
  */
 export async function fetchData<T>(source: string, options?: RequestInit): Promise<T> {
+  //includes "https"
   if (source.startsWith("http")) {
     const res = await fetch(source, options);
     if (!res.ok) throw new Error(`HTTP ${res.status} – ${source}`);

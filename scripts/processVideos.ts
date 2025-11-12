@@ -1,12 +1,6 @@
-import {createWriteStream} from "fs";
-import {promises as fs} from "fs";
-import {pipeline} from "stream/promises";
+import { promises as fs } from "fs";
 import * as path from "path";
-import {get as httpsGet} from "https";
-import cliProgress from "cli-progress";
-
-import { fetchData, toPathUrl } from "./utils";
-import type { ICmsVideoItem } from "../src/types";
+import { toPathUrl, getMediaEntries, getUniqueMediaEntries, generateTSModule, getDescriptors } from "./utils";
 
 /* =========================================================
  * Auto-generates src/lib/generated/videosMap.ts
@@ -28,55 +22,32 @@ import type { ICmsVideoItem } from "../src/types";
  *
  * ========================================================= */
 
-/* ---------- config ---------- */
-const VIDEOS_DIR = toPathUrl("videos");
-const OUT_FILE = toPathUrl("src/lib/generated/videosMap.ts");
+/* =========================================================
+*  Configuration
+* TODO: To make docs/video-strategy.md
+* ========================================================= */
+const SOURCE_DIR = toPathUrl("videos");
+const mediaMapFile = "videosMap.ts";
+const OUT_FILE   = toPathUrl(`src/lib/generated/${mediaMapFile}`);
 
 const SOURCES: string[] = [
 	//"https://cms.example.com/api/videos",
 	"scripts/lib/mockVideos.ts",  // export default mock videos: ICmsVideoItem[] from scripts
 ];
 
-const AUTO_PREFIX = "cms_"; // prefix for downloaded files from CMS API
-/* ---------------------------- */
-
-//await fs.mkdir(VIDEOS_DIR, {recursive: true});
-
-
-/* ------------------------------------------------------------------ */
-/*  Download helper                                                   */
-/* ------------------------------------------------------------------ */
-async function download(url: string, file: string): Promise<void> {
-	return new Promise<void>((resolve, reject) => {
-		httpsGet(url, async (res) => {
-			if (res.statusCode !== 200) {
-				return reject(new Error(`Download failed: ${res.statusCode}`));
-			}
-			await pipeline(res, createWriteStream(file));
-			resolve();  //when pipeline is complete, we close the promise with empty resolve() and go next below...
-		}).on('error', reject);
-	});
-}
-
 /* ------------------------------------------------------------------ */
 /*  Main                                                              */
 /* ------------------------------------------------------------------ */
 (async () => {
-	console.log('📥  Fetching video lists…');
+	console.log("📥  Fetching media list…");
 
 	/* ensure folder exists */
-	await fs.mkdir(VIDEOS_DIR, { recursive: true });
+	await fs.mkdir(SOURCE_DIR, { recursive: true });
 
-	const raw = await Promise.all(SOURCES.map(source => fetchData<ICmsVideoItem[]>(source)));
-	const items: ICmsVideoItem[] = raw.flat();
+	const items = await getMediaEntries(SOURCES);
 
 	/* ---------- dedupe by basename ---------- */
-	const seen = new Set<string>();
-	const unique = items.filter((it) => {
-		const key = path.basename(it.url);
-
-		return !seen.has(key) && Boolean(seen.add(key));  //!seen.has(key), then adding key to Set and return true
-	});
+	const unique = getUniqueMediaEntries(items);
 
 	/* ---------- progress bar ---------- */
 	const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
@@ -96,20 +67,19 @@ async function download(url: string, file: string): Promise<void> {
 		const fileName = isRemote ? `${AUTO_PREFIX}${baseName}` : baseName;
 		const localPath = path.join(VIDEOS_DIR, fileName);
 
-		if (!(await fs.stat(localPath).catch(() => false))) {
+		const exists = await fs.stat(localPath).catch(() => false);
+
+		if (!exists) {
 			/* downloading remote file if not found in localPath */
 			if (isRemote) {
 				await download(it.url, localPath);
+				console.log(`⬇️  Downloaded: ${it.url} → ${fileName}`);
 			}
 			else {
-				throw new Error(`[processImage]: local file is not found at ... ${localPath}`);
+				console.error(`\n❌ [processVideos]: local file ${baseName} is not found at ${localPath}`);
+				process.exit(1);
 			}
 		}
-
-		/* download if missing */
-/*		if (isRemote && !(await fs.stat(localPath).catch(() => false))) {
-			await download(it.url, localPath);
-		}*/
 
 		/* build descriptor */
 		const varName = `item_${idx}`;

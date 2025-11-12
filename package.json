@@ -10,6 +10,7 @@
     "lint:fix": "eslint . --fix",
     "tidy": "npm-run-all -s node:check format lint",
     "generate:images": "tsx scripts/processImages.ts",
+    "generate:videos": "tsx scripts/processVideos.ts",
     "dev": "npm-run-all -s tidy generate:images && concurrently \"next dev --turbopack\" \"npx next-video sync --watch\"",
     "build": "npm-run-all -s tidy generate:images npx next-video sync next build",
     "start": "next start"

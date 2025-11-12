@@ -2,7 +2,8 @@ import type { ICmsVideoItem } from "../../src/types";
 
 const mockVideos: ICmsVideoItem[] = [
 	{
-		url: "videos/planning_landscape.mp4",
+		src: "videos/planning_landscape.mp4",
+		fileName: "planning_landscape.mp4",
 	}
 ];
 

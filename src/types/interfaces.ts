@@ -7,17 +7,22 @@ import type {
 } from "@/types/types";
 import { type Metadata } from "next";
 
-/////////
+///////// END OF IMPORTS //////////////////
+/**
+ * !the external source does not always end with the file name,
+ * !that`s why the fileName (baseName) is included separately
+ */
 
-interface ICmsMediaUrl {
-  url: string;
+export interface ICmsMediaItem {
+  src: string;
+  fileName: string;
 }
 
-//! ICmsImageItem is equal to ICmsMediaItem but scalable...
+//! ICmsMediaItem is equal to ICmsMediaItem but scalable and could have special features in future
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ICmsImageItem extends ICmsMediaUrl {}
+export interface ICmsImageItem extends ICmsMediaItem {}
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ICmsVideoItem extends ICmsMediaUrl {}
+export interface ICmsVideoItem extends ICmsMediaItem {}
 
 export interface ICmsHeaderData {
   logoData?: TCmsNavImageData;

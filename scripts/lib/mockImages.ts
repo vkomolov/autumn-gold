@@ -1,14 +1,17 @@
-import type { ICmsImageItem } from "../../src/types";
+import type { ICmsMediaItem } from "../../src/types";
 
-const mockImages: ICmsImageItem[] = [
+const mockImages: ICmsMediaItem[] = [
 	{
-		url: "src/assets/imagesStatic/alcc_tr.webp",
+		src: "src/assets/imagesStatic/alcc_tr.webp",
+		fileName: "alcc_tr.webp",
 	},
 	{
-		url: "src/assets/imagesStatic/landscapes_hero.webp",
+		src: "src/assets/imagesStatic/landscapes_hero.webp",
+		fileName: "landscapes_hero.webp"
 	},
 	{
-		url: "src/assets/imagesStatic/logo-autumn.webp",
+		src: "src/assets/imagesStatic/logo-autumn.webp",
+		fileName: "logo-autumn.webp"
 	},
 ];
 

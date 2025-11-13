@@ -291,7 +291,6 @@ export const generateTSModule = (
  * @param params.moduleName - Name of the generated module ("imageMap" or "videoMap")
  * @param params.npmRunScript - NPM script that triggers this generation ("generate:images", "generate:videos")
  * @param params.assetsRelativeDir - Relative path to the local media files
- * @param params.mediaMapFile - Output filename of the generated module
  * @param params.absOutFilePath - Absolute output path of the generated module
  * @param params.sources - Array of URLs or local modules exporting media items
  */
@@ -300,13 +299,16 @@ export const generateMediaMap = async (params: IMediaMapGeneratorParams) => {
 		moduleName,
 		npmRunScript,
 		assetsRelativeDir,
-		mediaMapFile,
 		absOutFilePath,
 		sources
 	} = params;
 
-	const assetsRelativeAliasDir = assetsRelativeDir.replace(/^src/, "@");
+	const assetsRelativeAliasDir = assetsRelativeDir === "videos" ? "@v" :assetsRelativeDir.replace(/^src/, "@");
+	//const importPath = `${assetsRelativeAliasDir}/${fileName}`;
+	//const importPath = `@v/${fileName}`; //for video
+
 	const absSourceDir = toPathUrl(assetsRelativeDir);
+	const mediaMapFile = path.basename(absOutFilePath);
 
 	console.log(`📥  Fetching media list for ${moduleName}…`);
 

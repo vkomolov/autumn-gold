@@ -29,17 +29,15 @@ import type { IMediaMapGeneratorParams } from "../src/types";
 * moduleName - Name of the generated module ("imageMap" or "videoMap")
 * npmRunScript - NPM script that triggers this generation ("generate:images", "generate:videos")
 * assetsRelativeDir - Relative path to the local media files
-* mediaMapFile - Output filename of the generated module
 * absOutFilePath - Absolute output path of the generated module
 * sources - Array of URLs or local modules exporting media items
 * ========================================================= */
 
 const params: IMediaMapGeneratorParams = {
-	moduleName: "imageMap",
+	moduleName: "imagesMap",
 	npmRunScript: "generate:images",
 	assetsRelativeDir: "src/assets/imagesStatic",
-	mediaMapFile: "imageMap.ts",
-	absOutFilePath: toPathUrl("src/lib/generated/imageMap.ts"),
+	absOutFilePath: toPathUrl("src/lib/generated/imagesMap.ts"),
 	sources: [
 		// "https://cms.example.com/api/images",
 		"scripts/lib/mockImages.ts"
@@ -47,6 +45,6 @@ const params: IMediaMapGeneratorParams = {
 };
 
 generateMediaMap(params).catch(err => {
-	console.error("❌  Error generating image map:", err);
+	console.error(`❌  Error generating ${ params.moduleName }:`, err);
 	process.exitCode = 1;
 });

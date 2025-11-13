@@ -1,11 +1,70 @@
+import {
+	toPathUrl,
+	generateMediaMap
+} from "./utils";
+import type { IMediaMapGeneratorParams } from "../src/types";
+
+
+
+/* =========================================================
+ *  Universal videos-map generator for Next.js
+ * ----------------------------------------------------------
+ * Auto-generates src/lib/generated/videosMap.ts
+ * 1. Fetches video lists from CMS or local mocks
+ * 2. Downloads remote files into videos/ (alias @v/!*)
+ * 3. Deduplicates by basename
+ * 4. Writes static imports for next-video optimisation
+ * ----------------------------------------------------------
+ *! include to scripts:
+ * "generate:videos": "tsx scripts/processVideos.ts",
+ *
+ *! include to dev:
+ * "npm-run-all -s tidy generate:images generate:videos && concurrently \"next dev --turbopack\" \"npx next-video sync --watch\"",
+ *
+ *! include to build:
+ * "npm-run-all -s tidy generate:images generate:videos npx next-video sync next build"
+ * ========================================================= */
+
+//TODO: read docs/video-strategy.md
+
+/* =========================================================
+*  Configuration
+* ! read docs/image-strategy.md
+*
+* moduleName - Name of the generated module ("imageMap" or "videoMap")
+* npmRunScript - NPM script that triggers this generation ("generate:images", "generate:videos")
+* assetsRelativeDir - Relative path to the local media files
+* absOutFilePath - Absolute output path of the generated module
+* sources - Array of URLs or local modules exporting media items
+* ========================================================= */
+
+
+
+const params: IMediaMapGeneratorParams = {
+	moduleName: "videosMap",
+	npmRunScript: "generate:videos",
+	assetsRelativeDir: "videos",
+	absOutFilePath: toPathUrl("src/lib/generated/videosMap.ts"),
+	sources: [
+		// "https://cms.example.com/api/videos",
+		"scripts/lib/mockVideos.ts"
+	]
+};
+
+generateMediaMap(params).catch(err => {
+	console.error(`❌  Error generating ${ params.moduleName }:`, err);
+	process.exitCode = 1;
+});
+
+/*
 import { promises as fs } from "fs";
 import * as path from "path";
 import { toPathUrl, getMediaEntries, getUniqueMediaEntries, generateTSModule, getDescriptors } from "./utils";
 
-/* =========================================================
+/!* =========================================================
  * Auto-generates src/lib/generated/videosMap.ts
  * 1. Fetches video lists from CMS or local mocks
- * 2. Downloads remote files into videos/ (alias @v/*)
+ * 2. Downloads remote files into videos/ (alias @v/!*)
  * 3. Deduplicates by basename
  * 4. Writes static imports for next-video optimisation
  * ----------------------------------------------------------
@@ -20,12 +79,12 @@ import { toPathUrl, getMediaEntries, getUniqueMediaEntries, generateTSModule, ge
  *
  * TODO: read docs/video-strategy.md
  *
- * ========================================================= */
+ * ========================================================= *!/
 
-/* =========================================================
+/!* =========================================================
 *  Configuration
 * TODO: To make docs/video-strategy.md
-* ========================================================= */
+* ========================================================= *!/
 const SOURCE_DIR = toPathUrl("videos");
 const mediaMapFile = "videosMap.ts";
 const OUT_FILE   = toPathUrl(`src/lib/generated/${mediaMapFile}`);
@@ -35,21 +94,21 @@ const SOURCES: string[] = [
 	"scripts/lib/mockVideos.ts",  // export default mock videos: ICmsVideoItem[] from scripts
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Main                                                              */
-/* ------------------------------------------------------------------ */
+/!* ------------------------------------------------------------------ *!/
+/!*  Main                                                              *!/
+/!* ------------------------------------------------------------------ *!/
 (async () => {
 	console.log("📥  Fetching media list…");
 
-	/* ensure folder exists */
+	/!* ensure folder exists *!/
 	await fs.mkdir(SOURCE_DIR, { recursive: true });
 
 	const items = await getMediaEntries(SOURCES);
 
-	/* ---------- dedupe by basename ---------- */
+	/!* ---------- dedupe by basename ---------- *!/
 	const unique = getUniqueMediaEntries(items);
 
-	/* ---------- progress bar ---------- */
+	/!* ---------- progress bar ---------- *!/
 	const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 	bar.start(unique.length, 0);
 
@@ -70,7 +129,7 @@ const SOURCES: string[] = [
 		const exists = await fs.stat(localPath).catch(() => false);
 
 		if (!exists) {
-			/* downloading remote file if not found in localPath */
+			/!* downloading remote file if not found in localPath *!/
 			if (isRemote) {
 				await download(it.url, localPath);
 				console.log(`⬇️  Downloaded: ${it.url} → ${fileName}`);
@@ -81,7 +140,7 @@ const SOURCES: string[] = [
 			}
 		}
 
-		/* build descriptor */
+		/!* build descriptor *!/
 		const varName = `item_${idx}`;
 		const importPath = `@v/${fileName}`;
 		descriptors.push({ varName, baseName, importPath });
@@ -89,15 +148,15 @@ const SOURCES: string[] = [
 
 	bar.stop();
 
-	/* ---------- generate TS module ---------- */
+	/!* ---------- generate TS module ---------- *!/
 	const imports = descriptors.map(d => `import ${d.varName} from "${d.importPath}";`);
 	const mapEntries = descriptors.map(d => `  "${d.baseName}": ${d.varName},`);
 
 	const code = [
-		'/**',
+		'/!**',
 		' * ⚠️ AUTO-GENERATED FILE – DO NOT EDIT MANUALLY',
 		' * Generated by:  npm run generate:videos',
-		' */',
+		' *!/',
 		'',
 		...imports,
 		'',
@@ -116,4 +175,4 @@ const SOURCES: string[] = [
 })().catch(err => {
 	console.error('❌  Error:', err);
 	process.exitCode = 1;
-});
+});*/

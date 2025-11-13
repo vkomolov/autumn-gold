@@ -31,7 +31,6 @@ export interface IMediaMapGeneratorParams {
   moduleName: string; // Name of the module to generate ("imageMap" or "videoMap")
   npmRunScript: string; // NPM script that triggers this generation
   assetsRelativeDir: string; // Relative path to the local media files
-  mediaMapFile: string; // Filename of the generated module (e.g. "imageMap.ts")
   absOutFilePath: string; // Absolute Node path to the generated module file
   sources: string[]; // Array of URLs or local modules exporting media items
 }

@@ -1,6 +1,6 @@
-import type { ICmsVideoItem } from "../../src/types";
+import type { ICmsMediaItem } from "../../src/types";
 
-const mockVideos: ICmsVideoItem[] = [
+const mockVideos: ICmsMediaItem[] = [
 	{
 		src: "videos/planning_landscape.mp4",
 		fileName: "planning_landscape.mp4",

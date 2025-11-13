@@ -8,6 +8,8 @@ import type {
 import { type Metadata } from "next";
 
 ///////// END OF IMPORTS //////////////////
+
+/*** MEDIA GENERATOR NODE ENV ***/
 /**
  * !the external source does not always end with the file name,
  * !that`s why the fileName (baseName) is included separately
@@ -21,8 +23,20 @@ export interface ICmsMediaItem {
 //! ICmsMediaItem is equal to ICmsMediaItem but scalable and could have special features in future
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ICmsImageItem extends ICmsMediaItem {}
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ICmsVideoItem extends ICmsMediaItem {}
+
+export interface IMediaMapGeneratorParams {
+  moduleName: string; // Name of the module to generate ("imageMap" or "videoMap")
+  npmRunScript: string; // NPM script that triggers this generation
+  assetsRelativeDir: string; // Relative path to the local media files
+  mediaMapFile: string; // Filename of the generated module (e.g. "imageMap.ts")
+  absOutFilePath: string; // Absolute Node path to the generated module file
+  sources: string[]; // Array of URLs or local modules exporting media items
+}
+
+/*** CMS DATA ***/
 
 export interface ICmsHeaderData {
   logoData?: TCmsNavImageData;

@@ -3,7 +3,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { get as httpsGet } from "https";
 import {createWriteStream, promises as fs} from "fs";
 import { pipeline } from "stream/promises";
-import type { ICmsMediaItem } from "../../src/types";
+import type { ICmsMediaItem, IMediaMapGeneratorParams } from "../../src/types";
 import * as cliProgress from "cli-progress";
 import path from "path";
 import {customAlphabet} from "nanoid";
@@ -270,4 +270,65 @@ export const generateTSModule = (
 	const mapEntries = descriptors.map(d => `  "${d.baseName}": ${d.varName},`);
 
 	return moduleScriptFn({ imports, mapEntries });
+};
+
+
+/*** MEDIA GENERATOR  ***/
+
+/**
+ * ✅ Universal media-map generator for Next.js (Node environment)
+ *
+ * This function automates the creation of a TypeScript media map module,
+ * used for static imports of images, videos, or other media in Next.js.
+ *
+ * It performs the following steps:
+ * 1. Fetches media lists from CMS or local mocks
+ * 2. Downloads remote files into a specified local directory
+ * 3. Deduplicates entries by their base file name
+ * 4. Generates a strongly typed TypeScript module for static imports
+ *
+ * @param params - Configuration object
+ * @param params.moduleName - Name of the generated module ("imageMap" or "videoMap")
+ * @param params.npmRunScript - NPM script that triggers this generation ("generate:images", "generate:videos")
+ * @param params.assetsRelativeDir - Relative path to the local media files
+ * @param params.mediaMapFile - Output filename of the generated module
+ * @param params.absOutFilePath - Absolute output path of the generated module
+ * @param params.sources - Array of URLs or local modules exporting media items
+ */
+export const generateMediaMap = async (params: IMediaMapGeneratorParams) => {
+	const {
+		moduleName,
+		npmRunScript,
+		assetsRelativeDir,
+		mediaMapFile,
+		absOutFilePath,
+		sources
+	} = params;
+
+	const assetsRelativeAliasDir = assetsRelativeDir.replace(/^src/, "@");
+	const absSourceDir = toPathUrl(assetsRelativeDir);
+
+	console.log(`📥  Fetching media list for ${moduleName}…`);
+
+	/* Ensure local folder exists */
+	await fs.mkdir(absSourceDir, { recursive: true });
+
+	/* Fetch media entries from provided sources */
+	const items = await getMediaEntries(sources);
+
+	/* Deduplicate by basename */
+	const unique = getUniqueMediaEntries(items);
+
+	/* Generate descriptor list and progress bar */
+	const descriptors = await getDescriptors(unique, absSourceDir, assetsRelativeAliasDir);
+
+	/* Create or update the output TypeScript module */
+	await fs.mkdir(path.dirname(absOutFilePath), { recursive: true });
+	await fs.writeFile(
+		absOutFilePath,
+		generateTSModule(descriptors, generateModuleScript(moduleName, npmRunScript)),
+		"utf8"
+	);
+
+	console.log(`✅  ${mediaMapFile} created / updated successfully`);
 };
